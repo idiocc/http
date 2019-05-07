@@ -15,7 +15,9 @@ When [extending](#extending) the context, the `Tester` class also needs to be im
 This testing context is to be used with [_Zoroaster Context Testing Framework_](https://contexttesting.com). Once it is defined as part of a test suite, it will be available to all inner tests via the arguments. It allows to specify the middleware function to start the server with, and provides an API to send requests, while setting headers, and then assert on the result that came back. It was inspired by `supertest`, but is asynchronous in nature so that no `done` has to be called &mdash; just the promise needs to be awaited on.
 
 <table>
-<tr><th>HttpContext Example</th></tr>
+<tr><th><md2html>
+
+Using _HttpContext_ Example</md2html></th></tr>
 <!-- block-start -->
 <tr><td>
 
