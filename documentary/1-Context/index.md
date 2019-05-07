@@ -30,7 +30,8 @@ For example, we might want to test some synchronous middleware. It will check fo
 <!-- block-start -->
 <tr><td>
 
-%EXAMPLE: example/test/spec/default, ../../../src => @contexts/http%
+<img src="aty/1.gif" alt="Writing Tests With HttpContext">
+<!-- %EXAMPLE: example/test/spec/default, ../../../src => @contexts/http% -->
 </td></tr>
 <tr><td><md2html>
 

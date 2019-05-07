@@ -1,117 +1,13 @@
-const { equal, ok } = require('assert');
 const { createServer } = require('http');
 const { join } = require('path');
-let aqt = require('@rqt/aqt'); if (aqt && aqt.__esModule) aqt = aqt.default;
-const { createServer: createSecureServer } = require('https');
+const { createServer: createSecureServer, Server: HttpsServer } = require('https');
 const { readFileSync } = require('fs');
-let erotic = require('erotic'); if (erotic && erotic.__esModule) erotic = erotic.default;
 let cleanStack = require('@artdeco/clean-stack'); if (cleanStack && cleanStack.__esModule) cleanStack = cleanStack.default;
 const { c } = require('erte');
+const Tester = require('./Tester');
 
 const cert = readFileSync(join(__dirname, 'server.crt'), 'ascii')
 const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
-
-       class Tester extends Promise {
-  constructor() {
-    super(() => {})
-    /**
-     * The headers to send with the request, must be set before the `get` method is called using the `set` method.
-     * @type {http.OutgoingHttpHeaders}
-     */
-    this.headers = {}
-
-    /**
-     * @private
-     */
-    this._chain = Promise.resolve(true)
-    /**
-     * The reference to the parent context that started the server.
-     * @type {Server}
-     */
-    this.context = null
-  }
-  /**
-   * Adds the action to the list.
-   * @private
-   */
-  _addLink(fn, e) {
-    this._chain = this._chain.then(async (res) => {
-      if (res === false) return false
-      try {
-        return await fn()
-      } catch (err) {
-        if (e) throw e(err)
-        throw err
-      }
-    })
-  }
-  then(Ok, notOk) {
-    return this._chain.then(() => {
-      Ok()
-    }, (err) => {
-      notOk(err)
-    })
-  }
-  /**
-   * Navigate to the path and return the result.
-   * @param {string} path The path to navigate, empty by default.
-   */
-  get(path = '') {
-    this._addLink(async () => {
-      const { statusCode, body, headers } = await aqt(`${this.url}${path}`, {
-        headers: this.headers,
-      })
-      this.statusCode = statusCode
-      this.body = body
-      this.context.response.headers = headers
-    })
-    return this
-  }
-  /**
-   * Assert on the status code and body when a number is given.
-   * Assert on the header when the string is given. If the second arg is null, asserts on the absence of the header.
-   * @param {number|string|function(Response)} code The number of the status code, or name of the header, or the custom assertion function.
-   * @param {String} message The body or header value (or null for no header).
-   */
-  assert(code, message) {
-    const e = erotic(true)
-    this._addLink(() => {
-      if (typeof code == 'function') {
-        code(this.context.response)
-        return
-      }
-      if (typeof code == 'string' && message) {
-        equal(this.context.response.headers[code.toLowerCase()], message)
-        return
-      } else if (typeof code == 'string' && message === null) {
-        const v = this.context.response.headers[code.toLowerCase()]
-        if (v)
-          throw new Error(`The response had header ${code}: ${v}`)
-        return
-      }
-      // if we're here means code assertion
-      try {
-        equal(this.statusCode, code)
-      } catch (err) {
-        err.message = err.message + ' ' + this.body || ''
-        throw err
-      }
-      if (message instanceof RegExp) {
-        ok(message.test(this.body), `The body does not match ${message}`)
-      } else if (message) equal(this.body, message)
-    }, e)
-    return this
-  }
-  /**
-   * Sets the value for the header in the upcoming request.
-   * @param {string} name The name of the header to set.
-   * @param {string} value The value to set.
-   */
-  set(name, value) {
-    this.headers[name] = value
-    return this
-  }
-}
 
                class Server {
   constructor() {
@@ -121,14 +17,19 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
     this.TesterConstructor = Tester
     /**
      * The HTTP(S) server will be set on the tester after the `start` method is called. It will be automatically destroyed by the end of the test.
-     * @type {http.Server}
+     * @type {http.Server|https.Server}
      */
     this.server = null
     /**
-     * After the request listener is called, the `response` will be set to the server response which comes as the second argument to the request listener callback. The response will be updated to contain parsed headers.
+     * After the request listener is called, the `response` will be set to the server response which comes as the second argument to the request listener callback. The response will be updated to contain parsed headers. When using the `listen` method, only the headers received will be accessed via the object.
      * @type {Response}
      */
-    this.response = null
+    this.response = {}
+    /**
+     * The map of connections to the server. Used to finish any unended requests.
+     * @type {Object<string, net.Socket>}
+     */
+    this._connections = {}
   }
   /**
    * Call to switch on printing of debug messages and error stacks in the response body.
@@ -138,12 +39,11 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
     this._debug = on
   }
   /**
-   * Creates a server.
-   * @param {function(http.IncomingMessage, http.ServerResponse)} fn The server callback. If it does not throw an error, the 200 status code is set.
+   * Creates a server and wraps the supplied listener in the handler that will set status code `500` if the listener threw and the body to the error text, and `200` otherwise.
+   * @param {function(http.IncomingMessage, http.ServerResponse)} fn The server callback.
    * @param {boolean} [secure=false] Whether to start an https server.
    */
   start(fn, secure = false) {
-    let server
     const handler = async (req, res) => {
       try {
         this.response = res
@@ -157,12 +57,55 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
         res.end()
       }
     }
+    return this._start(handler, secure)
+  }
+  /**
+   * Creates a server with the supplied listener.
+   * @param {function(http.IncomingMessage, http.ServerResponse)} fn The server callback.
+   * @param {boolean} [secure=false] Whether to start an https server.
+   */
+  startPlain(fn, secure) {
+    /** @type {function(http.IncomingMessage, http.ServerResponse)} */
+    const handler = async (req, res) => {
+      try {
+        this.response = res
+        await fn(req, res)
+      } catch (err) {
+        if (this._debug) console.error(c(cleanStack(err.stack), 'yellow'))
+        throw err
+      }
+    }
+    return this._start(handler, secure)
+  }
+  /**
+   * @private
+   */
+  _start(handler, secure) {
+    let server
+    // const handler
     if (secure) {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED=0
       server = createSecureServer({ cert, key }, handler)
     } else {
       server = createServer(handler)
     }
+    return this.listen(server)
+  }
+  async _destroy() {
+    this._destroyed = true
+    if (this.server) await new Promise(r => {
+      this.server.close(r)
+      for (let k in this._connections) {
+        this._connections[k].destroy()
+      }
+    })
+  }
+  /**
+   * Calls the `listen` method on the server to accept incoming connections.
+   * @param {http.Server|https.Server} server The server to start.
+   */
+  listen(server) {
+    const secure = server instanceof HttpsServer
     const tester = new this.TesterConstructor()
     tester._addLink(async () => {
       await new Promise(r => server.listen(r))
@@ -175,15 +118,19 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
       this.server = server
     })
     tester.context = this
+    server.on('connection', (con) => {
+      const { remoteAddress, remotePort } = con
+      const k = [remoteAddress, remotePort].join(':')
+      this._connections[k] = con
+      con.on('close', () => {
+        delete this._connections[k]
+      })
+    })
     return tester
   }
-  async _destroy() {
-    this._destroyed = true
-    if (this.server) await new Promise(r => {
-      this.server.close(r)
-    })
-  }
 }
+
+
 
 /**
  * @typedef {import('http').IncomingMessage} http.IncomingMessage
@@ -191,6 +138,8 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
  * @typedef {import('http').OutgoingHttpHeaders} http.OutgoingHttpHeaders
  * @typedef {import('http').IncomingHttpHeaders} http.IncomingHttpHeaders
  * @typedef {import('http').Server} http.Server
+ * @typedef {import('https').Server} https.Server
+ * @typedef {import('net').Socket} net.Socket
  * @typedef {http.ServerResponse & { headers: http.IncomingHttpHeaders }} Response The response with headers.
  */
 

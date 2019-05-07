@@ -118,6 +118,20 @@ argufy@^1.7.0:
   resolved "https://registry.yarnpkg.com/argufy/-/argufy-1.7.0.tgz#189109155b6200c283350b1c23dbeee2a7519f7b"
   integrity sha512-iK7Nx5wv4XXbid/udPVu54EN6pA8w1RqkPp6NOZqBB/8cmpaxdjuWszw8VpPYQN6WWqAXJuLMNXZHEgFTvm0eA==
 
+aty@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/aty/-/aty-1.1.2.tgz#adbd52986f2fb55e9e6f26db7977dd50c8c89ffe"
+  integrity sha1-rb1SmG8vtV6ebybbeXfdUMjIn/4=
+  dependencies:
+    reloquent "1.0.6"
+    spawncommand "2.0.1"
+    usually "1.0.0"
+
+catchment@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/catchment/-/catchment-2.0.1.tgz#df0a05ac2e1194cf280c2444d5bb564a9cc8f488"
+  integrity sha512-aNvgHj+gmfld9rzUwxJJN6aT5MLBT0/R2LtqO8Xtjy/iq6PCAVLyFzYXZAs5Ew6FzwXAW5xV5XLGD5oACPtJdg==
+
 catchment@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/catchment/-/catchment-1.0.0.tgz#3061f71be0102710be84328d2f94363a165f8c4b"
@@ -293,6 +307,18 @@ preact@8.4.2:
   resolved "https://registry.yarnpkg.com/preact/-/preact-8.4.2.tgz#1263b974a17d1ea80b66590e41ef786ced5d6a23"
   integrity sha512-TsINETWiisfB6RTk0wh3/mvxbGRvx+ljeBccZ4Z6MPFKgu/KFGyf2Bmw3Z/jlXhL5JlNKY6QAbA9PVyzIy9//A==
 
+promto@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/promto/-/promto-1.0.1.tgz#0a169fc7bd8f48cef1ee9faeace61a100305a536"
+  integrity sha1-Chafx72PSM7x7p+urOYaEAMFpTY=
+
+reloquent@1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/reloquent/-/reloquent-1.0.6.tgz#56cb87f43209e421a129df48ba621a658c08b1d4"
+  integrity sha1-VsuH9DIJ5CGhKd9IumIaZYwIsdQ=
+  dependencies:
+    promto "1.0.1"
+
 resolve-dependency@^1.0.2, resolve-dependency@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/resolve-dependency/-/resolve-dependency-1.0.3.tgz#f0f78d0cea2c2fbf9dcf38b67ab15363aba8db34"
@@ -319,6 +345,13 @@ spawncommand@1.1.0:
   integrity sha1-gKVu08Bqs7kWQ88/bO84v1gv2xU=
   dependencies:
     catchment "^1.0.0"
+
+spawncommand@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/spawncommand/-/spawncommand-2.0.1.tgz#088476fd8aa3c63932309ce0e76a8924d51a34ab"
+  integrity sha1-CIR2/YqjxjkyMJzg52qJJNUaNKs=
+  dependencies:
+    catchment "2.0.1"
 
 spawncommand@^2.2.0:
   version "2.2.0"
@@ -358,6 +391,11 @@ unpipe@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=
+
+usually@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/usually/-/usually-1.0.0.tgz#3ace5b09471ddf35cccca85971ca178b5255d4b0"
+  integrity sha1-Os5bCUcd3zXMzKhZccoXi1JV1LA=
 
 usually@^1.2.0:
   version "1.2.0"
