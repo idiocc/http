@@ -110,8 +110,19 @@ example/test/spec
   ✓  prevents unauthorised
   ✓  does not find the user
   ✓  authenticates known user
+   constructor
+    ✓  does not ser the user without token
+    ✓  does not ser the user with missing token
+    ✓  sets the user
+    ✗  sets correct name
+    | Error: 500 == 200 'Actual-User' == 'Expected-User'
+    |     at sets correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:53:8)
 
-🦅  Executed 3 tests.
+example/test/spec > constructor > sets correct name
+  Error: 500 == 200 'Actual-User' == 'Expected-User'
+      at sets correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:53:8)
+
+🦅  Executed 7 tests: 1 error.
 ```
 </td></tr>
 <tr><td>The tests can be run with <em>Zoroaster</em> test runner: <code>zoroaster example/test/spec -a</code>.
@@ -205,14 +216,14 @@ class Context {
 /** @type {Object<string, (c: Context, h: HttpContext)} */
 const TS = {
   context: [Context, HttpContext],
-  async 'does not ser the user without token'({ c }, { start }) {
+  async 'does not set the user without token'({ c }, { start }) {
     await start(c((req) => {
       ok(!req.user)
     }))
       .get('/')
       .assert(200)
   },
-  async 'does not ser the user with missing token'({ c }, { start }) {
+  async 'does not set the user with missing token'({ c }, { start }) {
     await start(c((req) => {
       ok(!req.user)
     }), { 'secret-token': 'User' })
@@ -228,7 +239,7 @@ const TS = {
       .get('/')
       .assert(200)
   },
-  async 'sets the user to the correct name'({ c }, { start }) {
+  async 'sets the correct name'({ c }, { start }) {
     await start(c((req) => {
       equal(req.user, 'Expected-User')
     }, { 'secret-token': 'Actual-User' }))
@@ -254,13 +265,13 @@ example/test/spec/constructor.js
   ✓  does not ser the user without token
   ✓  does not ser the user with missing token
   ✓  sets the user
-  ✗  sets the user to the correct name
+  ✗  sets correct name
   | Error: 500 == 200 'Actual-User' == 'Expected-User'
-  |     at sets the user to the correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:53:8)
+  |     at sets correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:53:8)
 
-example/test/spec/constructor.js > sets the user to the correct name
+example/test/spec/constructor.js > sets correct name
   Error: 500 == 200 'Actual-User' == 'Expected-User'
-      at sets the user to the correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:53:8)
+      at sets correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:53:8)
 
 🦅  Executed 4 tests: 1 error.
 ```

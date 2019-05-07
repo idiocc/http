@@ -21,14 +21,14 @@ class Context {
 /** @type {Object<string, (c: Context, h: HttpContext)} */
 const TS = {
   context: [Context, HttpContext],
-  async 'does not ser the user without token'({ c }, { start }) {
+  async 'does not set the user without token'({ c }, { start }) {
     await start(c((req) => {
       ok(!req.user)
     }))
       .get('/')
       .assert(200)
   },
-  async 'does not ser the user with missing token'({ c }, { start }) {
+  async 'does not set the user with missing token'({ c }, { start }) {
     await start(c((req) => {
       ok(!req.user)
     }), { 'secret-token': 'User' })
@@ -44,7 +44,7 @@ const TS = {
       .get('/')
       .assert(200)
   },
-  async 'sets the user to the correct name'({ c }, { start }) {
+  async 'sets the correct name'({ c }, { start }) {
     await start(c((req) => {
       equal(req.user, 'Expected-User')
     }, { 'secret-token': 'Actual-User' }))
