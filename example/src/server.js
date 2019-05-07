@@ -3,7 +3,8 @@ import connect from 'connect'
 
 const app = connect()
 app.use((req, res, next) => {
-  if (req.url == '/error') throw new Error('Uncaught error')
+  if (req.url == '/error')
+    throw new Error('Uncaught error')
   res.write('hello, ')
   next()
 })
