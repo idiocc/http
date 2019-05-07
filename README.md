@@ -148,6 +148,126 @@ const handler = async (req, res) => {
 server.start(handler)
 ```
 
+<table>
+<tr><th>Middleware Constructor Testing Strategy</th></tr>
+<tr><td>
+
+```js
+/**
+ * Creates a middleware for the given list of users.
+ * @param {Object<string, string>} users
+ */
+const makeMiddleware = (users) => {
+  /**
+   * Updates the request to have the user information if the token is found.
+   * @param {http.IncomingMessage} req
+   */
+  const middleware = (req) => {
+    const token = req.headers['x-auth']
+    const user = users[token]
+    if (user) req['user'] = user
+  }
+  return middleware
+}
+
+export default makeMiddleware
+
+/**
+ * @typedef {import('http').IncomingMessage} http.IncomingMessage
+ * @typedef {import('http').ServerResponse} http.ServerResponse
+ */
+```
+</td></tr>
+<tr><td>We update the source code to export a constructor of middleware, based on the given options. In this case, the middleware will be created with the <code>users</code> object that is scoped within the function, rather that file, so that we can pass it at the point of creating the middleware.</td></tr>
+<tr><td>
+
+```js
+import { ok, equal } from 'assert'
+import HttpContext from '@contexts/http'
+import createMiddleware from '../../src/constructor'
+
+class Context {
+  /**
+   * Creates a request listener for testing.
+   * @param {function(http.IncomingMessage, http.ServerResponse)} next
+   * Assertion method.
+   * @param {Object<string, string>} [users] The list of tokens-users.
+   */
+  c(next, users = {}) {
+    return (req, res) => {
+      const mw = createMiddleware(users)
+      mw(req, res) // set the user on request
+      next(req, res)
+    }
+  }
+}
+
+/** @type {Object<string, (c: Context, h: HttpContext)} */
+const TS = {
+  context: [Context, HttpContext],
+  async 'does not ser the user without token'({ c }, { start }) {
+    await start(c((req) => {
+      ok(!req.user)
+    }))
+      .get('/')
+      .assert(200)
+  },
+  async 'does not ser the user with missing token'({ c }, { start }) {
+    await start(c((req) => {
+      ok(!req.user)
+    }), { 'secret-token': 'User' })
+      .set('x-auth', 'missing-token')
+      .get('/')
+      .assert(200)
+  },
+  async 'sets the user'({ c }, { start }) {
+    await start(c((req) => {
+      ok(req.user)
+    }, { 'secret-token': 'User' }))
+      .set('x-auth', 'secret-token')
+      .get('/')
+      .assert(200)
+  },
+  async 'sets the user to the correct name'({ c }, { start }) {
+    await start(c((req) => {
+      equal(req.user, 'Expected-User')
+    }, { 'secret-token': 'Actual-User' }))
+      .set('x-auth', 'secret-token')
+      .get('/')
+      .assert(200) // expecting fail
+  },
+}
+
+export default TS
+
+/**
+ * @typedef {import('http').IncomingMessage} http.IncomingMessage
+ * @typedef {import('http').ServerResponse} http.ServerResponse
+ */
+```
+</td></tr>
+<tr><td>The new tests require implementing a method that will call the middleware constructor prior to continuing with the request. This method is creates as part of a different context, called simply <em>Context</em>. It will help to create the request listener to pass to the <code>start</code> method, where the assertions will be written in another middleware executed after the source code one.</td></tr>
+<tr><td>
+
+```
+example/test/spec/constructor.js
+  ✓  does not ser the user without token
+  ✓  does not ser the user with missing token
+  ✓  sets the user
+  ✗  sets the user to the correct name
+  | Error: 500 == 200 'Actual-User' == 'Expected-User'
+  |     at sets the user to the correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:53:8)
+
+example/test/spec/constructor.js > sets the user to the correct name
+  Error: 500 == 200 'Actual-User' == 'Expected-User'
+      at sets the user to the correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:53:8)
+
+🦅  Executed 4 tests: 1 error.
+```
+</td></tr>
+<tr><td>We expect the last test to fail because in the assertion method we specified that the user name should be different from the one that was passed in the options to the middleware. Other tests pass because there were no errors in the assertion middleware. It is always required to call <code>assert</code> on the context instance, because simply requesting data with <code>get</code> will not throw anything even if the status code was not 200.</td></tr>
+</table>
+
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true"></a></p>
 
 ## Extending

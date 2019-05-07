@@ -25,6 +25,20 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Launch Zoroaster Example",
+      "program": "${workspaceFolder}/node_modules/.bin/zoroaster",
+      "console": "integratedTerminal",
+      "args": [
+        "example/test/spec/constructor.js",
+        "-a", "-w", "-t", "9999999"
+      ],
+      "skipFiles": [
+        "<node_internals>/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Launch Example",
       "program": "${workspaceFolder}/node_modules/.bin/alanode",
       "console": "integratedTerminal",
