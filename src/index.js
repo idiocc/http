@@ -5,6 +5,8 @@ import aqt from '@rqt/aqt'
 import { createServer as createSecureServer } from 'https'
 import { readFileSync } from 'fs'
 import erotic from 'erotic'
+import cleanStack from '@artdeco/clean-stack'
+import { c } from 'erte'
 
 const cert = readFileSync(join(__dirname, 'server.crt'), 'ascii')
 const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
@@ -96,7 +98,7 @@ export class Tester extends Promise {
       }
       if (message instanceof RegExp) {
         ok(message.test(this.body), `The body does not match ${message}`)
-      } else equal(this.body, message)
+      } else if (message) equal(this.body, message)
     }, e)
     return this
   }
@@ -142,14 +144,15 @@ export default class Server {
    */
   start(fn, secure = false) {
     let server
-    const handler = (req, res) => {
+    const handler = async (req, res) => {
       try {
         this.response = res
-        fn(req, res)
+        await fn(req, res)
         res.statusCode = 200
       } catch (err) {
         res.statusCode = 500
-        res.write(this._debug ? err.stack : err.message)
+        res.write(err.message)
+        if (this._debug) console.error(c(cleanStack(err.stack), 'yellow'))
       } finally {
         res.end()
       }

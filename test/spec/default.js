@@ -1,4 +1,4 @@
-import { equal, throws } from '@zoroaster/assert'
+import { equal, throws, ok } from '@zoroaster/assert'
 import HttpContext from '../../src'
 
 export const context = HttpContext
@@ -100,7 +100,7 @@ export const headers = {
 
 /** @type {TestSuite} */
 export const Debug = {
-  async 'sets the header'({ start, debug }) {
+  async 'prints the error to the body'({ start, debug }) {
     debug()
     await throws({
       async fn() {
@@ -110,8 +110,20 @@ export const Debug = {
           .get('/')
           .assert(200)
       },
-      message: /at start/,
+      message: /actual-body/,
     })
+  },
+}
+
+/** @type {TestSuite} */
+export const Https = {
+  async 'starts https server'({ start, debug }) {
+    debug()
+    await start((req) => {
+      ok(req.protocol == 'https' || req.connection.encrypted)
+    }, true)
+      .get('/')
+      .assert(200)
   },
 }
 
