@@ -49,6 +49,7 @@
   "dependencies": {
     "@artdeco/clean-stack": "^1.1.1",
     "@rqt/aqt": "^1.2.5",
+    "@zoroaster/deep-equal": "^1.0.1",
     "erotic": "^2.1.1",
     "erte": "^1.2.0"
   }

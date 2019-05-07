@@ -117,13 +117,37 @@ export const Debug = {
 
 /** @type {TestSuite} */
 export const Https = {
-  async 'starts https server'({ start, debug }) {
-    debug()
+  async 'starts https server'({ start }) {
     await start((req) => {
       ok(req.protocol == 'https' || req.connection.encrypted)
     }, true)
       .get('/')
       .assert(200)
+  },
+}
+
+/** @type {TestSuite} */
+export const JSON = {
+  async 'parses JSON requests'({ start }) {
+    await start((req, res) => {
+      res.setHeader('content-type', 'application/json')
+      res.end('{ "hello": "world" }')
+    })
+      .get('/')
+      .assert(200, { hello: 'world' })
+  },
+  async 'throws errors with json'({ start }) {
+    await throws({
+      async fn() {
+        await start((req, res) => {
+          res.setHeader('content-type', 'application/json')
+          res.end('{ "hello": "world" }')
+        })
+          .get('/')
+          .assert(200, { world: 'hello' })
+      },
+      message: /- world: hello[\s\S]+?\+ hello: world/,
+    })
   },
 }
 

@@ -96,6 +96,13 @@
   resolved "https://registry.yarnpkg.com/@zoroaster/assert/-/assert-1.0.2.tgz#8ffe2ebb10c81d570d4965080f942af688321a1f"
   integrity sha512-5C0LDzW8DkiSSCLyYO9ux3R5ru65yEn/GtxH1wh7ukRhLAZ/Svx4+A81YvciXcn35B2VmvCqyiTrhNdxdgusSw==
 
+"@zoroaster/deep-equal@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@zoroaster/deep-equal/-/deep-equal-1.0.1.tgz#7f7b72f59e54807ee23ea88e60f99165f10ca876"
+  integrity sha512-Nc8v2oW+Xtw/49SbgloPkln1v/H7D4fr7HGdgKr4rpdggk8pZRF2vNLaugm6OhiKhb0OuO/gHuk8o5qjH+strA==
+  dependencies:
+    differently "^1.0.0"
+
 "@zoroaster/mask@^2.1.1":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@zoroaster/mask/-/mask-2.2.0.tgz#fecdcb6f863440519b91b51f09549b1e981e84da"
@@ -137,6 +144,13 @@ competent@^1.1.1:
     "@depack/render" "^1.1.4"
     restream "^3.7.1"
     rexml "^1.4.0"
+
+differently@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/differently/-/differently-1.0.1.tgz#1a5c158fd98c686f9310a05899a59ac1a4bd6d08"
+  integrity sha512-J19iW+g47ww6ReGwZrthgeHQlKLN02zHAXPwG21BHCi8G03qv1G9YGrqYDmwws9uvtKRBY9b91DhJ4VbfWFNQQ==
+  dependencies:
+    erte "^1.2.0"
 
 documentary@^1.27.2:
   version "1.27.2"

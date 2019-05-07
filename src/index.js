@@ -6,6 +6,7 @@ import { createServer as createSecureServer } from 'https'
 import { readFileSync } from 'fs'
 import erotic from 'erotic'
 import cleanStack from '@artdeco/clean-stack'
+import deepEqual from '@zoroaster/deep-equal'
 import { c } from 'erte'
 
 const cert = readFileSync(join(__dirname, 'server.crt'), 'ascii')
@@ -98,6 +99,8 @@ export class Tester extends Promise {
       }
       if (message instanceof RegExp) {
         ok(message.test(this.body), `The body does not match ${message}`)
+      } else if (typeof message == 'object') {
+        deepEqual(this.body, message)
       } else if (message) equal(this.body, message)
     }, e)
     return this
