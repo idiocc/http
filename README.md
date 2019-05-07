@@ -15,7 +15,7 @@ yarn add @contexts/http
 - [class HttpContext](#class-httpcontext)
   * [`start(fn: (req: IncomingMessage, res: ServerResponse), secure: boolean=): Tester`](#startfn-req-incomingmessage-res-serverresponsesecure-boolean-tester)
   * [`startPlain(fn: (req: IncomingMessage, res: ServerResponse), secure: boolean=): Tester`](#startplainfn-req-incomingmessage-res-serverresponsesecure-boolean-tester)
-  * [`startPlain(fn: (req: IncomingMessage, res: ServerResponse), secure: boolean=): Tester`](#startplainfn-req-incomingmessage-res-serverresponsesecure-boolean-tester)
+  * [`listen(server: http.Server|https.Server): Tester`](#listenserver-httpserverhttpsserver-tester)
 - [class Tester](#class-tester)
   * [`get(path: string=): Tester`](#getpath-string-tester)
 - [Extending](#extending)
@@ -365,14 +365,14 @@ example/test/spec/plain
     ✗  throws an error
     | Error: Unhandled error.
     |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:174:15)
+    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:67:15)
     ✗  does not finish the request
     | Error: Test has timed out after 200ms
 
 example/test/spec/plain > plain > throws an error
   Error: Unhandled error.
       at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-      at Server.handler (/Users/zavr/idiocc/http/src/index.js:174:15)
+      at Server.handler (/Users/zavr/idiocc/http/src/index.js:67:15)
 
 example/test/spec/plain > plain > does not finish the request
   Error: Test has timed out after 200ms
@@ -385,116 +385,87 @@ example/test/spec/plain > plain > does not finish the request
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true" width="25"></a></p>
 
-### `startPlain(`<br/>&nbsp;&nbsp;`fn: (req: IncomingMessage, res: ServerResponse),`<br/>&nbsp;&nbsp;`secure: boolean=,`<br/>`): Tester`
+### `listen(`<br/>&nbsp;&nbsp;`server: http.Server|https.Server,`<br/>`): Tester`
 
-Starts the server without wrapping the listener in handler that would set status `200` on success and status `500` on error, and automatically finish the request. This means that the listener must manually do those things. Any uncaught error will result in run-time errors which will be caught by _Zoroaster_'s error handling mechanism outside of the test scope, but ideally they should be dealt with by the developer. If the middleware did not end the request, the test will timeout and the request will be destroyed by the context.
+Starts the given server by calling the `listen` method. This method is used to test apps such as `Koa`, `Express`, `Connect` _etc_, or many middleware chained together, therefore it's a higher level of testing aka integration testing that does not allow to access the `response` object because no middleware is inserted into the server itself. It only allows to open URLs and assert on the results received by the request library, such as status codes, body and the headers. The server will be closed by the end of each test by the context.
 
 <table>
-<tr><th>Plain Listener Testing</th><th>Wrapper Listener Testing</th></tr>
+<tr><th colspan="2">Server (App) Testing</th></tr>
 <tr><td>
 
 ```js
-import Http from '@contexts/http'
+import { createServer } from 'http'
+import connect from 'connect'
 
-/** @type {Object<string, (h: Http)} */
-const TS = {
-  context: Http,
-  async 'sets the status code and body'(
-    { startPlain }) {
-    await startPlain((req, res) => {
-      res.statusCode = 200
-      res.end('Hello World')
-    })
-      .get('/')
-      .assert(200, 'Hello World')
-  },
-  // expect to fail with global error
-  async 'throws an error'({ startPlain }) {
-    await startPlain(() => {
-      throw new Error('Unhandled error.')
-    })
-      .get('/')
-  },
-  // expect to timeout
-  async 'does not finish the request'(
-    { startPlain }) {
-    await startPlain((req, res) => {
-      res.write('hello')
-    })
-      .get('/')
-  },
-}
+const app = connect()
+app.use((req, res, next) => {
+  if (req.url == '/error') throw new Error('Uncaught error')
+  res.write('hello, ')
+  next()
+})
+app.use((req, res) => {
+  res.statusCode = 200
+  res.end('world!')
+})
 
-export default TS
+export default createServer(app)
 ```
 </td>
 <td>
 
 ```js
-class C {
-  c(listener) {
-    return (req, res) => {
-      try {
-        listener(req, res)
-      } catch (err) {
-        res.statusCode = 500
-      } finally {
-        res.end()
-      }
-    }
-  }
-}
+import H from '@contexts/http'
+import { createServer } from 'http'
+import server from '../../src/server'
 
-/** @type {Object<string, (c:C, h: Http)} */
-export const handled = {
-  context: [C, Http],
-  async 'throws an error'({ c },
-    { startPlain }) {
-    await startPlain(c(() => {
-      throw new Error('Unhandled error.')
-    }))
+/** @type {Object<string, (h: H)} */
+const TS = {
+  context: H,
+  async 'access the server'({ listen }) {
+    await listen(server)
       .get('/')
+      .assert(200, 'hello, world!')
+  },
+  async 'connect catches errors'(
+    { listen }) {
+    await listen(server)
+      .get('/error')
       .assert(500)
   },
-  async 'times out'({ c }, { startPlain }) {
-    await startPlain(c((req, res) => {
-      res.write('hello')
+  async 'zoroaster catches errors'(
+    { listen }) {
+    await listen(createServer((req, res) => {
+      res.statusCode = 500
+      res.end()
+      throw new Error('Uncaught Error')
     }))
-      .get('/')
-      .assert(200, 'hello')
+      .get('/error')
+      .assert(500)
   },
 }
+
+export default TS
 ```
 </td></tr>
-<tr><td colspan="2">With plain listener testing, the developer can test the function as if it was used on the server without any other middleware, such as error handling or automatic finishing of requests. The listener can also be wrapped in a custom service middleware that will do those things to support testing.</td></tr>
+<tr><td colspan="2">When a server needs to be tested as a whole of its middleware, the <code>listen</code> method of the <em>HttpContext</em> is used. It allows to start the server on a random port, navigate to pages served by it, and assert on the results.</td></tr>
 <tr><td colspan="2">
 
 ```
-example/test/spec/plain
-   handled
-    ✓  throws an error
-    ✓  times out
-   plain
-    ✓  sets the status code and body
-    ✗  throws an error
-    | Error: Unhandled error.
-    |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:174:15)
-    ✗  does not finish the request
-    | Error: Test has timed out after 200ms
+example/test/spec/listen.js
+  ✓  access the server
+  ✓  connect catches errors
+  ✗  zoroaster catches errors
+  | Error: Uncaught Error
+  |     at Server.createServer (/Users/zavr/idiocc/http/example/test/spec/listen.js:24:13)
 
-example/test/spec/plain > plain > throws an error
-  Error: Unhandled error.
-      at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-      at Server.handler (/Users/zavr/idiocc/http/src/index.js:174:15)
+example/test/spec/listen.js > zoroaster catches errors
+  Error: Uncaught Error
+      at Server.createServer (/Users/zavr/idiocc/http/example/test/spec/listen.js:24:13)
 
-example/test/spec/plain > plain > does not finish the request
-  Error: Test has timed out after 200ms
-
-🦅  Executed 5 tests: 2 errors.
+🦅  Executed 3 tests: 1 error.
 ```
 </td></tr>
-<tr><td colspan="2">The output shows how tests with listeners which did not handle errors fail, so did the tests with listeners that did not end the request. The <code>handled</code> test suite (on the right above), wraps the plain listener in another listener that always closed the connection and caught errors, setting the status code to <code>500</code>, so that all tests passed there. The strategy is similar to the <code>start</code> method, but allows to implement the custom handler.</td></tr>
+<tr><td colspan="2">The tests will be run as usual, but if there were any errors, they will be either handled by the server library, or caught by <em>Zoroaster</em> as global errors.</td></tr>
 </table>
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true" width="25"></a></p>
