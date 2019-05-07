@@ -29,8 +29,10 @@
       "program": "${workspaceFolder}/node_modules/.bin/zoroaster",
       "console": "integratedTerminal",
       "args": [
-        "example/test/spec/constructor.js",
-        "-a", "-w", "-t", "9999999"
+        "example/test/spec",
+        "-a", "-w",
+        // "-t",
+        // "9999999"
       ],
       "skipFiles": [
         "<node_internals>/**/*.js"

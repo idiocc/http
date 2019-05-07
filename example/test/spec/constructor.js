@@ -36,10 +36,11 @@ const TS = {
       .get('/')
       .assert(200)
   },
-  async 'sets the user'({ c }, { start }) {
+  async 'sets the user with https'({ c }, { start }) {
     await start(c((req) => {
       ok(req.user)
-    }, { 'secret-token': 'User' }))
+      ok(req.connection.encrypted)
+    }, { 'secret-token': 'User' }), true)
       .set('x-auth', 'secret-token')
       .get('/')
       .assert(200)

@@ -141,12 +141,11 @@ export default class Server {
     this._debug = on
   }
   /**
-   * Creates a server.
-   * @param {function(http.IncomingMessage, http.ServerResponse)} fn The server callback. If it does not throw an error, the 200 status code is set.
+   * Creates a server and wraps the supplied listener in the handler that will set status code `500` if the listener threw and the body to the error text, and `200` otherwise.
+   * @param {function(http.IncomingMessage, http.ServerResponse)} fn The server callback.
    * @param {boolean} [secure=false] Whether to start an https server.
    */
   start(fn, secure = false) {
-    let server
     const handler = async (req, res) => {
       try {
         this.response = res
@@ -160,6 +159,32 @@ export default class Server {
         res.end()
       }
     }
+    return this._start(handler, secure)
+  }
+  /**
+   * Creates a server with the supplied listener.
+   * @param {function(http.IncomingMessage, http.ServerResponse)} fn The server callback.
+   * @param {boolean} [secure=false] Whether to start an https server.
+   */
+  startPlain(fn, secure) {
+    /** @type {function(http.IncomingMessage, http.ServerResponse)} */
+    const handler = async (req, res) => {
+      try {
+        this.response = res
+        await fn(req, res)
+      } catch (err) {
+        if (this._debug) console.error(c(cleanStack(err.stack), 'yellow'))
+        throw err
+      }
+    }
+    return this._start(handler, secure)
+  }
+  /**
+   * @private
+   */
+  _start(handler, secure) {
+    let server
+    // const handler
     if (secure) {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED=0
       server = createSecureServer({ cert, key }, handler)
@@ -181,6 +206,7 @@ export default class Server {
     return tester
   }
   async _destroy() {
+    if (this.response) this.response.end()
     this._destroyed = true
     if (this.server) await new Promise(r => {
       this.server.close(r)
