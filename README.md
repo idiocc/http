@@ -415,8 +415,8 @@ export default createServer(app)
 <td>
 
 ```js
+/* example start */
 import H from '@contexts/http'
-import { createServer } from 'http'
 import server from '../../src/server'
 
 /** @type {Object<string, (h: H)} */
@@ -427,25 +427,27 @@ const TS = {
       .get('/')
       .assert(200, 'hello, world!')
   },
-  async 'connect catches errors'(
-    { listen }) {
+  async 'connect catches errors'({ listen }) {
     await listen(server)
-      .get('/error')
-      .assert(500)
-  },
-  async 'zoroaster catches errors'(
-    { listen }) {
-    await listen(createServer((req, res) => {
-      res.statusCode = 500
-      res.end()
-      throw new Error('Uncaught Error')
-    }))
       .get('/error')
       .assert(500)
   },
 }
 
 export default TS
+
+/* example end */
+// import { createServer } from 'http'
+// async 'zoroaster catches errors'(
+//   { listen }) {
+//   await listen(createServer((req, res) => {
+//     res.statusCode = 500
+//     res.end()
+//     throw new Error('Uncaught Error')
+//   }))
+//     .get('/error')
+//     .assert(500)
+// },
 ```
 </td></tr>
 <tr><td colspan="2">When a server needs to be tested as a whole of its middleware, the <code>listen</code> method of the <em>HttpContext</em> is used. It allows to start the server on a random port, navigate to pages served by it, and assert on the results.</td></tr>
@@ -455,18 +457,11 @@ export default TS
 example/test/spec/listen.js
   ✓  access the server
   ✓  connect catches errors
-  ✗  zoroaster catches errors
-  | Error: Uncaught Error
-  |     at Server.createServer (/Users/zavr/idiocc/http/example/test/spec/listen.js:24:13)
 
-example/test/spec/listen.js > zoroaster catches errors
-  Error: Uncaught Error
-      at Server.createServer (/Users/zavr/idiocc/http/example/test/spec/listen.js:24:13)
-
-🦅  Executed 3 tests: 1 error.
+🦅  Executed 2 tests.
 ```
 </td></tr>
-<tr><td colspan="2">The tests will be run as usual, but if there were any errors, they will be either handled by the server library, or caught by <em>Zoroaster</em> as global errors.</td></tr>
+<tr><td colspan="2">The tests will be run as usual, but if there were any errors, they will be either handled by the server library, or caught by <em>Zoroaster</em> as global errors. Any unended requests will result in the test timing out.</td></tr>
 </table>
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true"></a></p>

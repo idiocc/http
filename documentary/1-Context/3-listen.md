@@ -29,7 +29,7 @@ When a server needs to be tested as a whole of its middleware, the `listen` meth
 </td></tr>
 <tr><td colspan="2"><md2html>
 
-The tests will be run as usual, but if there were any errors, they will be either handled by the server library, or caught by _Zoroaster_ as global errors.
+The tests will be run as usual, but if there were any errors, they will be either handled by the server library, or caught by _Zoroaster_ as global errors. Any unended requests will result in the test timing out.
 </md2html></td></tr>
 <!-- /block-end -->
 </table>
