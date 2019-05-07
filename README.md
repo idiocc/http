@@ -104,7 +104,7 @@ const TS = {
 export default TS
 ```
 </td></tr>
-<tr><td>The tests are written for <em>Zoroaster</em> in such a way that test suite objects are exported. When the <code>context</code> property is found on the test suite, it will be instantiated for all inner tests.
+<tr><td>The tests are written for <em>Zoroaster</em> in such a way that test suite objects are exported. When the <code>context</code> property is found on the test suite, it will be instantiated for all inner tests. The <code>start</code> method will wrap the request listener in try-catch block to send statuses <em>200</em> and <em>500</em> accordingly (see below).
 </td></tr>
 <tr><td>
 
@@ -127,7 +127,7 @@ example/test/spec/default.js
 
 ### `start(`<br/>&nbsp;&nbsp;`fn: (req: IncomingMessage, res: ServerResponse),`<br/>&nbsp;&nbsp;`secure: boolean=,`<br/>`): Tester`
 
-Starts the server with the given middleware function. It will setup an upper layer over the middleware to try it and catch any errors in it. If there were errors, the status code will be set to `500` and the response will be ended with the error message. Otherwise, the status is set to `200`. This is done so that assertion methods can be called inside of the supplied function. If the server needs to be started without the wrapper handler, the [`startPlain`](#start-plain) method can be used instead.
+Starts the server with the given request listener function. It will setup an upper layer over the listener to try it and catch any errors in it. If there were errors, the status code will be set to `500` and the response will be ended with the error message. Otherwise, the status is set to `200`. This is done so that assertion methods can be called inside of the supplied function. If the server needs to be started without the wrapper handler, the [`startPlain`](#startplainfn-req-incomingmessage-res-serverresponsesecure-boolean-tester) method can be used instead.
 
 When the `secure` option is passed, the HTTPS server with self-signed keys will be started and `process.env.NODE_TLS_REJECT_UNAUTHORIZED` will be set to `0` so make sure this context is only used for testing, and not on the production env.
 
@@ -266,14 +266,14 @@ example/test/spec/constructor.js > sets the correct name
 🦅  Executed 4 tests: 1 error.
 ```
 </td></tr>
-<tr><td>We expect the last test to fail because in the assertion method we specified that the user name should be different from the one that was passed in the options to the middleware. Other tests pass because there were no errors in the assertion middleware. It is always required to call <code>assert</code> on the context instance, because simply requesting data with <code>get</code> will not throw anything even if the status code was not 200.</td></tr>
+<tr><td>We expected the last test to fail because in the assertion method we specified that the user name should be different from the one that was passed in the options to the middleware. Other tests pass because there were no errors in the assertion middleware. It is always required to call <code>assert</code> on the context instance, because simply requesting data with <code>get</code> will not throw anything even if the status code was not <em>200</em>.</td></tr>
 </table>
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/3.svg?sanitize=true" width="25"></a></p>
 
 ### `startPlain(`<br/>&nbsp;&nbsp;`fn: (req: IncomingMessage, res: ServerResponse),`<br/>&nbsp;&nbsp;`secure: boolean=,`<br/>`): Tester`
 
-Starts the server without wrapping the listener in handler that would set status `200` on success and status `500` on error, and automatically finish the request. This means that the listener must manually do those things. Any uncaught error will result in run-time errors which will be caught by _Zoroaster_'s error handling mechanism outside of the test scope, but ideally they should be dealt with by the developer. If the middleware did not end the request, the test will timeout and the request will be destroyed by the context.
+Starts the server without wrapping the listener in the handler that would set status `200` on success and status `500` on error, and automatically finish the request. This means that the listener must manually do these things. Any uncaught error will result in run-time errors which will be caught by _Zoroaster_'s error handling mechanism outside of the test scope, but ideally they should be dealt with by the developer. If the middleware did not end the request, the test will timeout and the connection will be destroyed by the context to close the request.
 
 <table>
 <tr><th>Plain Listener Testing</th><th>Wrapper Listener Testing</th></tr>
@@ -352,7 +352,7 @@ export const handled = {
 }
 ```
 </td></tr>
-<tr><td colspan="2">With plain listener testing, the developer can test the function as if it was used on the server without any other middleware, such as error handling or automatic finishing of requests. The listener can also be wrapped in a custom service middleware that will do those things to support testing.</td></tr>
+<tr><td colspan="2">With plain listener testing, the developer can test the function as if it was used on the server without any other middleware, such as error handling or automatic finishing of requests. The listener can also be wrapped in a custom service middleware that will do these admin things to support testing.</td></tr>
 <tr><td colspan="2">
 
 ```
@@ -380,7 +380,7 @@ example/test/spec/plain > plain > does not finish the request
 🦅  Executed 5 tests: 2 errors.
 ```
 </td></tr>
-<tr><td colspan="2">The output shows how tests with listeners which did not handle errors fail, so did the tests with listeners that did not end the request. The <code>handled</code> test suite (on the right above), wraps the plain listener in another listener that always closed the connection and caught errors, setting the status code to <code>500</code>, so that all tests passed there. The strategy is similar to the <code>start</code> method, but allows to implement the custom handler.</td></tr>
+<tr><td colspan="2">The output shows how tests with listeners that did not handle errors fail, so did the tests with listeners that did not end the request. The <code>handled</code> test suite (on the right above), wraps the plain listener in a middleware that closed the connection and caught errors, setting the status code to <code>500</code>, therefore all tests passed there. The strategy is similar to the <code>start</code> method, but allows to implement a custom handler.</td></tr>
 </table>
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true" width="25"></a></p>
@@ -464,6 +464,7 @@ The instance of a _Tester_ class is returned by the `start`, `startPlain` and `l
 Navigate to the path and store the result status code, body and headers in an internal state, used for assertions later using the `assert` method.
 
 <table>
+<tr><th colspan="2">get(path?)</th></tr>
 <tr><td>
 
 ```js

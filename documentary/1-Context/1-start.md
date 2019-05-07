@@ -5,7 +5,7 @@
 ]
 ```
 
-Starts the server with the given middleware function. It will setup an upper layer over the middleware to try it and catch any errors in it. If there were errors, the status code will be set to `500` and the response will be ended with the error message. Otherwise, the status is set to `200`. This is done so that assertion methods can be called inside of the supplied function. If the server needs to be started without the wrapper handler, the [`startPlain`](#start-plain) method can be used instead.
+Starts the server with the given request listener function. It will setup an upper layer over the listener to try it and catch any errors in it. If there were errors, the status code will be set to `500` and the response will be ended with the error message. Otherwise, the status is set to `200`. This is done so that assertion methods can be called inside of the supplied function. If the server needs to be started without the wrapper handler, the [`startPlain`](#startplainfn-req-incomingmessage-res-serverresponsesecure-boolean-tester) method can be used instead.
 
 When the `secure` option is passed, the HTTPS server with self-signed keys will be started and `process.env.NODE_TLS_REJECT_UNAUTHORIZED` will be set to `0` so make sure this context is only used for testing, and not on the production env.
 
@@ -55,7 +55,7 @@ The new tests require implementing a method that will call the middleware constr
 </td></tr>
 <tr><td><md2html>
 
-We expect the last test to fail because in the assertion method we specified that the user name should be different from the one that was passed in the options to the middleware. Other tests pass because there were no errors in the assertion middleware. It is always required to call `assert` on the context instance, because simply requesting data with `get` will not throw anything even if the status code was not 200.
+We expected the last test to fail because in the assertion method we specified that the user name should be different from the one that was passed in the options to the middleware. Other tests pass because there were no errors in the assertion middleware. It is always required to call `assert` on the context instance, because simply requesting data with `get` will not throw anything even if the status code was not _200_.
 </md2html></td></tr>
 <!-- /block-end -->
 </table>

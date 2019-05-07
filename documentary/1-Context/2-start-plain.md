@@ -5,7 +5,7 @@
 ]
 ```
 
-Starts the server without wrapping the listener in handler that would set status `200` on success and status `500` on error, and automatically finish the request. This means that the listener must manually do those things. Any uncaught error will result in run-time errors which will be caught by _Zoroaster_'s error handling mechanism outside of the test scope, but ideally they should be dealt with by the developer. If the middleware did not end the request, the test will timeout and the request will be destroyed by the context.
+Starts the server without wrapping the listener in the handler that would set status `200` on success and status `500` on error, and automatically finish the request. This means that the listener must manually do these things. Any uncaught error will result in run-time errors which will be caught by _Zoroaster_'s error handling mechanism outside of the test scope, but ideally they should be dealt with by the developer. If the middleware did not end the request, the test will timeout and the connection will be destroyed by the context to close the request.
 
 <table>
 <tr><th>Plain Listener Testing</th><th>Wrapper Listener Testing</th></tr>
@@ -20,7 +20,7 @@ Starts the server without wrapping the listener in handler that would set status
 </td></tr>
 <tr><td colspan="2"><md2html>
 
-With plain listener testing, the developer can test the function as if it was used on the server without any other middleware, such as error handling or automatic finishing of requests. The listener can also be wrapped in a custom service middleware that will do those things to support testing.
+With plain listener testing, the developer can test the function as if it was used on the server without any other middleware, such as error handling or automatic finishing of requests. The listener can also be wrapped in a custom service middleware that will do these admin things to support testing.
 </md2html></td></tr>
 <!-- /block-end -->
 <!-- block-start -->
@@ -30,7 +30,7 @@ With plain listener testing, the developer can test the function as if it was us
 </td></tr>
 <tr><td colspan="2"><md2html>
 
-The output shows how tests with listeners which did not handle errors fail, so did the tests with listeners that did not end the request. The `handled` test suite (on the right above), wraps the plain listener in another listener that always closed the connection and caught errors, setting the status code to `500`, so that all tests passed there. The strategy is similar to the `start` method, but allows to implement the custom handler.
+The output shows how tests with listeners that did not handle errors fail, so did the tests with listeners that did not end the request. The `handled` test suite (on the right above), wraps the plain listener in a middleware that closed the connection and caught errors, setting the status code to `500`, therefore all tests passed there. The strategy is similar to the `start` method, but allows to implement a custom handler.
 </md2html></td></tr>
 <!-- /block-end -->
 </table>

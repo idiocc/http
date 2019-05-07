@@ -34,7 +34,7 @@ For example, we might want to test some synchronous middleware. It will check fo
 </td></tr>
 <tr><td><md2html>
 
-The tests are written for _Zoroaster_ in such a way that test suite objects are exported. When the `context` property is found on the test suite, it will be instantiated for all inner tests.
+The tests are written for _Zoroaster_ in such a way that test suite objects are exported. When the `context` property is found on the test suite, it will be instantiated for all inner tests. The `start` method will wrap the request listener in try-catch block to send statuses _200_ and _500_ accordingly (see below).
 </md2html>
 </td></tr>
 <!-- /block-end -->
