@@ -53,12 +53,12 @@ The tests can be run with _Zoroaster_ test runner: `zoroaster example/test/spec 
 
 %~ width="25"%
 
-```### constructor
+<!-- ```### constructor
 ```
 
 The constructor is not used manually, it will be called by _Zoroaster_ automatically.
 
-%~ width="25"%
+%~ width="25"% -->
 <!-- %TYPEDEF types/index.xml%
 
 %EXAMPLE: example, ../src => @contexts/http%
