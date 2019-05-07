@@ -1,7 +1,7 @@
-import HttpContext from '../../../../src'
+import Http from '../../../../src'
 
 /* start example */
-class Context {
+class C {
   c(listener) {
     return (req, res) => {
       try {
@@ -15,9 +15,9 @@ class Context {
   }
 }
 
-/** @type {Object<string, (c:Context, h: HttpContext)} */
+/** @type {Object<string, (c:C, h: Http)} */
 export const handled = {
-  context: [Context, HttpContext],
+  context: [C, Http],
   async 'throws an error'({ c },
     { startPlain }) {
     await startPlain(c(() => {

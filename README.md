@@ -273,15 +273,15 @@ example/test/spec/constructor.js > sets the correct name
 Starts the server without wrapping the listener in handler that would set status `200` on success and status `500` on error, and automatically finish the request. This means that the listener must manually do those things. Any uncaught error will result in run-time errors which will be caught by _Zoroaster_'s error handling mechanism outside of the test scope, but ideally they should be dealt with by the developer. If the middleware did not end the request, the test will timeout and the request will be destroyed by the context.
 
 <table>
-<tr><th colspan="2">Plain Listener Testing</th></tr>
+<tr><th>Plain Listener Testing</th><th>Wrapper Listener Testing</th></tr>
 <tr><td>
 
 ```js
-import HttpContext from '@contexts/http'
+import Http from '@contexts/http'
 
-/** @type {Object<string, (h: HttpContext)} */
+/** @type {Object<string, (h: Http)} */
 const TS = {
-  context: HttpContext,
+  context: Http,
   async 'sets the status code and body'(
     { startPlain }) {
     await startPlain((req, res) => {
@@ -299,7 +299,8 @@ const TS = {
       .get('/')
   },
   // expect to timeout
-  async 'does not finish the request'({ startPlain }) {
+  async 'does not finish the request'(
+    { startPlain }) {
     await startPlain((req, res) => {
       res.write('hello')
     })
@@ -313,7 +314,7 @@ export default TS
 <td>
 
 ```js
-class Context {
+class C {
   c(listener) {
     return (req, res) => {
       try {
@@ -327,9 +328,9 @@ class Context {
   }
 }
 
-/** @type {Object<string, (c:Context, h: HttpContext)} */
+/** @type {Object<string, (c:C, h: Http)} */
 export const handled = {
-  context: [Context, HttpContext],
+  context: [C, Http],
   async 'throws an error'({ c },
     { startPlain }) {
     await startPlain(c(() => {
@@ -348,7 +349,7 @@ export const handled = {
 }
 ```
 </td></tr>
-<tr><td colspan="2">With plain listener testing, the developer can test the function as if it was used on the server without any other middleware, such as error handling or automatic finishing of requests. The listener can also be wrapped in a custom service middleware will do those things to support testing.</td></tr>
+<tr><td colspan="2">With plain listener testing, the developer can test the function as if it was used on the server without any other middleware, such as error handling or automatic finishing of requests. The listener can also be wrapped in a custom service middleware that will do those things to support testing.</td></tr>
 <tr><td colspan="2">
 
 ```
@@ -376,7 +377,7 @@ example/test/spec/plain > plain > does not finish the request
 🦅  Executed 5 tests: 2 errors.
 ```
 </td></tr>
-<tr><td colspan="2">The tests with listeners which did not handle errors with fail, so will the tests with listeners that did not end the request. The second test suite, <code>handled</code> will wrap the plain listener in another listener that will always close the connection and also catch errors, setting the status code to <code>500</code>. It is similar to the <code>start</code> method, but allows to implement the custom handler.</td></tr>
+<tr><td colspan="2">The output shows how tests with listeners which did not handle errors fail, so did the tests with listeners that did not end the request. The <code>handled</code> test suite (on the right above), wraps the plain listener in another listener that always closed the connection and caught errors, setting the status code to <code>500</code>, so that all tests passed there. The strategy is similar to the <code>start</code> method, but allows to implement the custom handler.</td></tr>
 </table>
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true" width="25"></a></p>

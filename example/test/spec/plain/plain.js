@@ -1,8 +1,8 @@
-import HttpContext from '../../../../src'
+import Http from '../../../../src'
 
-/** @type {Object<string, (h: HttpContext)} */
+/** @type {Object<string, (h: Http)} */
 const TS = {
-  context: HttpContext,
+  context: Http,
   async 'sets the status code and body'(
     { startPlain }) {
     await startPlain((req, res) => {
@@ -20,7 +20,8 @@ const TS = {
       .get('/')
   },
   // expect to timeout
-  async 'does not finish the request'({ startPlain }) {
+  async 'does not finish the request'(
+    { startPlain }) {
     await startPlain((req, res) => {
       res.write('hello')
     })
