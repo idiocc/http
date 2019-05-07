@@ -291,13 +291,15 @@ const TS = {
       .get('/')
       .assert(200, 'Hello World')
   },
+  // expect to fail with global error
   async 'throws an error'({ startPlain }) {
     await startPlain(() => {
       throw new Error('Unhandled error.')
     })
       .get('/')
   },
-  async 'times out'({ startPlain }) {
+  // expect to timeout
+  async 'does not finish the request'({ startPlain }) {
     await startPlain((req, res) => {
       res.write('hello')
     })
@@ -311,21 +313,23 @@ export default TS
 <td>
 
 ```js
-/** @type {Object<string, (h: HttpContext)} */
-export const handled = {
-  context: [class {
-    c(listener) {
-      return (req, res) => {
-        try {
-          listener(req, res)
-        } catch (err) {
-          res.statusCode = 500
-        } finally {
-          res.end()
-        }
+class Context {
+  c(listener) {
+    return (req, res) => {
+      try {
+        listener(req, res)
+      } catch (err) {
+        res.statusCode = 500
+      } finally {
+        res.end()
       }
     }
-  }, HttpContext],
+  }
+}
+
+/** @type {Object<string, (c:Context, h: HttpContext)} */
+export const handled = {
+  context: [Context, HttpContext],
   async 'throws an error'({ c },
     { startPlain }) {
     await startPlain(c(() => {
@@ -356,17 +360,17 @@ example/test/spec/plain
     ✓  sets the status code and body
     ✗  throws an error
     | Error: Unhandled error.
-    |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:17:13)
+    |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
     |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:174:15)
-    ✗  times out
+    ✗  does not finish the request
     | Error: Test has timed out after 200ms
 
 example/test/spec/plain > plain > throws an error
   Error: Unhandled error.
-      at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:17:13)
+      at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
       at Server.handler (/Users/zavr/idiocc/http/src/index.js:174:15)
 
-example/test/spec/plain > plain > times out
+example/test/spec/plain > plain > does not finish the request
   Error: Test has timed out after 200ms
 
 🦅  Executed 5 tests: 2 errors.

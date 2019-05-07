@@ -12,13 +12,15 @@ const TS = {
       .get('/')
       .assert(200, 'Hello World')
   },
+  // expect to fail with global error
   async 'throws an error'({ startPlain }) {
     await startPlain(() => {
       throw new Error('Unhandled error.')
     })
       .get('/')
   },
-  async 'times out'({ startPlain }) {
+  // expect to timeout
+  async 'does not finish the request'({ startPlain }) {
     await startPlain((req, res) => {
       res.write('hello')
     })
