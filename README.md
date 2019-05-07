@@ -365,14 +365,14 @@ example/test/spec/plain
     ✗  throws an error
     | Error: Unhandled error.
     |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:67:15)
+    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:72:15)
     ✗  does not finish the request
     | Error: Test has timed out after 200ms
 
 example/test/spec/plain > plain > throws an error
   Error: Unhandled error.
       at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-      at Server.handler (/Users/zavr/idiocc/http/src/index.js:67:15)
+      at Server.handler (/Users/zavr/idiocc/http/src/index.js:72:15)
 
 example/test/spec/plain > plain > does not finish the request
   Error: Test has timed out after 200ms
@@ -415,7 +415,6 @@ export default createServer(app)
 <td>
 
 ```js
-/* example start */
 import H from '@contexts/http'
 import server from '../../src/server'
 
@@ -435,19 +434,6 @@ const TS = {
 }
 
 export default TS
-
-/* example end */
-// import { createServer } from 'http'
-// async 'zoroaster catches errors'(
-//   { listen }) {
-//   await listen(createServer((req, res) => {
-//     res.statusCode = 500
-//     res.end()
-//     throw new Error('Uncaught Error')
-//   }))
-//     .get('/error')
-//     .assert(500)
-// },
 ```
 </td></tr>
 <tr><td colspan="2">When a server needs to be tested as a whole of its middleware, the <code>listen</code> method of the <em>HttpContext</em> is used. It allows to start the server on a random port, navigate to pages served by it, and assert on the results.</td></tr>

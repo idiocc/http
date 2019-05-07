@@ -14,6 +14,13 @@ const T = {
       .get('/')
       .assert(201, 'ok')
   },
+  // async '!destroys the server'({ listen }) {
+  //   const server = createServer((req, res) => {
+  //     res.statusCode = 201
+  //   })
+  //   await listen(server)
+  //     .get('/')
+  // },
 }
 
 export default T

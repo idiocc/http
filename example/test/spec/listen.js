@@ -1,4 +1,4 @@
-/* example start */
+/* start example */
 import H from '../../../src'
 import server from '../../src/server'
 
@@ -19,7 +19,7 @@ const TS = {
 
 export default TS
 
-/* example end */
+/* end example */
 // import { createServer } from 'http'
 // async 'zoroaster catches errors'(
 //   { listen }) {

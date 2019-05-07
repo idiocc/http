@@ -25,6 +25,11 @@ export default class Server {
      * @type {Response}
      */
     this.response = {}
+    /**
+     * The map of connections to the server. Used to finish any unended requests.
+     * @type {Object<string, net.Socket>}
+     */
+    this._connections = {}
   }
   /**
    * Call to switch on printing of debug messages and error stacks in the response body.
@@ -87,10 +92,12 @@ export default class Server {
     return this.listen(server)
   }
   async _destroy() {
-    if (this.response && this.response.end) this.response.end()
     this._destroyed = true
     if (this.server) await new Promise(r => {
       this.server.close(r)
+      for (let k in this._connections) {
+        this._connections[k].destroy()
+      }
     })
   }
   /**
@@ -111,6 +118,14 @@ export default class Server {
       this.server = server
     })
     tester.context = this
+    server.on('connection', (con) => {
+      const { remoteAddress, remotePort } = con
+      const k = [remoteAddress, remotePort].join(':')
+      this._connections[k] = con
+      con.on('close', () => {
+        delete this._connections[k]
+      })
+    })
     return tester
   }
 }
@@ -124,6 +139,7 @@ export { Tester }
  * @typedef {import('http').IncomingHttpHeaders} http.IncomingHttpHeaders
  * @typedef {import('http').Server} http.Server
  * @typedef {import('https').Server} https.Server
+ * @typedef {import('net').Socket} net.Socket
  * @typedef {http.ServerResponse & { headers: http.IncomingHttpHeaders }} Response The response with headers.
  */
 
