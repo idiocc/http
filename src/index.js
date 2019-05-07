@@ -1,120 +1,13 @@
-import { equal, ok } from 'assert'
 import { createServer } from 'http'
 import { join } from 'path'
-import aqt from '@rqt/aqt'
-import { createServer as createSecureServer } from 'https'
+import { createServer as createSecureServer, Server as HttpsServer } from 'https'
 import { readFileSync } from 'fs'
-import erotic from 'erotic'
 import cleanStack from '@artdeco/clean-stack'
-import deepEqual from '@zoroaster/deep-equal'
 import { c } from 'erte'
+import Tester from './Tester'
 
 const cert = readFileSync(join(__dirname, 'server.crt'), 'ascii')
 const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
-
-export class Tester extends Promise {
-  constructor() {
-    super(() => {})
-    /**
-     * The headers to send with the request, must be set before the `get` method is called using the `set` method.
-     * @type {http.OutgoingHttpHeaders}
-     */
-    this.headers = {}
-
-    /**
-     * @private
-     */
-    this._chain = Promise.resolve(true)
-    /**
-     * The reference to the parent context that started the server.
-     * @type {Server}
-     */
-    this.context = null
-  }
-  /**
-   * Adds the action to the list.
-   * @private
-   */
-  _addLink(fn, e) {
-    this._chain = this._chain.then(async (res) => {
-      if (res === false) return false
-      try {
-        return await fn()
-      } catch (err) {
-        if (e) throw e(err)
-        throw err
-      }
-    })
-  }
-  then(Ok, notOk) {
-    return this._chain.then(() => {
-      Ok()
-    }, (err) => {
-      notOk(err)
-    })
-  }
-  /**
-   * Navigate to the path and return the result.
-   * @param {string} path The path to navigate, empty by default.
-   */
-  get(path = '') {
-    this._addLink(async () => {
-      const { statusCode, body, headers } = await aqt(`${this.url}${path}`, {
-        headers: this.headers,
-      })
-      this.statusCode = statusCode
-      this.body = body
-      this.context.response.headers = headers
-    })
-    return this
-  }
-  /**
-   * Assert on the status code and body when a number is given.
-   * Assert on the header when the string is given. If the second arg is null, asserts on the absence of the header.
-   * @param {number|string|function(Response)} code The number of the status code, or name of the header, or the custom assertion function.
-   * @param {String} message The body or header value (or null for no header).
-   */
-  assert(code, message) {
-    const e = erotic(true)
-    this._addLink(() => {
-      if (typeof code == 'function') {
-        code(this.context.response)
-        return
-      }
-      if (typeof code == 'string' && message) {
-        equal(this.context.response.headers[code.toLowerCase()], message)
-        return
-      } else if (typeof code == 'string' && message === null) {
-        const v = this.context.response.headers[code.toLowerCase()]
-        if (v)
-          throw new Error(`The response had header ${code}: ${v}`)
-        return
-      }
-      // if we're here means code assertion
-      try {
-        equal(this.statusCode, code)
-      } catch (err) {
-        err.message = err.message + ' ' + this.body || ''
-        throw err
-      }
-      if (message instanceof RegExp) {
-        ok(message.test(this.body), `The body does not match ${message}`)
-      } else if (typeof message == 'object') {
-        deepEqual(this.body, message)
-      } else if (message) equal(this.body, message)
-    }, e)
-    return this
-  }
-  /**
-   * Sets the value for the header in the upcoming request.
-   * @param {string} name The name of the header to set.
-   * @param {string} value The value to set.
-   */
-  set(name, value) {
-    this.headers[name] = value
-    return this
-  }
-}
 
 export default class Server {
   constructor() {
@@ -124,14 +17,14 @@ export default class Server {
     this.TesterConstructor = Tester
     /**
      * The HTTP(S) server will be set on the tester after the `start` method is called. It will be automatically destroyed by the end of the test.
-     * @type {http.Server}
+     * @type {http.Server|https.Server}
      */
     this.server = null
     /**
-     * After the request listener is called, the `response` will be set to the server response which comes as the second argument to the request listener callback. The response will be updated to contain parsed headers.
+     * After the request listener is called, the `response` will be set to the server response which comes as the second argument to the request listener callback. The response will be updated to contain parsed headers. When using the `listen` method, only the headers received will be accessed via the object.
      * @type {Response}
      */
-    this.response = null
+    this.response = {}
   }
   /**
    * Call to switch on printing of debug messages and error stacks in the response body.
@@ -191,6 +84,21 @@ export default class Server {
     } else {
       server = createServer(handler)
     }
+    return this.listen(server)
+  }
+  async _destroy() {
+    if (this.response && this.response.end) this.response.end()
+    this._destroyed = true
+    if (this.server) await new Promise(r => {
+      this.server.close(r)
+    })
+  }
+  /**
+   * Calls the `listen` method on the server to accept incoming connections.
+   * @param {http.Server|https.Server} server The server to start.
+   */
+  listen(server) {
+    const secure = server instanceof HttpsServer
     const tester = new this.TesterConstructor()
     tester._addLink(async () => {
       await new Promise(r => server.listen(r))
@@ -205,14 +113,9 @@ export default class Server {
     tester.context = this
     return tester
   }
-  async _destroy() {
-    if (this.response) this.response.end()
-    this._destroyed = true
-    if (this.server) await new Promise(r => {
-      this.server.close(r)
-    })
-  }
 }
+
+export { Tester }
 
 /**
  * @typedef {import('http').IncomingMessage} http.IncomingMessage
@@ -220,6 +123,7 @@ export default class Server {
  * @typedef {import('http').OutgoingHttpHeaders} http.OutgoingHttpHeaders
  * @typedef {import('http').IncomingHttpHeaders} http.IncomingHttpHeaders
  * @typedef {import('http').Server} http.Server
+ * @typedef {import('https').Server} https.Server
  * @typedef {http.ServerResponse & { headers: http.IncomingHttpHeaders }} Response The response with headers.
  */
 

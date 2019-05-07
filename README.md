@@ -15,6 +15,9 @@ yarn add @contexts/http
 - [class HttpContext](#class-httpcontext)
   * [`start(fn: (req: IncomingMessage, res: ServerResponse), secure: boolean=): Tester`](#startfn-req-incomingmessage-res-serverresponsesecure-boolean-tester)
   * [`startPlain(fn: (req: IncomingMessage, res: ServerResponse), secure: boolean=): Tester`](#startplainfn-req-incomingmessage-res-serverresponsesecure-boolean-tester)
+  * [`startPlain(fn: (req: IncomingMessage, res: ServerResponse), secure: boolean=): Tester`](#startplainfn-req-incomingmessage-res-serverresponsesecure-boolean-tester)
+- [class Tester](#class-tester)
+  * [`get(path: string=): Tester`](#getpath-string-tester)
 - [Extending](#extending)
 - [Copyright](#copyright)
 
@@ -382,13 +385,171 @@ example/test/spec/plain > plain > does not finish the request
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true" width="25"></a></p>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true"></a></p>
+### `startPlain(`<br/>&nbsp;&nbsp;`fn: (req: IncomingMessage, res: ServerResponse),`<br/>&nbsp;&nbsp;`secure: boolean=,`<br/>`): Tester`
+
+Starts the server without wrapping the listener in handler that would set status `200` on success and status `500` on error, and automatically finish the request. This means that the listener must manually do those things. Any uncaught error will result in run-time errors which will be caught by _Zoroaster_'s error handling mechanism outside of the test scope, but ideally they should be dealt with by the developer. If the middleware did not end the request, the test will timeout and the request will be destroyed by the context.
+
+<table>
+<tr><th>Plain Listener Testing</th><th>Wrapper Listener Testing</th></tr>
+<tr><td>
+
+```js
+import Http from '@contexts/http'
+
+/** @type {Object<string, (h: Http)} */
+const TS = {
+  context: Http,
+  async 'sets the status code and body'(
+    { startPlain }) {
+    await startPlain((req, res) => {
+      res.statusCode = 200
+      res.end('Hello World')
+    })
+      .get('/')
+      .assert(200, 'Hello World')
+  },
+  // expect to fail with global error
+  async 'throws an error'({ startPlain }) {
+    await startPlain(() => {
+      throw new Error('Unhandled error.')
+    })
+      .get('/')
+  },
+  // expect to timeout
+  async 'does not finish the request'(
+    { startPlain }) {
+    await startPlain((req, res) => {
+      res.write('hello')
+    })
+      .get('/')
+  },
+}
+
+export default TS
+```
+</td>
+<td>
+
+```js
+class C {
+  c(listener) {
+    return (req, res) => {
+      try {
+        listener(req, res)
+      } catch (err) {
+        res.statusCode = 500
+      } finally {
+        res.end()
+      }
+    }
+  }
+}
+
+/** @type {Object<string, (c:C, h: Http)} */
+export const handled = {
+  context: [C, Http],
+  async 'throws an error'({ c },
+    { startPlain }) {
+    await startPlain(c(() => {
+      throw new Error('Unhandled error.')
+    }))
+      .get('/')
+      .assert(500)
+  },
+  async 'times out'({ c }, { startPlain }) {
+    await startPlain(c((req, res) => {
+      res.write('hello')
+    }))
+      .get('/')
+      .assert(200, 'hello')
+  },
+}
+```
+</td></tr>
+<tr><td colspan="2">With plain listener testing, the developer can test the function as if it was used on the server without any other middleware, such as error handling or automatic finishing of requests. The listener can also be wrapped in a custom service middleware that will do those things to support testing.</td></tr>
+<tr><td colspan="2">
+
+```
+example/test/spec/plain
+   handled
+    ✓  throws an error
+    ✓  times out
+   plain
+    ✓  sets the status code and body
+    ✗  throws an error
+    | Error: Unhandled error.
+    |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
+    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:174:15)
+    ✗  does not finish the request
+    | Error: Test has timed out after 200ms
+
+example/test/spec/plain > plain > throws an error
+  Error: Unhandled error.
+      at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
+      at Server.handler (/Users/zavr/idiocc/http/src/index.js:174:15)
+
+example/test/spec/plain > plain > does not finish the request
+  Error: Test has timed out after 200ms
+
+🦅  Executed 5 tests: 2 errors.
+```
+</td></tr>
+<tr><td colspan="2">The output shows how tests with listeners which did not handle errors fail, so did the tests with listeners that did not end the request. The <code>handled</code> test suite (on the right above), wraps the plain listener in another listener that always closed the connection and caught errors, setting the status code to <code>500</code>, so that all tests passed there. The strategy is similar to the <code>start</code> method, but allows to implement the custom handler.</td></tr>
+</table>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true" width="25"></a></p>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/6.svg?sanitize=true"></a></p>
+
+## class Tester
+
+The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class extends the _Promise_.
+
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/7.svg?sanitize=true" width="25"></a></p>
+
+### `get(`<br/>&nbsp;&nbsp;`path: string=,`<br/>`): Tester`
+
+Navigate to the path and store the result status code, body and headers in an internal state, used for assertions later using the `assert` method.
+
+<table>
+<tr><td>
+
+```js
+async 'redirects to /'({ start }) {
+  await start(middleware)
+    .get()
+    .assert(302)
+    .assert('location', 'index.html')
+},
+async 'opens sitemap'({ start }) {
+  await start(middleware)
+    .get('/sitemap')
+    .assert(200)
+},
+```
+</td>
+<td>
+
+```
+example/test/spec/get.js
+  ✓  redirects to /
+  ✓  opens sitemap
+
+🦅  Executed 2 tests.
+```
+</td></tr>
+</table>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/8.svg?sanitize=true" width="25"></a></p>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/9.svg?sanitize=true"></a></p>
 
 ## Extending
 
 The package was designed to be extended with custom assertions which are easily documented for use in tests. The only thing required is to import the _Tester_ class, and extend it, following a few simple rules.
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/6.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/10.svg?sanitize=true"></a></p>
 
 ## Copyright
 
