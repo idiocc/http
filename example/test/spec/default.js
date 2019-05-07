@@ -1,4 +1,4 @@
-import HttpContext from '../../../src'
+import HttpContext from '@contexts/http'
 import middleware from '../../src'
 
 /** @type {Object<string, (h: HttpContext)} */

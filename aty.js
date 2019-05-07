@@ -35,9 +35,8 @@ ${code`53`}`
 (async () => {
   const a = aty`
 ${activateApp`Code`}
-${type`a`}
-${code`53`}
-${type`${'sync \'authenticates known user\'({ '}${10}${20}`}
+${typeInstant`async `}
+${type`${'\'authenticates known user\'({ '}${10}${20}`}
 ${code`53`}
 ${type`${'sta'}`}
 ${delay`${'2500'}`}

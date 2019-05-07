@@ -75,7 +75,7 @@ For example, we might want to test some synchronous middleware. It will check fo
 </tr></td>
 <tr><td>
 
-<img src="aty/1.gif" alt="Writing Tests With HttpContext">
+<img src="aty/2.gif" alt="Writing Tests With HttpContext">
 </td></tr>
 <tr><td>The tests are written for <em>Zoroaster</em> in such a way that test suite objects are exported. When the <code>context</code> property is found on the test suite, it will be instantiated for all inner tests. The <code>start</code> method will wrap the request listener in try-catch block to send statuses <em>200</em> and <em>500</em> accordingly (see below).
 </td></tr>
