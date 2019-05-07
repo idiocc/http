@@ -61,6 +61,6 @@ The constructor is not used manually, it will be called by _Zoroaster_ automatic
 %~ width="25"%
 <!-- %TYPEDEF types/index.xml%
 
-%EXAMPLE: example, ../src => @idio/http%
+%EXAMPLE: example, ../src => @contexts/http%
 %FORK example% -->
 

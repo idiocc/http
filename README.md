@@ -1,11 +1,11 @@
-# @idio/http
+# @contexts/http
 
-[![npm version](https://badge.fury.io/js/%40idio%2Fhttp.svg)](https://npmjs.org/package/@idio/http)
+[![npm version](https://badge.fury.io/js/%40contexts%2Fhttp.svg)](https://npmjs.org/package/@contexts/http)
 
-`@idio/http` is The Http(s) Testing Context For Super-Test Style Assertions. Includes Standard Assertions (get, set, assert), And Allows To Be Extended With JSDocumented Custom Assertions.
+`@contexts/http` is The Http(s) Testing Context For Super-Test Style Assertions. Includes Standard Assertions (get, set, assert), And Allows To Be Extended With JSDocumented Custom Assertions.
 
 ```sh
-yarn add @idio/http
+yarn add @contexts/http
 ```
 
 ## Table Of Contents
@@ -355,7 +355,7 @@ example/test/spec/plain.js
   |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain.js:16:13)
   |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:174:15)
   ✗  times out
-  | Error: Test has timed out after 100ms
+  | Error: Test has timed out after 200ms
    handled
     ✓  throws an error
     ✓  times out
@@ -366,7 +366,7 @@ example/test/spec/plain.js > throws an error
       at Server.handler (/Users/zavr/idiocc/http/src/index.js:174:15)
 
 example/test/spec/plain.js > times out
-  Error: Test has timed out after 100ms
+  Error: Test has timed out after 200ms
 
 🦅  Executed 5 tests: 2 errors.
 ```

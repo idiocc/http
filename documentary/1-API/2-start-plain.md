@@ -22,7 +22,7 @@ With plain listener testing, the developer can test the function as if it was us
 <!-- block-start -->
 <tr><td>
 
-%FORK node_modules/.bin/zoroaster example/test/spec/plain.js -a -t 100%
+%FORK node_modules/.bin/zoroaster example/test/spec/plain.js -a -t 200%
 </td></tr>
 <tr><td><md2html>
 

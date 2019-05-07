@@ -10,7 +10,7 @@
       "name": "Launch Zoroaster",
       "program": "${workspaceFolder}/node_modules/.bin/zoroaster",
       "env": {
-        "NODE_DEBUG": "@idio/http",
+        "NODE_DEBUG": "@contexts/http",
       },
       "console": "integratedTerminal",
       "args": [

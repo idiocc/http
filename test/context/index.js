@@ -1,7 +1,7 @@
 import { join } from 'path'
 import { debuglog } from 'util'
 
-const LOG = debuglog('@idio/http')
+const LOG = debuglog('@contexts/http')
 
 /**
  * A testing context for the package.

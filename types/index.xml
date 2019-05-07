@@ -1,5 +1,5 @@
-<types namespace="_@idio/http">
-  <type name="Config" desc="Options for the program.">
+<types namespace="_contexts">
+  <type name="HttpContext" desc="The HTTP context interface.">
     <prop boolean name="shouldRun" default="true">
       A boolean option.
     </prop>
