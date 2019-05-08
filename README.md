@@ -18,6 +18,9 @@ yarn add @contexts/http
   * [`listen(server: http.Server|https.Server): Tester`](#listenserver-httpserverhttpsserver-tester)
 - [class Tester](#class-tester)
   * [`get(path: string=): Tester`](#getpath-string-tester)
+  * [`assert(code: number, body: string|RegExp=|Object): Tester`](#assertcode-numberbody-stringregexpobject-tester)
+  * [`assert(header: string, value: ?string): Tester`](#assertheader-stringvalue-string-tester)
+  * [`assert(assertion: function(ServerResponse)): Tester`](#assertassertion-functionserverresponse-tester)
 - [Extending](#extending)
 - [Copyright](#copyright)
 
@@ -468,13 +471,150 @@ example/test/spec/get.js
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/7.svg?sanitize=true" width="25"></a></p>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/8.svg?sanitize=true"></a></p>
+### `assert(`<br/>&nbsp;&nbsp;`code: number,`<br/>&nbsp;&nbsp;`body: string|RegExp=|Object,`<br/>`): Tester`
+
+Assert on the status code and body. The error message will contain the body if it was present. If the response was in JSON, it will be automatically parses by the request library, and the deep assertion will be performed.
+
+<table>
+<tr><th colspan="2">assert(code, body=)</th></tr>
+<tr><td>
+
+```js
+async 'asserts status code'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.statusCode = 205
+    res.end()
+  })
+    .get()
+    .assert(205)
+},
+async 'asserts status code with message'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.statusCode = 205
+    res.end('example')
+  })
+    .get('/sitemap')
+    .assert(205, 'example')
+},
+async 'asserts status code with regexp'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.statusCode = 205
+    res.end('Example')
+  })
+    .get('/sitemap')
+    .assert(205, /example/i)
+},
+async 'asserts status code with json'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.statusCode = 205
+    res.setHeader('content-type', 'application/json')
+    res.end(JSON.stringify({ hello: 'world' }))
+  })
+    .get('/sitemap')
+    .assert(205, { hello: 'world' })
+},
+```
+</td>
+<td>
+
+```
+example/test/spec/assert/code.js
+  ✓  asserts status code
+  ✓  asserts status code with message
+  ✓  asserts status code with regexp
+  ✓  asserts status code with json
+
+🦅  Executed 4 tests.
+```
+</td></tr>
+</table>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/8.svg?sanitize=true" width="25"></a></p>
+
+### `assert(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: ?string,`<br/>`): Tester`
+
+Assert on the response header. The value must be either a string, or null to assert that the header was not set.
+
+<table>
+<tr><th colspan="2">assert(header, ?value)</th></tr>
+<tr><td>
+
+```js
+async 'asserts header'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.statusCode = 205
+    res.setHeader('content-type', 'application/json')
+    res.end('[]')
+  })
+    .get('/sitemap')
+    .assert(205)
+    .assert('content-type', 'application/json')
+},
+async 'asserts absence of a header'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.end()
+  })
+    .get('/sitemap')
+    .assert('content-type', null)
+},
+```
+</td>
+<td>
+
+```
+example/test/spec/assert/header.js
+  ✓  asserts header
+  ✓  asserts absence of a header
+
+🦅  Executed 2 tests.
+```
+</td></tr>
+</table>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/9.svg?sanitize=true" width="25"></a></p>
+
+### `assert(`<br/>&nbsp;&nbsp;`assertion: function(ServerResponse),`<br/>`): Tester`
+
+Perform an assertion using the function that will receive the response object set by the `setup` method, enriched with the `headers` field updated by the request library.
+
+<table>
+<tr><th colspan="2">assert(assertion)</th></tr>
+<tr><td>
+
+```js
+async 'asserts using a function'({ start }) {
+  await start((_, res) => {
+    res.statusCode = 205
+    res.setHeader('content-type', 'application/xml')
+    res.end()
+  })
+    .get('/sitemap')
+    .assert((res) => {
+      equal(res.headers['content-type'], 'application/xml')
+    })
+},
+```
+</td>
+<td>
+
+```
+example/test/spec/assert/function.js
+  ✓  asserts using a function
+
+🦅  Executed 1 test.
+```
+</td></tr>
+</table>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/10.svg?sanitize=true" width="25"></a></p>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/11.svg?sanitize=true"></a></p>
 
 ## Extending
 
 The package was designed to be extended with custom assertions which are easily documented for use in tests. The only thing required is to import the _Tester_ class, and extend it, following a few simple rules.
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/9.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/12.svg?sanitize=true"></a></p>
 
 ## Copyright
 
