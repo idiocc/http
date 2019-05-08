@@ -19,5 +19,3 @@ Sets the outgoing headers. Must be called before the `get` method.
 %FORK node_modules/.bin/zoroaster example/test/spec/assert/set.js -a%
 </td></tr>
 </table>
-
-%~ width="25"%
