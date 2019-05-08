@@ -1,7 +1,7 @@
 ```### assert => Tester
 [
   ["code", "number"],
-  ["body", "string|RegExp=|Object"]
+  ["body", "(string|RegExp|Object)="]
 ]
 ```
 

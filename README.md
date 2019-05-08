@@ -18,9 +18,10 @@ yarn add @contexts/http
   * [`listen(server: http.Server|https.Server): Tester`](#listenserver-httpserverhttpsserver-tester)
 - [class Tester](#class-tester)
   * [`get(path: string=): Tester`](#getpath-string-tester)
-  * [`assert(code: number, body: string|RegExp=|Object): Tester`](#assertcode-numberbody-stringregexpobject-tester)
+  * [`assert(code: number, body: (string|RegExp|Object)=): Tester`](#assertcode-numberbody-stringregexpobject-tester)
   * [`assert(header: string, value: ?string): Tester`](#assertheader-stringvalue-string-tester)
   * [`assert(assertion: function(ServerResponse)): Tester`](#assertassertion-functionserverresponse-tester)
+  * [`set(header: string, value: string): Tester`](#setheader-stringvalue-string-tester)
 - [Extending](#extending)
 - [Copyright](#copyright)
 
@@ -471,7 +472,7 @@ example/test/spec/get.js
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/7.svg?sanitize=true" width="25"></a></p>
 
-### `assert(`<br/>&nbsp;&nbsp;`code: number,`<br/>&nbsp;&nbsp;`body: string|RegExp=|Object,`<br/>`): Tester`
+### `assert(`<br/>&nbsp;&nbsp;`code: number,`<br/>&nbsp;&nbsp;`body: (string|RegExp|Object)=,`<br/>`): Tester`
 
 Assert on the status code and body. The error message will contain the body if it was present. If the response was in JSON, it will be automatically parses by the request library, and the deep assertion will be performed.
 
@@ -609,13 +610,51 @@ example/test/spec/assert/function.js
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/10.svg?sanitize=true" width="25"></a></p>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/11.svg?sanitize=true"></a></p>
+### `set(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: string,`<br/>`): Tester`
+
+Sets the outgoing headers. Must be called before the `get` method.
+
+<table>
+<tr><th colspan="2">set(header, value)</th></tr>
+<tr><td>
+
+```js
+async 'sets the header'({ startPlain }) {
+  await startPlain((req, res) => {
+    if (req.headers['x-auth'] == 'token') {
+      res.statusCode = 205
+      res.end('hello')
+    } else {
+      res.statusCode = 403
+      res.end('forbidden')
+    }
+  })
+    .set('x-auth', 'token')
+    .get()
+    .assert(205)
+},
+```
+</td>
+<td>
+
+```
+example/test/spec/assert/set.js
+  ✓  sets the header
+
+🦅  Executed 1 test.
+```
+</td></tr>
+</table>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/11.svg?sanitize=true" width="25"></a></p>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/12.svg?sanitize=true"></a></p>
 
 ## Extending
 
 The package was designed to be extended with custom assertions which are easily documented for use in tests. The only thing required is to import the _Tester_ class, and extend it, following a few simple rules.
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/12.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/13.svg?sanitize=true"></a></p>
 
 ## Copyright
 
