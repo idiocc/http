@@ -4,7 +4,7 @@ import HttpContext from '../../../../src'
 const TS = {
   context: HttpContext,
   /* start example */
-  async 'asserts status code'({ startPlain }) {
+  async 'status code'({ startPlain }) {
     await startPlain((_, res) => {
       res.statusCode = 205
       res.end()
@@ -12,7 +12,7 @@ const TS = {
       .get()
       .assert(205)
   },
-  async 'asserts status code with message'({ startPlain }) {
+  async 'status code with message'({ startPlain }) {
     await startPlain((_, res) => {
       res.statusCode = 205
       res.end('example')
@@ -20,7 +20,7 @@ const TS = {
       .get('/sitemap')
       .assert(205, 'example')
   },
-  async 'asserts status code with regexp'({ startPlain }) {
+  async 'status code with regexp'({ startPlain }) {
     await startPlain((_, res) => {
       res.statusCode = 205
       res.end('Example')
@@ -28,7 +28,7 @@ const TS = {
       .get('/sitemap')
       .assert(205, /example/i)
   },
-  async 'asserts status code with json'({ startPlain }) {
+  async 'status code with json'({ startPlain }) {
     await startPlain((_, res) => {
       res.statusCode = 205
       res.setHeader('content-type', 'application/json')

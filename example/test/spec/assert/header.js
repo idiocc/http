@@ -4,7 +4,7 @@ import HttpContext from '../../../../src'
 const TS = {
   context: HttpContext,
   /* start example */
-  async 'asserts header'({ startPlain }) {
+  async 'header'({ startPlain }) {
     await startPlain((_, res) => {
       res.statusCode = 205
       res.setHeader('content-type', 'application/json')
@@ -14,7 +14,7 @@ const TS = {
       .assert(205)
       .assert('content-type', 'application/json')
   },
-  async 'asserts absence of a header'({ startPlain }) {
+  async 'absence of a header'({ startPlain }) {
     await startPlain((_, res) => {
       res.end()
     })

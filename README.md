@@ -480,7 +480,7 @@ Assert on the status code and body. The error message will contain the body if i
 <tr><td>
 
 ```js
-async 'asserts status code'({ startPlain }) {
+async 'status code'({ startPlain }) {
   await startPlain((_, res) => {
     res.statusCode = 205
     res.end()
@@ -488,7 +488,7 @@ async 'asserts status code'({ startPlain }) {
     .get()
     .assert(205)
 },
-async 'asserts status code with message'({ startPlain }) {
+async 'status code with message'({ startPlain }) {
   await startPlain((_, res) => {
     res.statusCode = 205
     res.end('example')
@@ -496,7 +496,7 @@ async 'asserts status code with message'({ startPlain }) {
     .get('/sitemap')
     .assert(205, 'example')
 },
-async 'asserts status code with regexp'({ startPlain }) {
+async 'status code with regexp'({ startPlain }) {
   await startPlain((_, res) => {
     res.statusCode = 205
     res.end('Example')
@@ -504,7 +504,7 @@ async 'asserts status code with regexp'({ startPlain }) {
     .get('/sitemap')
     .assert(205, /example/i)
 },
-async 'asserts status code with json'({ startPlain }) {
+async 'status code with json'({ startPlain }) {
   await startPlain((_, res) => {
     res.statusCode = 205
     res.setHeader('content-type', 'application/json')
@@ -519,10 +519,10 @@ async 'asserts status code with json'({ startPlain }) {
 
 ```
 example/test/spec/assert/code.js
-  ✓  asserts status code
-  ✓  asserts status code with message
-  ✓  asserts status code with regexp
-  ✓  asserts status code with json
+  ✓  status code
+  ✓  status code with message
+  ✓  status code with regexp
+  ✓  status code with json
 
 🦅  Executed 4 tests.
 ```
@@ -540,7 +540,7 @@ Assert on the response header. The value must be either a string, or null to ass
 <tr><td>
 
 ```js
-async 'asserts header'({ startPlain }) {
+async 'header'({ startPlain }) {
   await startPlain((_, res) => {
     res.statusCode = 205
     res.setHeader('content-type', 'application/json')
@@ -550,7 +550,7 @@ async 'asserts header'({ startPlain }) {
     .assert(205)
     .assert('content-type', 'application/json')
 },
-async 'asserts absence of a header'({ startPlain }) {
+async 'absence of a header'({ startPlain }) {
   await startPlain((_, res) => {
     res.end()
   })
@@ -563,8 +563,8 @@ async 'asserts absence of a header'({ startPlain }) {
 
 ```
 example/test/spec/assert/header.js
-  ✓  asserts header
-  ✓  asserts absence of a header
+  ✓  header
+  ✓  absence of a header
 
 🦅  Executed 2 tests.
 ```
@@ -582,7 +582,7 @@ Perform an assertion using the function that will receive the response object se
 <tr><td>
 
 ```js
-async 'asserts using a function'({ start }) {
+async 'using a function'({ start }) {
   await start((_, res) => {
     res.statusCode = 205
     res.setHeader('content-type', 'application/xml')
@@ -590,7 +590,8 @@ async 'asserts using a function'({ start }) {
   })
     .get('/sitemap')
     .assert((res) => {
-      equal(res.headers['content-type'], 'application/xml')
+      equal(res.headers['content-type'],
+        'application/xml')
     })
 },
 ```
@@ -599,7 +600,7 @@ async 'asserts using a function'({ start }) {
 
 ```
 example/test/spec/assert/function.js
-  ✓  asserts using a function
+  ✓  using a function
 
 🦅  Executed 1 test.
 ```

@@ -5,7 +5,7 @@ import { equal } from 'assert'
 const TS = {
   context: HttpContext,
   /* start example */
-  async 'asserts using a function'({ start }) {
+  async 'using a function'({ start }) {
     await start((_, res) => {
       res.statusCode = 205
       res.setHeader('content-type', 'application/xml')
@@ -13,7 +13,8 @@ const TS = {
     })
       .get('/sitemap')
       .assert((res) => {
-        equal(res.headers['content-type'], 'application/xml')
+        equal(res.headers['content-type'],
+          'application/xml')
       })
   },
   /* end example */
