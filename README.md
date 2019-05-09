@@ -343,14 +343,14 @@ example/test/spec/plain
     ✗  throws an error
     | Error: Unhandled error.
     |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:78:15)
+    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:82:15)
     ✗  does not finish the request
     | Error: Test has timed out after 200ms
 
 example/test/spec/plain > plain > throws an error
   Error: Unhandled error.
       at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-      at Server.handler (/Users/zavr/idiocc/http/src/index.js:78:15)
+      at Server.handler (/Users/zavr/idiocc/http/src/index.js:82:15)
 
 example/test/spec/plain > plain > does not finish the request
   Error: Test has timed out after 200ms
@@ -676,6 +676,187 @@ example/test/spec/assert/set.js
 ## Extending
 
 The package was designed to be extended with custom assertions which are easily documented for use in tests. The only thing required is to import the _Tester_ class, and extend it, following a few simple rules.
+
+There are 2 parts of the _@contexts/Http_ software: the context and the tester. The context is used to start the server, remember the response object as well as to destroy the server. The tester is what is returned by the `start/startPlain/listen` methods, and is used to query the server. To implement the custom assertions with support for JSDoc, the context need to be extended to include any private methods that could be used by the tester's assertions, but might not have to be part of the _Tester_ API, and then implement those assertions in the tester by calling the private `_addLink` method which will add the action to the promise chain, so that the `await` syntax is available.
+
+<table>
+<tr><th>Implementing Custom Assertions For Cookies</th></tr>
+<tr><td>
+
+```js
+import Http from '../../src'
+import CookieTester from './CookieTester'
+import mistmatch from 'mismatch'
+
+export default class Cookies extends Http {
+  constructor() {
+    super()
+    this.TesterConstructor = CookieTester
+  }
+  /**
+   * @param {function(http.IncomingMessage, http.ServerResponse)} test
+   * @param {boolean} secure
+   */
+  start(fn, secure) {
+    const tester = /** @type {CookieTester} */ (super.start(fn, secure))
+    return tester
+  }
+  getCookies() {
+    const setCookies = /** @type {Array<string>} */ (this.tester.res.headers['set-cookie']) || []
+    return setCookies.map(Cookies.parseSetCookie)
+  }
+  /**
+   * Parses the `set-cookie` header.
+   * @param {string} header
+   */
+  static parseSetCookie(header) {
+    const pattern = /\s*([^=;]+)(?:=([^;]*);?|;|$)/g
+
+    const pairs = mistmatch(pattern, header, ['name', 'value'])
+
+    const cookie = pairs.shift()
+
+    for (let i = 0; i < pairs.length; i++) {
+      const match = pairs[i]
+      cookie[match.name.toLowerCase()] = (match.value || true)
+    }
+
+    return cookie
+  }
+  /**
+   * Returns the cookie record for the given name.
+   * @param {string} name
+   */
+  getCookieForName(name) {
+    const cookies = this.getCookies()
+
+    return cookies.find(({ name: n }) => {
+      return name == n
+    })
+  }
+}
+
+/**
+ * @typedef {import('http').IncomingMessage} http.IncomingMessage
+ * @typedef {import('http').ServerResponse} http.ServerResponse
+ */
+```
+</td></tr>
+<tr><td>The <em>Cookies</em> context should extend the <em>Http</em> context, and set <code>this.TesterConstructor = CookieTester</code> in its constructor, so that the <code>start/startPlain/listen</code> methods of the superclass will construct the appropriate tester. The additional step involved is overriding the <code>start</code> method to update the JSDoc type of the tester returned to <code>CookieTester</code> so that the autocompletion hints are available in tests. Now, additional methods that are required for assertions, can be added to the context. They will be accessible via the <code>this.context</code> in the tester as shown below. The tester itself is accessible via the <code>this.tester</code>, and the AQT response object can be accessed via the <code>this.tester.res</code> property.</td></tr>
+<tr><td>
+
+```js
+import { equal, ok } from 'assert'
+import erotic from 'erotic'
+import { Tester } from '../../src'
+
+export default class CookieTester extends Tester {
+  constructor() {
+    super()
+    /** @type {import('./Context').default} */
+    this.context = null
+  }
+  /**
+   * Assert on the number of times the cookie was set.
+   * @param {number} num The expected count.
+   */
+  count(num) {
+    const e = erotic(true)
+    this._addLink(() => {
+      const count = this.context.getCookies().length
+      equal(count, num, 'should set cookie ' + num + ' times')
+    }, e)
+    return this
+  }
+
+  /**
+   * Asserts on the value of the cookie.
+   * @param {string} name The name of the cookie.
+   * @param {string} val The value of the cookie.
+   */
+  value(name, val) {
+    const e = erotic(true)
+    this._addLink(() => {
+      const cookie = this.context.getCookieForName(name)
+      ok(cookie, 'should set cookie ' + name)
+      equal(cookie.value, val, 'should set cookie ' + name + ' to ' + val)
+    }, e)
+    return this
+  }
+
+  /**
+   * Asserts on the presence of an attribute in the cookie.
+   * @param {string} name The name of the cookie.
+   * @param {string} attrib The name of the attribute.
+   */
+  attribute(name, attrib) {
+    const e = erotic(true)
+    this._addLink(() => {
+      const cookie = this.context.getCookieForName(name)
+      ok(cookie, 'should set cookie ' + name)
+      ok((attrib.toLowerCase() in cookie), 'should set cookie with attribute ' + attrib)
+    }, e)
+    return this
+  }
+
+  /**
+   * Asserts on the value of the cookie's attribute.
+   * @param {string} name The name of the cookie.
+   * @param {string} attrib The name of the attribute.
+   * @param {string} value The value of the attribute.
+   */
+  attributeAndValue(name, attrib, value) {
+    const e = erotic(true)
+    this._addLink(() => {
+      const cookie = this.context.getCookieForName(name)
+      ok(cookie, 'should set cookie ' + name)
+      ok((attrib.toLowerCase() in cookie), 'should set cookie with attribute ' + attrib)
+      equal(cookie[attrib.toLowerCase()], value, 'should set cookie with attribute ' + attrib + ' set to ' + value)
+    }, e)
+    return this
+  }
+  /**
+   * Asserts on the absence of an attribute in the cookie.
+   * @param {string} name The name of the cookie.
+   * @param {string} attrib The name of the attribute.
+   */
+  noAttribute(name, attrib) {
+    const e = erotic(true)
+    this._addLink(() => {
+      const cookie = this.context.getCookieForName(name)
+      ok(cookie, 'should set cookie ' + name)
+      ok(!(attrib.toLowerCase() in cookie), 'should set cookie without attribute ' + attrib)
+    }, e)
+    return this
+  }
+}
+```
+</td></tr>
+<tr><td>The <em>CookieTester</em> class allows to add the assertions to the tester. To help write assertions, the <code>this.context</code> type need to be updated to the <code>/** @type {import('./Context').default} */ this.context = null</code> in the constructor. Each assertion is documented with standard JSDoc. The assertion method might want to create an <code>erotic</code> object at first, to remember the point of entry to the function, so that the assertion will fail with an error whose stack consists of a single line where the assertion is called. This <code>e</code> object will have to be passed as the second argument to the <code>this._addLink</code> method. The assertion logic, either sync or async must be implemented withing the callback passed to the <code>this_addLink</code> method that will update the chain and execute the assertion in its turn. If the assertion explicitly returns <code>false</code>, no other assertions in the chain will be called.</td></tr>
+<tr><td>
+
+<img src="aty/jsdoc.gif" alt="Writing JSDoc Enabled Assertions">
+</td></tr>
+<tr><td>Now the <em>CookieTester</em> methods which are used in tests, will come up with JSDoc documentation. The context must be imported as usual from the <code>context</code> directory, and setup on test suites in the <code>context</code> property.</td></tr>
+<tr><td>
+
+```
+example/test/spec/cookie/
+  ✓  sets the HttpOnly cookie
+  ✓  deletes the cookie
+  ✗  sets cookie for a path
+  | Error: should set cookie with attribute path
+  |     at sets cookie for a path (/Users/zavr/idiocc/http/example/test/spec/cookie/default.js:32:8)
+
+example/test/spec/cookie/ > sets cookie for a path
+  Error: should set cookie with attribute path
+      at sets cookie for a path (/Users/zavr/idiocc/http/example/test/spec/cookie/default.js:32:8)
+
+🦅  Executed 3 tests: 1 error.
+```
+</td></tr>
+<tr><td>Because we used <code>erotic</code>, the test will fail at the line of where the assertion method was called. It is useful for async assertions, which otherwise would not have any useful information in the error stack, and only point to the internal lines in the <em>CookieTester</em>, but not the test suite.</td></tr>
+</table>
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/12.svg?sanitize=true"></a></p>
 

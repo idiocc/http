@@ -30,6 +30,10 @@ export default class Server {
      * @type {Object<string, net.Socket>}
      */
     this._connections = {}
+    /**
+     * The tester created after the start, startPlain or listen methods.
+     */
+    this.tester = null
   }
   /**
    * Call to switch on printing of debug messages and error stacks in the response body.
@@ -132,6 +136,7 @@ export default class Server {
         delete this._connections[k]
       })
     })
+    this.tester = tester
     return tester
   }
 }
