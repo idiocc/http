@@ -1,8 +1,8 @@
-import Http from '../../src'
-import CookieTester from './CookieTester'
-import mistmatch from 'mismatch'
+const Http = require('../Http');
+const CookieTester = require('./Tester');
+let mistmatch = require('mismatch'); if (mistmatch && mistmatch.__esModule) mistmatch = mistmatch.default;
 
-export default class Cookies extends Http {
+               class Cookies extends Http {
   constructor() {
     super()
     this.TesterConstructor = CookieTester
@@ -55,3 +55,5 @@ export default class Cookies extends Http {
  * @typedef {import('http').IncomingMessage} http.IncomingMessage
  * @typedef {import('http').ServerResponse} http.ServerResponse
  */
+
+module.exports = Cookies

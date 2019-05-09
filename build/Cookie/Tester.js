@@ -1,11 +1,11 @@
-import { equal, ok } from 'assert'
-import erotic from 'erotic'
-import { Tester } from '../../src'
+const { equal, ok } = require('assert');
+let erotic = require('erotic'); if (erotic && erotic.__esModule) erotic = erotic.default;
+const Tester = require('../Tester');
 
-export default class CookieTester extends Tester {
+               class CookieTester extends Tester {
   constructor() {
     super()
-    /** @type {import('./Context').default} */
+    /** @type {import('.').default} */
     this.context = null
   }
   /**
@@ -87,3 +87,5 @@ export default class CookieTester extends Tester {
     return this
   }
 }
+
+module.exports = CookieTester

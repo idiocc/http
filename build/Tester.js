@@ -18,7 +18,7 @@ let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__e
     this._chain = Promise.resolve(true)
     /**
      * The reference to the parent context that started the server.
-     * @type {import('.').default}
+     * @type {import('./Http').default}
      */
     this.context = null
     /**

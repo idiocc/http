@@ -45,7 +45,6 @@
     "connect": "^3.6.6",
     "documentary": "^1.27.2",
     "eslint-config-artdeco": "1.0.1",
-    "mismatch": "^1.2.0",
     "yarn-s": "1.1.0",
     "zoroaster": "^4.1.1-alpha"
   },
@@ -54,6 +53,7 @@
     "@rqt/aqt": "^1.2.5",
     "@zoroaster/deep-equal": "^1.0.1",
     "erotic": "^2.1.1",
-    "erte": "^1.2.0"
+    "erte": "^1.2.0",
+    "mismatch": "^1.2.0"
   }
 }
