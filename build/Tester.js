@@ -18,9 +18,14 @@ let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__e
     this._chain = Promise.resolve(true)
     /**
      * The reference to the parent context that started the server.
-     * @type {import(.).default}
+     * @type {import('.').default}
      */
     this.context = null
+    /**
+     * The response saved after requests.
+     * @type {import('@rqt/aqt').AqtReturn}
+     */
+    this.res = null
   }
   /**
    * Adds the action to the list.
@@ -37,6 +42,9 @@ let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__e
       }
     })
   }
+  /**
+   * @private
+   */
   then(Ok, notOk) {
     return this._chain.then(() => {
       Ok()
@@ -50,49 +58,47 @@ let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__e
    */
   get(path = '') {
     this._addLink(async () => {
-      const { statusCode, body, headers } = await aqt(`${this.url}${path}`, {
+      const res = await aqt(`${this.url}${path}`, {
         headers: this.headers,
       })
-      this.statusCode = statusCode
-      this.body = body
-      this.context.response.headers = headers
+      this.res = res
     })
     return this
   }
   /**
    * Assert on the status code and body when a number is given.
    * Assert on the header when the string is given. If the second arg is null, asserts on the absence of the header.
-   * @param {number|string|function(Response)} code The number of the status code, or name of the header, or the custom assertion function.
+   * @param {number|string|function(AqtReturn)} code The number of the status code, or name of the header, or the custom assertion function.
    * @param {String} message The body or header value (or null for no header).
    */
   assert(code, message) {
     const e = erotic(true)
     this._addLink(() => {
       if (typeof code == 'function') {
-        code(this.context.response)
+        code(this.res)
         return
       }
       if (typeof code == 'string' && message) {
-        equal(this.context.response.headers[code.toLowerCase()], message)
+        equal(this.res.headers[code.toLowerCase()], message)
         return
       } else if (typeof code == 'string' && message === null) {
-        const v = this.context.response.headers[code.toLowerCase()]
+        const v = this.res.headers[code.toLowerCase()]
         if (v)
           throw new Error(`The response had header ${code}: ${v}`)
         return
       }
       // if we're here means code assertion
       try {
-        equal(this.statusCode, code)
+        equal(this.res.statusCode, code)
       } catch (err) {
-        err.message = err.message + ' ' + this.body || ''
+        err.message = err.message + ' ' + this.res.body || ''
         throw err
       }
       if (message instanceof RegExp) {
-        ok(message.test(this.body), `The body does not match ${message}`)
+        ok(message.test(this.res.body), `The body does not match ${message}`)
       } else if (typeof message == 'object') {
-        deepEqual(this.body, message)
-      } else if (message) equal(this.body, message)
+        deepEqual(this.res.body, message)
+      } else if (message) equal(this.res.body, message)
     }, e)
     return this
   }
@@ -110,7 +116,7 @@ let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__e
 
 /**
  * @typedef {import('http').OutgoingHttpHeaders} http.OutgoingHttpHeaders
- * @typedef {import('.').Response} Response
+ * @typedef {import('@rqt/aqt').AqtReturn} AqtReturn
  */
 
 

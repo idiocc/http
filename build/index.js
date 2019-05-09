@@ -21,15 +21,19 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
      */
     this.server = null
     /**
-     * After the request listener is called, the `response` will be set to the server response which comes as the second argument to the request listener callback. The response will be updated to contain parsed headers. When using the `listen` method, only the headers received will be accessed via the object.
-     * @type {Response}
+     * After the request listener is called, the `response` will be set to the server response which comes as the second argument to the request listener callback. Is not set when using the `listen` method.
+     * @type {http.ServerResponse}
      */
-    this.response = {}
+    this.response = null
     /**
      * The map of connections to the server. Used to finish any unended requests.
      * @type {Object<string, net.Socket>}
      */
     this._connections = {}
+    /**
+     * The tester created after the start, startPlain or listen methods.
+     */
+    this.tester = null
   }
   /**
    * Call to switch on printing of debug messages and error stacks in the response body.
@@ -37,6 +41,12 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
    */
   debug(on = true) {
     this._debug = on
+  }
+  /**
+   * Returns the server response after the request listener finished.
+   */
+  getResponse() {
+    return this.response
   }
   /**
    * Creates a server and wraps the supplied listener in the handler that will set status code `500` if the listener threw and the body to the error text, and `200` otherwise.
@@ -126,6 +136,7 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
         delete this._connections[k]
       })
     })
+    this.tester = tester
     return tester
   }
 }
@@ -140,7 +151,6 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
  * @typedef {import('http').Server} http.Server
  * @typedef {import('https').Server} https.Server
  * @typedef {import('net').Socket} net.Socket
- * @typedef {http.ServerResponse & { headers: http.IncomingHttpHeaders }} Response The response with headers.
  */
 
 /** @typedef {import('./types').TestSuite} TestSuite */
