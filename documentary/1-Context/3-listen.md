@@ -33,3 +33,5 @@ The tests will be run as usual, but if there were any errors, they will be eithe
 </md2html></td></tr>
 <!-- /block-end -->
 </table>
+
+%~ width="25"%

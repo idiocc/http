@@ -16,6 +16,7 @@ yarn add @contexts/http
   * [`start(fn: (req: IncomingMessage, res: ServerResponse), secure: boolean=): Tester`](#startfn-req-incomingmessage-res-serverresponsesecure-boolean-tester)
   * [`startPlain(fn: (req: IncomingMessage, res: ServerResponse), secure: boolean=): Tester`](#startplainfn-req-incomingmessage-res-serverresponsesecure-boolean-tester)
   * [`listen(server: http.Server|https.Server): Tester`](#listenserver-httpserverhttpsserver-tester)
+  * [`debug(on: boolean=)`](#debugon-boolean-void)
 - [class Tester](#class-tester)
   * [`get(path: string=): Tester`](#getpath-string-tester)
   * [`assert(code: number, body: (string|RegExp|Object)=): Tester`](#assertcode-numberbody-stringregexpobject-tester)
@@ -430,14 +431,61 @@ example/test/spec/listen.js
 <tr><td colspan="2">The tests will be run as usual, but if there were any errors, they will be either handled by the server library, or caught by <em>Zoroaster</em> as global errors. Any unended requests will result in the test timing out.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true" width="25"></a></p>
+
+### `debug(`<br/>&nbsp;&nbsp;`on: boolean=,`<br/>`): void`
+
+Switches on the debugging for the `start` method, because it catches the error and sets the response to 500, without giving any info about the error. This will log the error that happened during assertions in the request listener. Useful to see at what point the request failed.
+
+<table>
+<tr><th>Debugging Errors In Start</th></tr>
+<tr><td>
+
+```js
+async 'sets the code to 200'({ start, debug }) {
+  debug()
+  await start(middleware)
+    .get()
+    .assert(200)
+},
+```
+</td></tr>
+<tr><td>The debug is called once before the test. When called with <code>false</code>, it will be switched off, but that use case is probably not going to be ever used, since it's just to debug tests.</td></tr>
+<tr><td>
+
+```
+example/test/spec/debug.js
+  ✗  sets the code to 200
+  | Error: 500 == 200 The authentication is required.
+  |     at sets the code to 200 (/Users/zavr/idiocc/http/example/test/spec/debug.js:12:8)
+
+example/test/spec/debug.js > sets the code to 200
+  Error: 500 == 200 The authentication is required.
+      at sets the code to 200 (/Users/zavr/idiocc/http/example/test/spec/debug.js:12:8)
+
+🦅  Executed 1 test: 1 error.
+```
+</td></tr>
+<tr><td>The output normally fails with the error on the status code assertions, since the handler which wraps the request listener in the <code>start</code> methods, catches any errors and sets the response to be of status <code>500</code> and the body to the error message.</td></tr>
+<tr><td>
+
+```
+Error: The authentication is required.
+    at middleware (/Users/zavr/idiocc/http/example/src/index.js:12:21)
+    at Server.handler (/Users/zavr/idiocc/http/src/index.js:60:15)
+```
+</td></tr>
+<tr><td>The <code>stderr</code> output, on the other hand, will now print the full error stack that lead to the error.</td></tr>
+</table>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/6.svg?sanitize=true"></a></p>
 
 ## class Tester
 
 The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.
 
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/6.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/7.svg?sanitize=true" width="25"></a></p>
 
 ### `get(`<br/>&nbsp;&nbsp;`path: string=,`<br/>`): Tester`
 
@@ -473,7 +521,7 @@ example/test/spec/get.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/7.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/8.svg?sanitize=true" width="25"></a></p>
 
 ### `assert(`<br/>&nbsp;&nbsp;`code: number,`<br/>&nbsp;&nbsp;`body: (string|RegExp|Object)=,`<br/>`): Tester`
 
@@ -533,7 +581,7 @@ example/test/spec/assert/code.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/8.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/9.svg?sanitize=true" width="25"></a></p>
 
 ### `assert(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: ?string,`<br/>`): Tester`
 
@@ -575,7 +623,7 @@ example/test/spec/assert/header.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/9.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/10.svg?sanitize=true" width="25"></a></p>
 
 ### `assert(`<br/>&nbsp;&nbsp;`assertion: function(Aqt.Return),`<br/>`): Tester`
 
@@ -635,7 +683,7 @@ example/test/spec/assert/function.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/10.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/11.svg?sanitize=true" width="25"></a></p>
 
 ### `set(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: string,`<br/>`): Tester`
 
@@ -673,7 +721,7 @@ example/test/spec/assert/set.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/11.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/12.svg?sanitize=true"></a></p>
 
 ## Extending
 
@@ -868,7 +916,7 @@ example/test/spec/cookie/ > sets cookie for a path
 <tr><td>Because we used <code>erotic</code>, the test will fail at the line of where the assertion method was called. It is useful to remove too much information in errors stacks, and especially for async assertions, which otherwise would have the stack beginning at <code>&lt;anonymous&gt;</code>, and only pointing to the internal lines in the <em>CookieTester</em>, but not the test suite.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/12.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/13.svg?sanitize=true"></a></p>
 
 ## Copyright
 
