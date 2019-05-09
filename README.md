@@ -942,7 +942,7 @@ The _CookiesContext_ provides assertion methods on the `set-cookie` header retur
 - `attributeAndValue(name, attrib, value)`: Asserts on the value of the cookie's attribute.
 - `noAttribute(name, attrib)`: Asserts on the absence of an attribute in the cookie.
 
-The context was adapted from the work in https://github.com/pillarjs/cookies.
+The context was adapted from the work in https://github.com/pillarjs/cookies. See how [the tests are implemented](https://github.com/idiocc/cookies/blob/master/test/spec/set.js) for more info.
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/14.svg?sanitize=true"></a></p>
 
