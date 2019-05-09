@@ -80,7 +80,9 @@ For example, we might want to test some synchronous middleware. It will check fo
 </tr></td>
 <tr><td>
 
-<img src="aty/2.gif" alt="Writing Tests With HttpContext">
+<a href="example/test/spec/default.js">
+  <img src="aty/2.gif" alt="Writing Tests With HttpContext">
+</a>
 </td></tr>
 <tr><td>The tests are written for <em>Zoroaster</em> in such a way that test suite objects are exported. When the <code>context</code> property is found on the test suite, it will be instantiated for all inner tests. The <code>start</code> method will wrap the request listener in try-catch block to send statuses <em>200</em> and <em>500</em> accordingly (see below).
 </td></tr>
@@ -677,14 +679,14 @@ example/test/spec/assert/set.js
 
 The package was designed to be extended with custom assertions which are easily documented for use in tests. The only thing required is to import the _Tester_ class, and extend it, following a few simple rules.
 
-There are 2 parts of the _@contexts/Http_ software: the context and the tester. The context is used to start the server, remember the response object as well as to destroy the server. The tester is what is returned by the `start/startPlain/listen` methods, and is used to query the server. To implement the custom assertions with support for JSDoc, the context need to be extended to include any private methods that could be used by the tester's assertions, but might not have to be part of the _Tester_ API, and then implement those assertions in the tester by calling the private `_addLink` method which will add the action to the promise chain, so that the `await` syntax is available.
+There are 2 parts of the _@contexts/Http_ software: the context and the tester. The context is used to start the server, remember the response object as well as to destroy the server. The tester is what is returned by the `start/startPlain/listen` methods, and is used to query the server. To implement the custom assertions with support for JSDoc, the _HttpContext_ needs to be extended to include any private methods that could be used by the tester's assertions, but might not have to be part of the _Tester_ API, and then implement those assertions in the tester by calling the private `_addLink` method which will add the action to the promise chain, so that the `await` syntax is available.
 
 <table>
 <tr><th>Implementing Custom Assertions For Cookies</th></tr>
 <tr><td>
 
 ```js
-import Http from '../../src'
+import Http from '@context/http'
 import CookieTester from './CookieTester'
 import mistmatch from 'mismatch'
 
@@ -702,7 +704,8 @@ export default class Cookies extends Http {
     return tester
   }
   getCookies() {
-    const setCookies = /** @type {Array<string>} */ (this.tester.res.headers['set-cookie']) || []
+    const setCookies = /** @type {Array<string>} */
+      (this.tester.res.headers['set-cookie']) || []
     return setCookies.map(Cookies.parseSetCookie)
   }
   /**
@@ -748,7 +751,7 @@ export default class Cookies extends Http {
 ```js
 import { equal, ok } from 'assert'
 import erotic from 'erotic'
-import { Tester } from '../../src'
+import { Tester } from '@context/http'
 
 export default class CookieTester extends Tester {
   constructor() {
@@ -779,7 +782,8 @@ export default class CookieTester extends Tester {
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
       ok(cookie, 'should set cookie ' + name)
-      equal(cookie.value, val, 'should set cookie ' + name + ' to ' + val)
+      equal(cookie.value, val,
+        'should set cookie ' + name + ' to ' + val)
     }, e)
     return this
   }
@@ -794,7 +798,8 @@ export default class CookieTester extends Tester {
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
       ok(cookie, 'should set cookie ' + name)
-      ok((attrib.toLowerCase() in cookie), 'should set cookie with attribute ' + attrib)
+      ok((attrib.toLowerCase() in cookie),
+        'should set cookie with attribute ' + attrib)
     }, e)
     return this
   }
@@ -810,8 +815,10 @@ export default class CookieTester extends Tester {
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
       ok(cookie, 'should set cookie ' + name)
-      ok((attrib.toLowerCase() in cookie), 'should set cookie with attribute ' + attrib)
-      equal(cookie[attrib.toLowerCase()], value, 'should set cookie with attribute ' + attrib + ' set to ' + value)
+      ok((attrib.toLowerCase() in cookie),
+        'should set cookie with attribute ' + attrib)
+      equal(cookie[attrib.toLowerCase()], value,
+        'should set cookie with attribute ' + attrib + ' set to ' + value)
     }, e)
     return this
   }
@@ -825,7 +832,8 @@ export default class CookieTester extends Tester {
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
       ok(cookie, 'should set cookie ' + name)
-      ok(!(attrib.toLowerCase() in cookie), 'should set cookie without attribute ' + attrib)
+      ok(!(attrib.toLowerCase() in cookie),
+        'should set cookie without attribute ' + attrib)
     }, e)
     return this
   }
@@ -835,9 +843,11 @@ export default class CookieTester extends Tester {
 <tr><td>The <em>CookieTester</em> class allows to add the assertions to the tester. To help write assertions, the <code>this.context</code> type need to be updated to the <code>/** @type {import('./Context').default} */ this.context = null</code> in the constructor. Each assertion is documented with standard JSDoc. The assertion method might want to create an <code>erotic</code> object at first, to remember the point of entry to the function, so that the assertion will fail with an error whose stack consists of a single line where the assertion is called. This <code>e</code> object will have to be passed as the second argument to the <code>this._addLink</code> method. The assertion logic, either sync or async must be implemented withing the callback passed to the <code>this_addLink</code> method that will update the chain and execute the assertion in its turn. If the assertion explicitly returns <code>false</code>, no other assertions in the chain will be called.</td></tr>
 <tr><td>
 
-<img src="aty/jsdoc.gif" alt="Writing JSDoc Enabled Assertions">
+<a href="example/test/spec/cookie/default.js">
+  <img src="aty/jsdoc.gif" alt="Writing JSDoc Enabled Assertions">
+</a>
 </td></tr>
-<tr><td>Now the <em>CookieTester</em> methods which are used in tests, will come up with JSDoc documentation. The context must be imported as usual from the <code>context</code> directory, and setup on test suites in the <code>context</code> property.</td></tr>
+<tr><td>Now the <em>CookieTester</em> methods which are used in tests, will come up with JSDoc documentation. The context must be imported as usual from the <code>context</code> directory, and set up on test suites in the <code>context</code> property. If there are multiple test suites in a file, the <code>export const context = CookieContext</code> would also work without having to specify the context on each individual test suite. The JSDoc enabling line, <code>/** type {Object<string, (h: CookieContext)} */</code> still needs to be present.</td></tr>
 <tr><td>
 
 ```
@@ -855,7 +865,7 @@ example/test/spec/cookie/ > sets cookie for a path
 🦅  Executed 3 tests: 1 error.
 ```
 </td></tr>
-<tr><td>Because we used <code>erotic</code>, the test will fail at the line of where the assertion method was called. It is useful for async assertions, which otherwise would not have any useful information in the error stack, and only point to the internal lines in the <em>CookieTester</em>, but not the test suite.</td></tr>
+<tr><td>Because we used <code>erotic</code>, the test will fail at the line of where the assertion method was called. It is useful to remove too much information in errors stacks, and especially for async assertions, which otherwise would have the stack beginning at <code>&lt;anonymous&gt;</code>, and only pointing to the internal lines in the <em>CookieTester</em>, but not the test suite.</td></tr>
 </table>
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/12.svg?sanitize=true"></a></p>

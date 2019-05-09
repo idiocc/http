@@ -16,7 +16,8 @@ export default class Cookies extends Http {
     return tester
   }
   getCookies() {
-    const setCookies = /** @type {Array<string>} */ (this.tester.res.headers['set-cookie']) || []
+    const setCookies = /** @type {Array<string>} */
+      (this.tester.res.headers['set-cookie']) || []
     return setCookies.map(Cookies.parseSetCookie)
   }
   /**

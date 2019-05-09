@@ -31,7 +31,8 @@ export default class CookieTester extends Tester {
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
       ok(cookie, 'should set cookie ' + name)
-      equal(cookie.value, val, 'should set cookie ' + name + ' to ' + val)
+      equal(cookie.value, val,
+        'should set cookie ' + name + ' to ' + val)
     }, e)
     return this
   }
@@ -46,7 +47,8 @@ export default class CookieTester extends Tester {
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
       ok(cookie, 'should set cookie ' + name)
-      ok((attrib.toLowerCase() in cookie), 'should set cookie with attribute ' + attrib)
+      ok((attrib.toLowerCase() in cookie),
+        'should set cookie with attribute ' + attrib)
     }, e)
     return this
   }
@@ -62,8 +64,10 @@ export default class CookieTester extends Tester {
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
       ok(cookie, 'should set cookie ' + name)
-      ok((attrib.toLowerCase() in cookie), 'should set cookie with attribute ' + attrib)
-      equal(cookie[attrib.toLowerCase()], value, 'should set cookie with attribute ' + attrib + ' set to ' + value)
+      ok((attrib.toLowerCase() in cookie),
+        'should set cookie with attribute ' + attrib)
+      equal(cookie[attrib.toLowerCase()], value,
+        'should set cookie with attribute ' + attrib + ' set to ' + value)
     }, e)
     return this
   }
@@ -77,7 +81,8 @@ export default class CookieTester extends Tester {
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
       ok(cookie, 'should set cookie ' + name)
-      ok(!(attrib.toLowerCase() in cookie), 'should set cookie without attribute ' + attrib)
+      ok(!(attrib.toLowerCase() in cookie),
+        'should set cookie without attribute ' + attrib)
     }, e)
     return this
   }
