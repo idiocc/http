@@ -20,7 +20,8 @@ yarn add @contexts/http
   * [`get(path: string=): Tester`](#getpath-string-tester)
   * [`assert(code: number, body: (string|RegExp|Object)=): Tester`](#assertcode-numberbody-stringregexpobject-tester)
   * [`assert(header: string, value: ?string): Tester`](#assertheader-stringvalue-string-tester)
-  * [`assert(assertion: function(ServerResponse)): Tester`](#assertassertion-functionserverresponse-tester)
+  * [`assert(assertion: function(Aqt.Return)): Tester`](#assertassertion-functionaqtreturn-tester)
+    * [`AqtReturn`](#type-aqtreturn)
   * [`set(header: string, value: string): Tester`](#setheader-stringvalue-string-tester)
 - [Extending](#extending)
 - [Copyright](#copyright)
@@ -342,14 +343,14 @@ example/test/spec/plain
     ✗  throws an error
     | Error: Unhandled error.
     |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:72:15)
+    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:78:15)
     ✗  does not finish the request
     | Error: Test has timed out after 200ms
 
 example/test/spec/plain > plain > throws an error
   Error: Unhandled error.
       at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-      at Server.handler (/Users/zavr/idiocc/http/src/index.js:72:15)
+      at Server.handler (/Users/zavr/idiocc/http/src/index.js:78:15)
 
 example/test/spec/plain > plain > does not finish the request
   Error: Test has timed out after 200ms
@@ -574,9 +575,20 @@ example/test/spec/assert/header.js
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/9.svg?sanitize=true" width="25"></a></p>
 
-### `assert(`<br/>&nbsp;&nbsp;`assertion: function(ServerResponse),`<br/>`): Tester`
+### `assert(`<br/>&nbsp;&nbsp;`assertion: function(Aqt.Return),`<br/>`): Tester`
 
-Perform an assertion using the function that will receive the response object set by the `setup` method, enriched with the `headers` field updated by the request library.
+Perform an assertion using the function that will receive the response object which is the result of the request operation with `aqt`. If the tester was started with `start` or `startPlain` methods, it is possible to get the  response object from the request listener by calling the `getResponse` method on the context.
+
+`import('http').IncomingHttpHeaders` __<a name="type-httpincominghttpheaders">`http.IncomingHttpHeaders`</a>__
+
+__<a name="type-aqtreturn">`AqtReturn`</a>__
+
+|        Name        |                                Type                                |                                                                                                                    Description                                                                                                                     |
+| ------------------ | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| __body*__          | <em>(string \| Object \| Buffer)</em>                              | The return from the server. In case the `json` content-type was set by the server, the response will be parsed into an object. If `binary` option was used for the request, a `Buffer` will be returned. Otherwise, a string response is returned. |
+| __headers*__       | <em>[http.IncomingHttpHeaders](#type-httpincominghttpheaders)</em> | Incoming headers returned by the server.                                                                                                                                                                                                           |
+| __statusCode*__    | <em>number</em>                                                    | The status code returned by the server.                                                                                                                                                                                                            |
+| __statusMessage*__ | <em>string</em>                                                    | The status message set by the server.                                                                                                                                                                                                              |
 
 <table>
 <tr><th colspan="2">assert(assertion)</th></tr>
@@ -595,6 +607,18 @@ async 'using a function'({ start }) {
         'application/xml')
     })
 },
+async 'with response object'({ start, getResponse }) {
+  await start((_, res) => {
+    res.setHeader('content-type', 'application/xml')
+    res.end()
+  })
+    .get('/sitemap')
+    .assert(() => {
+      const res = getResponse()
+      equal(res.getHeader('content-type'),
+        'application/xml')
+    })
+},
 ```
 </td>
 <td>
@@ -602,8 +626,9 @@ async 'using a function'({ start }) {
 ```
 example/test/spec/assert/function.js
   ✓  using a function
+  ✓  with response object
 
-🦅  Executed 1 test.
+🦅  Executed 2 tests.
 ```
 </td></tr>
 </table>

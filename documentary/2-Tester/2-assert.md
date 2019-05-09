@@ -48,11 +48,13 @@ Assert on the response header. The value must be either a string, or null to ass
 
 ```### assert => Tester
 [
-  ["assertion", "function(ServerResponse)"]
+  ["assertion", "function(Aqt.Return)"]
 ]
 ```
 
-Perform an assertion using the function that will receive the response object set by the `setup` method, enriched with the `headers` field updated by the request library.
+Perform an assertion using the function that will receive the response object which is the result of the request operation with `aqt`. If the tester was started with `start` or `startPlain` methods, it is possible to get the  response object from the request listener by calling the `getResponse` method on the context.
+
+%TYPEDEF node_modules/@rqt/aqt/types/return.xml%
 
 <table>
 <tr><th colspan="2">assert(assertion)</th></tr>

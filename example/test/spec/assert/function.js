@@ -17,6 +17,18 @@ const TS = {
           'application/xml')
       })
   },
+  async 'with response object'({ start, getResponse }) {
+    await start((_, res) => {
+      res.setHeader('content-type', 'application/xml')
+      res.end()
+    })
+      .get('/sitemap')
+      .assert(() => {
+        const res = getResponse()
+        equal(res.getHeader('content-type'),
+          'application/xml')
+      })
+  },
   /* end example */
 }
 
