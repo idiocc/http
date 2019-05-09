@@ -1,12 +1,11 @@
 ## API
 
-The package is available by importing its default function:
+The package is available by importing its default and named classes. When [extending](#extending) the context, the `Tester` class is required. The [_CookiesContext_](#CookiesContext) is an extension of the _HttpContext_ that provides assertions for the returned `set-cookie` header.
 
 ```js
 import HttpContext, { Tester } from '@contexts/http'
+import CookiesContext, { CookiesTester } from '@contexts/http/cookie'
 ```
-
-When [extending](#extending) the context, the `Tester` class also needs to be imported.
 
 %~%
 

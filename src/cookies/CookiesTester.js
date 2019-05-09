@@ -1,8 +1,8 @@
 import { equal, ok } from 'assert'
 import erotic from 'erotic'
-import Tester from '../Tester'
+import { Tester } from '../'
 
-export default class CookieTester extends Tester {
+export default class CookiesTester extends Tester {
   constructor() {
     super()
     /** @type {import('.').default} */

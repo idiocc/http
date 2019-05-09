@@ -9,7 +9,7 @@ There are 2 parts of the _@contexts/Http_ software: the context and the tester. 
 <!-- block-start -->
 <tr><td>
 
-%EXAMPLE: example/context/Context, ../../src => @context/http%
+%EXAMPLE: src/cookies/index.js, ../ => @context/http%
 </td></tr>
 <tr><td><md2html>
 
@@ -19,11 +19,11 @@ The _Cookies_ context should extend the _Http_ context, and set `this.TesterCons
 <!-- block-start -->
 <tr><td>
 
-%EXAMPLE: example/context/CookieTester, ../../src => @context/http%
+%EXAMPLE: src/cookies/CookiesTester, ../ => @context/http%
 </td></tr>
 <tr><td><md2html>
 
-The _CookieTester_ class allows to add the assertions to the tester. To help write assertions, the `this.context` type need to be updated to the `/** @type {import('./Context').default} */ this.context = null` in the constructor. Each assertion is documented with standard JSDoc. The assertion method might want to create an `erotic` object at first, to remember the point of entry to the function, so that the assertion will fail with an error whose stack consists of a single line where the assertion is called. This `e` object will have to be passed as the second argument to the `this._addLink` method. The assertion logic, either sync or async must be implemented withing the callback passed to the `this_addLink` method that will update the chain and execute the assertion in its turn. If the assertion explicitly returns `false`, no other assertions in the chain will be called.
+The _CookiesTester_ class allows to add the assertions to the tester. To help write assertions, the `this.context` type need to be updated to the `/** @type {import('.').default} */ this.context = null` in the constructor. Each assertion is documented with standard JSDoc. The assertion method might want to create an `erotic` object at first, to remember the point of entry to the function, so that the assertion will fail with an error whose stack consists of a single line where the assertion is called. This `e` object will have to be passed as the second argument to the `this._addLink` method. The assertion logic, either sync or async must be implemented withing the callback passed to the `this_addLink` method that will update the chain and execute the assertion in its turn. If the assertion explicitly returns `false`, no other assertions in the chain will be called.
 </md2html></td></tr>
 <!-- /block-end -->
 <!-- block-start -->
@@ -35,7 +35,7 @@ The _CookieTester_ class allows to add the assertions to the tester. To help wri
 </td></tr>
 <tr><td><md2html>
 
-Now the _CookieTester_ methods which are used in tests, will come up with JSDoc documentation. The context must be imported as usual from the `context` directory, and set up on test suites in the `context` property. If there are multiple test suites in a file, the `export const context = CookieContext` would also work without having to specify the context on each individual test suite. The JSDoc enabling line, `/** type {Object<string, (h: CookieContext)} */` still needs to be present.
+Now the _CookiesTester_ methods which are used in tests, will come up with JSDoc documentation. The context must be imported as usual from the `context` directory, and set up on test suites in the `context` property. If there are multiple test suites in a file, the `export const context = CookieContext` would also work without having to specify the context on each individual test suite. The JSDoc enabling line, `/** type {Object<string, (h: CookieContext)} */` still needs to be present.
 </md2html></td></tr>
 <!-- /block-end -->
 <!-- block-start -->
@@ -45,7 +45,7 @@ Now the _CookieTester_ methods which are used in tests, will come up with JSDoc 
 </td></tr>
 <tr><td><md2html>
 
-Because we used `erotic`, the test will fail at the line of where the assertion method was called. It is useful to remove too much information in errors stacks, and especially for async assertions, which otherwise would have the stack beginning at `&lt;anonymous&gt;`, and only pointing to the internal lines in the _CookieTester_, but not the test suite.
+Because we used `erotic`, the test will fail at the line of where the assertion method was called. It is useful to remove too much information in errors stacks, and especially for async assertions, which otherwise would have the stack beginning at `&lt;anonymous&gt;`, and only pointing to the internal lines in the _CookiesTester_, but not the test suite.
 </md2html></td></tr>
 <!-- /block-end -->
 </table>

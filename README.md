@@ -25,19 +25,19 @@ yarn add @contexts/http
     * [`AqtReturn`](#type-aqtreturn)
   * [`set(header: string, value: string): Tester`](#setheader-stringvalue-string-tester)
 - [Extending](#extending)
+- [CookiesContext](#cookiescontext)
 - [Copyright](#copyright)
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/0.svg?sanitize=true"></a></p>
 
 ## API
 
-The package is available by importing its default function:
+The package is available by importing its default and named classes. When [extending](#extending) the context, the `Tester` class is required. The [_CookiesContext_](#CookiesContext) is an extension of the _HttpContext_ that provides assertions for the returned `set-cookie` header.
 
 ```js
 import HttpContext, { Tester } from '@contexts/http'
+import CookiesContext, { CookiesTester } from '@contexts/http/cookie'
 ```
-
-When [extending](#extending) the context, the `Tester` class also needs to be imported.
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/1.svg?sanitize=true"></a></p>
 
@@ -346,14 +346,14 @@ example/test/spec/plain
     ✗  throws an error
     | Error: Unhandled error.
     |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:82:15)
+    |     at Server.handler (/Users/zavr/idiocc/http/src/Http.js:82:15)
     ✗  does not finish the request
     | Error: Test has timed out after 200ms
 
 example/test/spec/plain > plain > throws an error
   Error: Unhandled error.
       at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-      at Server.handler (/Users/zavr/idiocc/http/src/index.js:82:15)
+      at Server.handler (/Users/zavr/idiocc/http/src/Http.js:82:15)
 
 example/test/spec/plain > plain > does not finish the request
   Error: Test has timed out after 200ms
@@ -472,7 +472,7 @@ example/test/spec/debug.js > sets the code to 200
 ```
 Error: The authentication is required.
     at middleware (/Users/zavr/idiocc/http/example/src/index.js:12:21)
-    at Server.handler (/Users/zavr/idiocc/http/src/index.js:60:15)
+    at Server.handler (/Users/zavr/idiocc/http/src/Http.js:60:15)
 ```
 </td></tr>
 <tr><td>The <code>stderr</code> output, on the other hand, will now print the full error stack that lead to the error.</td></tr>
@@ -735,26 +735,37 @@ There are 2 parts of the _@contexts/Http_ software: the context and the tester. 
 
 ```js
 import Http from '@context/http'
-import CookieTester from './CookieTester'
+import CookiesTester from './CookiesTester'
 import mistmatch from 'mismatch'
 
+/**
+ * Extends _HTTPContext_ to assert on the cookies.
+ */
 export default class Cookies extends Http {
   constructor() {
     super()
-    this.TesterConstructor = CookieTester
+    this.TesterConstructor = CookiesTester
+    /**
+     * Parsed cookies.
+     * @private
+     */
+    this._cookies = null
   }
   /**
-   * @param {function(http.IncomingMessage, http.ServerResponse)} test
+   * @param {function(http.IncomingMessage, http.ServerResponse)} fn
    * @param {boolean} secure
    */
   start(fn, secure) {
-    const tester = /** @type {CookieTester} */ (super.start(fn, secure))
+    const tester = /** @type {CookiesTester} */ (super.start(fn, secure))
     return tester
   }
   getCookies() {
+    if (this._cookies) return this._cookies
     const setCookies = /** @type {Array<string>} */
       (this.tester.res.headers['set-cookie']) || []
-    return setCookies.map(Cookies.parseSetCookie)
+    const res = setCookies.map(Cookies.parseSetCookie)
+    this._cookies = res
+    return res
   }
   /**
    * Parses the `set-cookie` header.
@@ -765,6 +776,7 @@ export default class Cookies extends Http {
 
     const pairs = mistmatch(pattern, header, ['name', 'value'])
 
+    /** @type {{ name: string, value: string }} */
     const cookie = pairs.shift()
 
     for (let i = 0; i < pairs.length; i++) {
@@ -787,6 +799,8 @@ export default class Cookies extends Http {
   }
 }
 
+export { default as Tester } from './CookiesTester'
+
 /**
  * @typedef {import('http').IncomingMessage} http.IncomingMessage
  * @typedef {import('http').ServerResponse} http.ServerResponse
@@ -801,10 +815,10 @@ import { equal, ok } from 'assert'
 import erotic from 'erotic'
 import { Tester } from '@context/http'
 
-export default class CookieTester extends Tester {
+export default class CookiesTester extends Tester {
   constructor() {
     super()
-    /** @type {import('./Context').default} */
+    /** @type {import('.').default} */
     this.context = null
   }
   /**
@@ -888,14 +902,14 @@ export default class CookieTester extends Tester {
 }
 ```
 </td></tr>
-<tr><td>The <em>CookieTester</em> class allows to add the assertions to the tester. To help write assertions, the <code>this.context</code> type need to be updated to the <code>/** @type {import('./Context').default} */ this.context = null</code> in the constructor. Each assertion is documented with standard JSDoc. The assertion method might want to create an <code>erotic</code> object at first, to remember the point of entry to the function, so that the assertion will fail with an error whose stack consists of a single line where the assertion is called. This <code>e</code> object will have to be passed as the second argument to the <code>this._addLink</code> method. The assertion logic, either sync or async must be implemented withing the callback passed to the <code>this_addLink</code> method that will update the chain and execute the assertion in its turn. If the assertion explicitly returns <code>false</code>, no other assertions in the chain will be called.</td></tr>
+<tr><td>The <em>CookiesTester</em> class allows to add the assertions to the tester. To help write assertions, the <code>this.context</code> type need to be updated to the <code>/** @type {import('.').default} */ this.context = null</code> in the constructor. Each assertion is documented with standard JSDoc. The assertion method might want to create an <code>erotic</code> object at first, to remember the point of entry to the function, so that the assertion will fail with an error whose stack consists of a single line where the assertion is called. This <code>e</code> object will have to be passed as the second argument to the <code>this._addLink</code> method. The assertion logic, either sync or async must be implemented withing the callback passed to the <code>this_addLink</code> method that will update the chain and execute the assertion in its turn. If the assertion explicitly returns <code>false</code>, no other assertions in the chain will be called.</td></tr>
 <tr><td>
 
 <a href="example/test/spec/cookie/default.js">
   <img src="aty/jsdoc.gif" alt="Writing JSDoc Enabled Assertions">
 </a>
 </td></tr>
-<tr><td>Now the <em>CookieTester</em> methods which are used in tests, will come up with JSDoc documentation. The context must be imported as usual from the <code>context</code> directory, and set up on test suites in the <code>context</code> property. If there are multiple test suites in a file, the <code>export const context = CookieContext</code> would also work without having to specify the context on each individual test suite. The JSDoc enabling line, <code>/** type {Object<string, (h: CookieContext)} */</code> still needs to be present.</td></tr>
+<tr><td>Now the <em>CookiesTester</em> methods which are used in tests, will come up with JSDoc documentation. The context must be imported as usual from the <code>context</code> directory, and set up on test suites in the <code>context</code> property. If there are multiple test suites in a file, the <code>export const context = CookieContext</code> would also work without having to specify the context on each individual test suite. The JSDoc enabling line, <code>/** type {Object<string, (h: CookieContext)} */</code> still needs to be present.</td></tr>
 <tr><td>
 
 ```
@@ -913,10 +927,24 @@ example/test/spec/cookie/ > sets cookie for a path
 🦅  Executed 3 tests: 1 error.
 ```
 </td></tr>
-<tr><td>Because we used <code>erotic</code>, the test will fail at the line of where the assertion method was called. It is useful to remove too much information in errors stacks, and especially for async assertions, which otherwise would have the stack beginning at <code>&lt;anonymous&gt;</code>, and only pointing to the internal lines in the <em>CookieTester</em>, but not the test suite.</td></tr>
+<tr><td>Because we used <code>erotic</code>, the test will fail at the line of where the assertion method was called. It is useful to remove too much information in errors stacks, and especially for async assertions, which otherwise would have the stack beginning at <code>&lt;anonymous&gt;</code>, and only pointing to the internal lines in the <em>CookiesTester</em>, but not the test suite.</td></tr>
 </table>
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/13.svg?sanitize=true"></a></p>
+
+## CookiesContext
+
+The _CookiesContext_ provides assertion methods on the `set-cookie` header returned by the server. It allows to check how many times cookies were set as well as what attributes and values they had.
+
+- `count(number)`: Assert on the number of times the cookie was set.
+- `value(name, value)`: Asserts on the value of the cookie.
+- `attribute(name, attrib)`: Asserts on the presence of an attribute in the cookie.
+- `attributeAndValue(name, attrib, value)`: Asserts on the value of the cookie's attribute.
+- `noAttribute(name, attrib)`: Asserts on the absence of an attribute in the cookie.
+
+The context was adapted from the work in https://github.com/pillarjs/cookies.
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/14.svg?sanitize=true"></a></p>
 
 ## Copyright
 

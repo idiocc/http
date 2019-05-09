@@ -1,4 +1,4 @@
-import CookieContext from '../../../context/Context'
+import CookieContext from '../../../../src/cookies'
 
 /** @type {Object<string, (h: CookieContext)} */
 const TS = {
