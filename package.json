@@ -29,7 +29,12 @@
   },
   "keywords": [
     "http",
-    "idio"
+    "https",
+    "idio",
+    "context",
+    "testing",
+    "test",
+    "cookies"
   ],
   "author": "Anton <anton@adc.sh>",
   "license": "MIT",
