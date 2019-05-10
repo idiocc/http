@@ -37,14 +37,17 @@ Assert on the response header. The value must be either a string, regular expres
 <tr><td>
 
 %EXAMPLE: example/test/spec/assert/header%
+</td><td>
+
+%EXAMPLE: example/test/spec/assert/header-fail%
 </td></tr>
-<tr><td>
+<tr><td colspan="2">
 
 <details><summary>
 Show <em>Zoroaster</em> output
 </summary>
 
-%FORK node_modules/.bin/zoroaster example/test/spec/assert/header.js -a%
+%FORK node_modules/.bin/zoroaster example/test/spec/assert/header.js example/test/spec/assert/header-fail.js -a%
 </details>
 </td></tr>
 </table>

@@ -4,28 +4,29 @@ import HttpContext from '../../../../src'
 const TS = {
   context: HttpContext,
   /* start example */
-  async 'header'({ startPlain }) {
+  async 'header - fail'({ startPlain }) {
     await startPlain((_, res) => {
       res.statusCode = 205
       res.setHeader('content-type',
-        'application/json')
-      res.end('[]')
+        'application/xml')
+      res.end('<pages />')
     })
       .get('/sitemap')
       .assert(205)
       .assert('content-type', 'application/json')
   },
-  async 'header with regexp'({ startPlain }) {
+  async 'header with regexp - fail'({ startPlain }) {
     await startPlain((_, res) => {
       res.setHeader('content-type',
         'application/json; charset=utf-8')
       res.end('[]')
     })
       .get('/')
-      .assert('content-type', /application\/json/)
+      .assert('content-type', /application\/xml/)
   },
-  async 'absence of a header'({ startPlain }) {
+  async 'absence of a header - fail'({ startPlain }) {
     await startPlain((_, res) => {
+      res.setHeader('content-type', 'text/plain')
       res.end()
     })
       .get('/sitemap')

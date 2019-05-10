@@ -633,18 +633,9 @@ Assert on the response header. The value must be either a string, regular expres
 async 'header'({ startPlain }) {
   await startPlain((_, res) => {
     res.statusCode = 205
-    res.setHeader('content-type', 'application/json')
+    res.setHeader('content-type',
+      'application/json')
     res.end('[]')
-  })
-    .get('/sitemap')
-    .assert(205)
-    .assert('content-type', 'application/json')
-},
-async 'header - fail'({ startPlain }) {
-  await startPlain((_, res) => {
-    res.statusCode = 205
-    res.setHeader('content-type', 'application/xml')
-    res.end('<pages />')
   })
     .get('/sitemap')
     .assert(205)
@@ -659,6 +650,28 @@ async 'header with regexp'({ startPlain }) {
     .get('/')
     .assert('content-type', /application\/json/)
 },
+async 'absence of a header'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.end()
+  })
+    .get('/sitemap')
+    .assert('content-type', null)
+},
+```
+</td><td>
+
+```js
+async 'header - fail'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.statusCode = 205
+    res.setHeader('content-type',
+      'application/xml')
+    res.end('<pages />')
+  })
+    .get('/sitemap')
+    .assert(205)
+    .assert('content-type', 'application/json')
+},
 async 'header with regexp - fail'({ startPlain }) {
   await startPlain((_, res) => {
     res.setHeader('content-type',
@@ -667,13 +680,6 @@ async 'header with regexp - fail'({ startPlain }) {
   })
     .get('/')
     .assert('content-type', /application\/xml/)
-},
-async 'absence of a header'({ startPlain }) {
-  await startPlain((_, res) => {
-    res.end()
-  })
-    .get('/sitemap')
-    .assert('content-type', null)
 },
 async 'absence of a header - fail'({ startPlain }) {
   await startPlain((_, res) => {
@@ -685,7 +691,7 @@ async 'absence of a header - fail'({ startPlain }) {
 },
 ```
 </td></tr>
-<tr><td>
+<tr><td colspan="2">
 
 <details><summary>
 Show <em>Zoroaster</em> output
@@ -694,44 +700,44 @@ Show <em>Zoroaster</em> output
 ```
 example/test/spec/assert/header.js
   ✓  header
+  ✓  header with regexp
+  ✓  absence of a header
+ example/test/spec/assert/header-fail.js
   ✗  header - fail
   | Error: Header content-type did not match value:
   |   - application/json
   |   + application/xml
-  |     at header - fail (example/test/spec/assert/header.js:25:8)
-  ✓  header with regexp
+  |     at header - fail (example/test/spec/assert/header-fail.js:16:8)
   ✗  header with regexp - fail
   | Error: Header content-type did not match RexExp:
   |   - /application//xml/
   |   + application/json; charset=utf-8
-  |     at header with regexp - fail (example/test/spec/assert/header.js:43:8)
-  ✓  absence of a header
+  |     at header with regexp - fail (example/test/spec/assert/header-fail.js:25:8)
   ✗  absence of a header - fail
   | Error: Header content-type was not expected:
   |   + text/plain
-  |     at absence of a header - fail (example/test/spec/assert/header.js:58:8)
+  |     at absence of a header - fail (example/test/spec/assert/header-fail.js:33:8)
 
-example/test/spec/assert/header.js > header - fail
+example/test/spec/assert/header-fail.js > header - fail
   Error: Header content-type did not match value:
     - application/json
     + application/xml
-      at header - fail (example/test/spec/assert/header.js:25:8)
+      at header - fail (example/test/spec/assert/header-fail.js:16:8)
 
-example/test/spec/assert/header.js > header with regexp - fail
+example/test/spec/assert/header-fail.js > header with regexp - fail
   Error: Header content-type did not match RexExp:
     - /application//xml/
     + application/json; charset=utf-8
-      at header with regexp - fail (example/test/spec/assert/header.js:43:8)
+      at header with regexp - fail (example/test/spec/assert/header-fail.js:25:8)
 
-example/test/spec/assert/header.js > absence of a header - fail
+example/test/spec/assert/header-fail.js > absence of a header - fail
   Error: Header content-type was not expected:
     + text/plain
-      at absence of a header - fail (example/test/spec/assert/header.js:58:8)
+      at absence of a header - fail (example/test/spec/assert/header-fail.js:33:8)
 
 🦅  Executed 6 tests: 3 errors.
 ```
 </details>
-
 </td></tr>
 </table>
 
