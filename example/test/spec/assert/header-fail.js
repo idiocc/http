@@ -14,7 +14,8 @@ const TS = {
     })
       .get('/sitemap')
       .assert(205)
-      .assert('content-type', 'application/json')
+      .assert('content-type',
+        'application/json')
   },
   async 'header with regexp'({ startPlain }) {
     await startPlain((_, res) => {
@@ -23,11 +24,13 @@ const TS = {
       res.end('[]')
     })
       .get('/')
-      .assert('content-type', /application\/xml/)
+      .assert('content-type',
+        /application\/xml/)
   },
   async 'absence of a header'({ startPlain }) {
     await startPlain((_, res) => {
-      res.setHeader('content-type', 'text/plain')
+      res.setHeader('content-type',
+        'text/plain')
       res.end()
     })
       .get('/sitemap')

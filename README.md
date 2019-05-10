@@ -640,7 +640,8 @@ async 'header'({ startPlain }) {
   })
     .get('/sitemap')
     .assert(205)
-    .assert('content-type', 'application/json')
+    .assert('content-type',
+      'application/json')
 },
 async 'header with regexp'({ startPlain }) {
   await startPlain((_, res) => {
@@ -649,10 +650,12 @@ async 'header with regexp'({ startPlain }) {
     res.end('[]')
   })
     .get('/')
-    .assert('content-type', /application\/json/)
+    .assert('content-type',
+      /application\/json/)
 },
 async 'absence of a header'({ startPlain }) {
   await startPlain((_, res) => {
+
 
     res.end()
   })
@@ -673,7 +676,8 @@ async 'header'({ startPlain }) {
   })
     .get('/sitemap')
     .assert(205)
-    .assert('content-type', 'application/json')
+    .assert('content-type',
+      'application/json')
 },
 async 'header with regexp'({ startPlain }) {
   await startPlain((_, res) => {
@@ -682,11 +686,13 @@ async 'header with regexp'({ startPlain }) {
     res.end('[]')
   })
     .get('/')
-    .assert('content-type', /application\/xml/)
+    .assert('content-type',
+      /application\/xml/)
 },
 async 'absence of a header'({ startPlain }) {
   await startPlain((_, res) => {
-    res.setHeader('content-type', 'text/plain')
+    res.setHeader('content-type',
+      'text/plain')
     res.end()
   })
     .get('/sitemap')
@@ -715,11 +721,11 @@ example/test/spec/assert/header.js
   | Error: Header content-type did not match RexExp:
   |   - /application//xml/
   |   + application/json; charset=utf-8
-  |     at header with regexp (example/test/spec/assert/header-fail.js:26:8)
+  |     at header with regexp (example/test/spec/assert/header-fail.js:27:8)
   ✗  absence of a header
   | Error: Header content-type was not expected:
   |   + text/plain
-  |     at absence of a header (example/test/spec/assert/header-fail.js:34:8)
+  |     at absence of a header (example/test/spec/assert/header-fail.js:37:8)
 
 example/test/spec/assert/header-fail.js > header
   Error: Header content-type did not match value:
@@ -731,12 +737,12 @@ example/test/spec/assert/header-fail.js > header with regexp
   Error: Header content-type did not match RexExp:
     - /application//xml/
     + application/json; charset=utf-8
-      at header with regexp (example/test/spec/assert/header-fail.js:26:8)
+      at header with regexp (example/test/spec/assert/header-fail.js:27:8)
 
 example/test/spec/assert/header-fail.js > absence of a header
   Error: Header content-type was not expected:
     + text/plain
-      at absence of a header (example/test/spec/assert/header-fail.js:34:8)
+      at absence of a header (example/test/spec/assert/header-fail.js:37:8)
 
 🦅  Executed 6 tests: 3 errors.
 ```
