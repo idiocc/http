@@ -1,6 +1,7 @@
 const { equal, ok } = require('assert');
 let aqt = require('@rqt/aqt'); if (aqt && aqt.__esModule) aqt = aqt.default;
 let erotic = require('erotic'); if (erotic && erotic.__esModule) erotic = erotic.default;
+const { c } = require('erte');
 let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__esModule) deepEqual = deepEqual.default;
 
                class Tester extends Promise {
@@ -92,14 +93,28 @@ let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__e
         code(this.res)
         return
       }
-      if (typeof code == 'string' && message) {
-        equal(this.res.headers[code.toLowerCase()], message)
-        return
-      } else if (typeof code == 'string' && message === null) {
-        const v = this.res.headers[code.toLowerCase()]
-        if (v)
-          throw new Error(`The response had header ${code}: ${v}`)
-        return
+      if (typeof code == 'string') {
+        const header = this.res.headers[code.toLowerCase()]
+        if (message instanceof RegExp) {
+          ok(message.test(header), `Header ${c(code, 'blue')} did not match RexExp:
+  ${c(`- ${message}`, 'red')}
+  ${c(`+ ${header}`, 'green')}`)
+          return
+        } else if (message && !header){
+          throw new Error(`Header ${c(code, 'blue')} was expected:
+  ${c(`- ${message}`, 'red')}`)
+        } else if (message) {
+          equal(header, message, `Header ${c(code, 'blue')} did not match value:
+  ${c(`- ${message}`, 'red')}
+  ${c(`+ ${header}`, 'green')}`)
+          return
+        } else if (message === null) {
+          if (header)
+            throw new Error(`Header ${c(code, 'blue')} was not expected:
+  ${c(`+ ${header}`, 'green')}`)
+          else return
+        }
+        throw new Error('Nothing was tested')
       }
       // if we're here means code assertion
       try {

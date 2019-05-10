@@ -1,5 +1,9 @@
 ## 10 May 2019
 
+### [1.2.0](https://github.com/idiocc/http/compare/v1.1.0...v1.2.0)
+
+- [feature] Assert headers by regular expression, better header diffing in error info.
+
 ### [1.1.0](https://github.com/idiocc/http/compare/v1.0.3...v1.1.0)
 
 - [feature] Send `HEAD` requests.
