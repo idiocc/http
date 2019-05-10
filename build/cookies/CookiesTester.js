@@ -1,6 +1,14 @@
 const { equal, ok } = require('assert');
 let erotic = require('erotic'); if (erotic && erotic.__esModule) erotic = erotic.default;
 const { Tester } = require('../');
+const { c } = require('erte');
+const { wasExpectedError, didNotMatchValue, wasNotExpected } = require('../lib');
+
+const assertAttribute = (name, cookie, attrib) => {
+  ok(cookie, wasExpectedError('Cookie', name))
+  ok((attrib.toLowerCase() in cookie),
+    `Attribute ${c(attrib, 'blue')} of cookie ${c(name, 'yellow')} was expected.`)
+}
 
                class CookiesTester extends Tester {
   constructor() {
@@ -16,7 +24,7 @@ const { Tester } = require('../');
     const e = erotic(true)
     this._addLink(() => {
       const count = this.context.getCookies().length
-      equal(count, num, 'should set cookie ' + num + ' times')
+      equal(count, num, 'Should set cookie ' + num + ' times, not ' + count + '.')
     }, e)
     return this
   }
@@ -30,9 +38,9 @@ const { Tester } = require('../');
     const e = erotic(true)
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
-      ok(cookie, 'should set cookie ' + name)
+      ok(cookie, wasExpectedError('Cookie', name, val))
       equal(cookie.value, val,
-        'should set cookie ' + name + ' to ' + val)
+        didNotMatchValue('Cookie', name, val, cookie.value))
     }, e)
     return this
   }
@@ -46,9 +54,7 @@ const { Tester } = require('../');
     const e = erotic(true)
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
-      ok(cookie, 'should set cookie ' + name)
-      ok((attrib.toLowerCase() in cookie),
-        'should set cookie with attribute ' + attrib)
+      assertAttribute(name, cookie, attrib)
     }, e)
     return this
   }
@@ -63,11 +69,11 @@ const { Tester } = require('../');
     const e = erotic(true)
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
-      ok(cookie, 'should set cookie ' + name)
-      ok((attrib.toLowerCase() in cookie),
-        'should set cookie with attribute ' + attrib)
-      equal(cookie[attrib.toLowerCase()], value,
-        'should set cookie with attribute ' + attrib + ' set to ' + value)
+      assertAttribute(name, cookie, attrib)
+      const actual = cookie[attrib.toLowerCase()]
+      equal(actual, value,
+        didNotMatchValue(`Attribute ${c(attrib, 'blue')} of cookie ${c(name, 'yellow')}`,
+          null, value, actual))
     }, e)
     return this
   }
@@ -80,9 +86,11 @@ const { Tester } = require('../');
     const e = erotic(true)
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
-      ok(cookie, 'should set cookie ' + name)
-      ok(!(attrib.toLowerCase() in cookie),
-        'should set cookie without attribute ' + attrib)
+      ok(cookie, wasExpectedError('Cookie', name))
+      const a = attrib.toLowerCase()
+      ok(!(a in cookie),
+        wasNotExpected(`Attribute ${c(attrib, 'blue')} of cookie ${c(name, 'yellow')}`,
+          null, cookie[a]))
     }, e)
     return this
   }

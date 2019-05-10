@@ -3,6 +3,7 @@ let aqt = require('@rqt/aqt'); if (aqt && aqt.__esModule) aqt = aqt.default;
 let erotic = require('erotic'); if (erotic && erotic.__esModule) erotic = erotic.default;
 const { c } = require('erte');
 let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__esModule) deepEqual = deepEqual.default;
+const { wasExpectedError, didNotMatchValue, wasNotExpected } = require('./lib');
 
                class Tester extends Promise {
   constructor() {
@@ -101,17 +102,13 @@ let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__e
   ${c(`+ ${header}`, 'green')}`)
           return
         } else if (message && !header){
-          throw new Error(`Header ${c(code, 'blue')} was expected:
-  ${c(`- ${message}`, 'red')}`)
+          throw new Error(wasExpectedError('Header', code, message))
         } else if (message) {
-          equal(header, message, `Header ${c(code, 'blue')} did not match value:
-  ${c(`- ${message}`, 'red')}
-  ${c(`+ ${header}`, 'green')}`)
+          equal(header, message, didNotMatchValue('Header', code, message, header))
           return
         } else if (message === null) {
           if (header)
-            throw new Error(`Header ${c(code, 'blue')} was not expected:
-  ${c(`+ ${header}`, 'green')}`)
+            throw new Error(wasNotExpected('Header', code, header))
           else return
         }
         throw new Error('Nothing was tested')

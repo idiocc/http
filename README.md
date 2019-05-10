@@ -714,8 +714,8 @@ example/test/spec/assert/header.js
  example/test/spec/assert/header-fail.js
   ✗  header
   | Error: Header content-type did not match value:
-  |   - application/json
-  |   + application/xml
+  | - application/json
+  | + application/xml
   |     at header (example/test/spec/assert/header-fail.js:17:8)
   ✗  header with regexp
   | Error: Header content-type did not match RexExp:
@@ -729,8 +729,8 @@ example/test/spec/assert/header.js
 
 example/test/spec/assert/header-fail.js > header
   Error: Header content-type did not match value:
-    - application/json
-    + application/xml
+  - application/json
+  + application/xml
       at header (example/test/spec/assert/header-fail.js:17:8)
 
 example/test/spec/assert/header-fail.js > header with regexp
@@ -879,11 +879,21 @@ export default class Cookies extends Http {
     this._cookies = null
   }
   /**
+   * Creates a server and wraps the supplied listener in the handler that will set status code `500` if the listener threw and the body to the error text.
    * @param {function(http.IncomingMessage, http.ServerResponse)} fn
    * @param {boolean} secure
    */
   start(fn, secure) {
     const tester = /** @type {CookiesTester} */ (super.start(fn, secure))
+    return tester
+  }
+  /**
+   * Creates a server with the supplied listener.
+   * @param {function(http.IncomingMessage, http.ServerResponse)} fn
+   * @param {boolean} secure
+   */
+  startPlain(fn, secure) {
+    const tester = /** @type {CookiesTester} */ (super.startPlain(fn, secure))
     return tester
   }
   getCookies() {
@@ -941,6 +951,14 @@ export { default as Tester } from './CookiesTester'
 import { equal, ok } from 'assert'
 import erotic from 'erotic'
 import { Tester } from '@context/http'
+import { c } from 'erte'
+import { wasExpectedError, didNotMatchValue, wasNotExpected } from '../lib'
+
+const assertAttribute = (name, cookie, attrib) => {
+  ok(cookie, wasExpectedError('Cookie', name))
+  ok((attrib.toLowerCase() in cookie),
+    `Attribute ${c(attrib, 'blue')} of cookie ${c(name, 'yellow')} was expected.`)
+}
 
 export default class CookiesTester extends Tester {
   constructor() {
@@ -956,7 +974,7 @@ export default class CookiesTester extends Tester {
     const e = erotic(true)
     this._addLink(() => {
       const count = this.context.getCookies().length
-      equal(count, num, 'should set cookie ' + num + ' times')
+      equal(count, num, 'Should set cookie ' + num + ' times, not ' + count + '.')
     }, e)
     return this
   }
@@ -970,9 +988,9 @@ export default class CookiesTester extends Tester {
     const e = erotic(true)
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
-      ok(cookie, 'should set cookie ' + name)
+      ok(cookie, wasExpectedError('Cookie', name, val))
       equal(cookie.value, val,
-        'should set cookie ' + name + ' to ' + val)
+        didNotMatchValue('Cookie', name, val, cookie.value))
     }, e)
     return this
   }
@@ -986,9 +1004,7 @@ export default class CookiesTester extends Tester {
     const e = erotic(true)
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
-      ok(cookie, 'should set cookie ' + name)
-      ok((attrib.toLowerCase() in cookie),
-        'should set cookie with attribute ' + attrib)
+      assertAttribute(name, cookie, attrib)
     }, e)
     return this
   }
@@ -1003,11 +1019,11 @@ export default class CookiesTester extends Tester {
     const e = erotic(true)
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
-      ok(cookie, 'should set cookie ' + name)
-      ok((attrib.toLowerCase() in cookie),
-        'should set cookie with attribute ' + attrib)
-      equal(cookie[attrib.toLowerCase()], value,
-        'should set cookie with attribute ' + attrib + ' set to ' + value)
+      assertAttribute(name, cookie, attrib)
+      const actual = cookie[attrib.toLowerCase()]
+      equal(actual, value,
+        didNotMatchValue(`Attribute ${c(attrib, 'blue')} of cookie ${c(name, 'yellow')}`,
+          null, value, actual))
     }, e)
     return this
   }
@@ -1020,9 +1036,11 @@ export default class CookiesTester extends Tester {
     const e = erotic(true)
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
-      ok(cookie, 'should set cookie ' + name)
-      ok(!(attrib.toLowerCase() in cookie),
-        'should set cookie without attribute ' + attrib)
+      ok(cookie, wasExpectedError('Cookie', name))
+      const a = attrib.toLowerCase()
+      ok(!(a in cookie),
+        wasNotExpected(`Attribute ${c(attrib, 'blue')} of cookie ${c(name, 'yellow')}`,
+          null, cookie[a]))
     }, e)
     return this
   }
@@ -1044,11 +1062,11 @@ example/test/spec/cookie/
   ✓  sets the HttpOnly cookie
   ✓  deletes the cookie
   ✗  sets cookie for a path
-  | Error: should set cookie with attribute path
+  | Error: Attribute path of cookie example was expected.
   |     at sets cookie for a path (example/test/spec/cookie/default.js:32:8)
 
 example/test/spec/cookie/ > sets cookie for a path
-  Error: should set cookie with attribute path
+  Error: Attribute path of cookie example was expected.
       at sets cookie for a path (example/test/spec/cookie/default.js:32:8)
 
 🦅  Executed 3 tests: 1 error.

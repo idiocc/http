@@ -3,6 +3,7 @@ import aqt from '@rqt/aqt'
 import erotic from 'erotic'
 import { c } from 'erte'
 import deepEqual from '@zoroaster/deep-equal'
+import { wasExpectedError, didNotMatchValue, wasNotExpected } from './lib'
 
 export default class Tester extends Promise {
   constructor() {
@@ -101,17 +102,13 @@ export default class Tester extends Promise {
   ${c(`+ ${header}`, 'green')}`)
           return
         } else if (message && !header){
-          throw new Error(`Header ${c(code, 'blue')} was expected:
-  ${c(`- ${message}`, 'red')}`)
+          throw new Error(wasExpectedError('Header', code, message))
         } else if (message) {
-          equal(header, message, `Header ${c(code, 'blue')} did not match value:
-  ${c(`- ${message}`, 'red')}
-  ${c(`+ ${header}`, 'green')}`)
+          equal(header, message, didNotMatchValue('Header', code, message, header))
           return
         } else if (message === null) {
           if (header)
-            throw new Error(`Header ${c(code, 'blue')} was not expected:
-  ${c(`+ ${header}`, 'green')}`)
+            throw new Error(wasNotExpected('Header', code, header))
           else return
         }
         throw new Error('Nothing was tested')

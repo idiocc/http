@@ -1,3 +1,9 @@
+## 11 May 2019
+
+### [1.2.1](https://github.com/idiocc/http/compare/v1.2.0...v1.2.1)
+
+- [fix] Override the `startPlain` method, better cookies error messages.
+
 ## 10 May 2019
 
 ### [1.2.0](https://github.com/idiocc/http/compare/v1.1.0...v1.2.0)

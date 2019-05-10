@@ -16,11 +16,21 @@ let mistmatch = require('mismatch'); if (mistmatch && mistmatch.__esModule) mist
     this._cookies = null
   }
   /**
+   * Creates a server and wraps the supplied listener in the handler that will set status code `500` if the listener threw and the body to the error text.
    * @param {function(http.IncomingMessage, http.ServerResponse)} fn
    * @param {boolean} secure
    */
   start(fn, secure) {
     const tester = /** @type {CookiesTester} */ (super.start(fn, secure))
+    return tester
+  }
+  /**
+   * Creates a server with the supplied listener.
+   * @param {function(http.IncomingMessage, http.ServerResponse)} fn
+   * @param {boolean} secure
+   */
+  startPlain(fn, secure) {
+    const tester = /** @type {CookiesTester} */ (super.startPlain(fn, secure))
     return tester
   }
   getCookies() {
