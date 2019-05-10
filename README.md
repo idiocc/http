@@ -21,7 +21,7 @@ yarn add @contexts/http
   * [`get(path: string=): Tester`](#getpath-string-tester)
   * [`head(path: string=): Tester`](#headpath-string-tester)
   * [`assert(code: number, body: (string|RegExp|Object)=): Tester`](#assertcode-numberbody-stringregexpobject-tester)
-  * [`assert(header: string, value: ?string): Tester`](#assertheader-stringvalue-string-tester)
+  * [`assert(header: string, value: ?(string|RegExp)): Tester`](#assertheader-stringvalue-stringregexp-tester)
   * [`assert(assertion: function(Aqt.Return)): Tester`](#assertassertion-functionaqtreturn-tester)
     * [`AqtReturn`](#type-aqtreturn)
   * [`set(header: string, value: string): Tester`](#setheader-stringvalue-string-tester)
@@ -621,9 +621,9 @@ example/test/spec/assert/code.js
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/10.svg?sanitize=true" width="25"></a></p>
 
-### `assert(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: ?string,`<br/>`): Tester`
+### `assert(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: ?(string|RegExp),`<br/>`): Tester`
 
-Assert on the response header. The value must be either a string, or null to assert that the header was not set.
+Assert on the response header. The value must be either a string, regular expression to match the value of the header, or null to assert that the header was not set.
 
 <table>
 <tr><th colspan="2">assert(header, ?value)</th></tr>
@@ -640,6 +640,24 @@ async 'header'({ startPlain }) {
     .assert(205)
     .assert('content-type', 'application/json')
 },
+async 'header with regexp'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.setHeader('content-type',
+      'application/json; charset=utf-8')
+    res.end('[]')
+  })
+    .get('/')
+    .assert('content-type', /application\/json/)
+},
+async 'header with regexp (fail)'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.setHeader('content-type',
+      'application/json; charset=utf-8')
+    res.end('[]')
+  })
+    .get('/')
+    .assert('content-type', /application\/xml/)
+},
 async 'absence of a header'({ startPlain }) {
   await startPlain((_, res) => {
     res.end()
@@ -648,15 +666,27 @@ async 'absence of a header'({ startPlain }) {
     .assert('content-type', null)
 },
 ```
-</td>
-<td>
+</td></tr>
+<tr><td>
 
 ```
 example/test/spec/assert/header.js
   ✓  header
+  ✓  header with regexp
+  ✗  header with regexp (fail)
+  | Error: The header content-type with the value of application/json; charset=utf-8 does not match /application//xml/
+  |     at header with regexp (fail) (/Users/zavr/idiocc/http/example/test/spec/assert/header.js:33:8)
+  |     at bb (/Users/zavr/idiocc/http/node_modules/zoroaster/depack/bin/zoroaster.js:425:66)
+  |     at <anonymous>
   ✓  absence of a header
 
-🦅  Executed 2 tests.
+example/test/spec/assert/header.js > header with regexp (fail)
+  Error: The header content-type with the value of application/json; charset=utf-8 does not match /application//xml/
+      at header with regexp (fail) (/Users/zavr/idiocc/http/example/test/spec/assert/header.js:33:8)
+      at bb (/Users/zavr/idiocc/http/node_modules/zoroaster/depack/bin/zoroaster.js:425:66)
+      at <anonymous>
+
+🦅  Executed 4 tests: 1 error.
 ```
 </td></tr>
 </table>

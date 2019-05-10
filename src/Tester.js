@@ -1,6 +1,7 @@
 import { equal, ok } from 'assert'
 import aqt from '@rqt/aqt'
 import erotic from 'erotic'
+import { c } from 'erte'
 import deepEqual from '@zoroaster/deep-equal'
 
 export default class Tester extends Promise {
@@ -92,13 +93,21 @@ export default class Tester extends Promise {
         code(this.res)
         return
       }
-      if (typeof code == 'string' && message) {
-        equal(this.res.headers[code.toLowerCase()], message)
-        return
-      } else if (typeof code == 'string' && message === null) {
-        const v = this.res.headers[code.toLowerCase()]
-        if (v)
-          throw new Error(`The response had header ${code}: ${v}`)
+      if (typeof code == 'string') {
+        const header = this.res.headers[code.toLowerCase()]
+        if (message instanceof RegExp) {
+          ok(message.test(header), `The header ${
+            c(code, 'blue')
+          } with the value of ${
+            c(header, 'yellow')
+          } does not match ${c(message, 'green')}`)
+          return
+        } else if (message) {
+          equal(header, message)
+          return
+        } else if (message === null) {
+          if (header) throw new Error(`The response had header ${code}: ${header}`)
+        }
         return
       }
       // if we're here means code assertion

@@ -14,6 +14,24 @@ const TS = {
       .assert(205)
       .assert('content-type', 'application/json')
   },
+  async 'header with regexp'({ startPlain }) {
+    await startPlain((_, res) => {
+      res.setHeader('content-type',
+        'application/json; charset=utf-8')
+      res.end('[]')
+    })
+      .get('/')
+      .assert('content-type', /application\/json/)
+  },
+  async 'header with regexp (fail)'({ startPlain }) {
+    await startPlain((_, res) => {
+      res.setHeader('content-type',
+        'application/json; charset=utf-8')
+      res.end('[]')
+    })
+      .get('/')
+      .assert('content-type', /application\/xml/)
+  },
   async 'absence of a header'({ startPlain }) {
     await startPlain((_, res) => {
       res.end()

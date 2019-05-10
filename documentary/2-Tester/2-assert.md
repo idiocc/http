@@ -25,11 +25,11 @@ Assert on the status code and body. The error message will contain the body if i
 ```### assert => Tester
 [
   ["header", "string"],
-  ["value", "?string"]
+  ["value", "?(string|RegExp)"]
 ]
 ```
 
-Assert on the response header. The value must be either a string, or null to assert that the header was not set.
+Assert on the response header. The value must be either a string, regular expression to match the value of the header, or null to assert that the header was not set.
 
 <table>
 <tr><th colspan="2">assert(header, ?value)</th></tr>
@@ -37,8 +37,8 @@ Assert on the response header. The value must be either a string, or null to ass
 <tr><td>
 
 %EXAMPLE: example/test/spec/assert/header%
-</td>
-<td>
+</td></tr>
+<tr><td>
 
 %FORK node_modules/.bin/zoroaster example/test/spec/assert/header.js -a%
 </td></tr>
