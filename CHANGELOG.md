@@ -1,3 +1,9 @@
+## 10 May 2019
+
+### [1.0.1](https://github.com/idiocc/http/compare/v1.0.0...v1.0.1)
+
+- [jsdoc-fix] Put files in the `index.js` to enable JSDoc.
+
 ## 9 May 2019
 
 ### [1.0.0](https://github.com/idiocc/http/compare/v0.0.0-pre...v1.0.0)
