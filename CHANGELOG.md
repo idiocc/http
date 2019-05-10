@@ -1,5 +1,9 @@
 ## 10 May 2019
 
+### [1.0.2](https://github.com/idiocc/http/compare/v1.0.1...v1.0.2)
+
+- [fix] Don't override the status code in the `start` method.
+
 ### [1.0.1](https://github.com/idiocc/http/compare/v1.0.0...v1.0.1)
 
 - [jsdoc-fix] Put files in the `index.js` to enable JSDoc.
