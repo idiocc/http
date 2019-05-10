@@ -19,6 +19,7 @@ yarn add @contexts/http
   * [`debug(on: boolean=)`](#debugon-boolean-void)
 - [class Tester](#class-tester)
   * [`get(path: string=): Tester`](#getpath-string-tester)
+  * [`head(path: string=): Tester`](#headpath-string-tester)
   * [`assert(code: number, body: (string|RegExp|Object)=): Tester`](#assertcode-numberbody-stringregexpobject-tester)
   * [`assert(header: string, value: ?string): Tester`](#assertheader-stringvalue-string-tester)
   * [`assert(assertion: function(Aqt.Return)): Tester`](#assertassertion-functionaqtreturn-tester)
@@ -523,6 +524,43 @@ example/test/spec/get.js
 
 <p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/8.svg?sanitize=true" width="25"></a></p>
 
+### `head(`<br/>&nbsp;&nbsp;`path: string=,`<br/>`): Tester`
+
+Send the `HEAD` request to the server.
+
+
+<table>
+<tr><th colspan="2">head(path?)</th></tr>
+<tr><td>
+
+```js
+async 'sends redirect for index'({ start }) {
+  await start(middleware)
+    .head()
+    .assert(302)
+    .assert('location', 'index.html')
+},
+async 'sends 200 for sitemap'({ start }) {
+  await start(middleware)
+    .head('/sitemap')
+    .assert(200)
+},
+```
+</td>
+<td>
+
+```
+example/test/spec/head.js
+  ✓  sends redirect for index
+  ✓  sends 200 for sitemap
+
+🦅  Executed 2 tests.
+```
+</td></tr>
+</table>
+
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/9.svg?sanitize=true" width="25"></a></p>
+
 ### `assert(`<br/>&nbsp;&nbsp;`code: number,`<br/>&nbsp;&nbsp;`body: (string|RegExp|Object)=,`<br/>`): Tester`
 
 Assert on the status code and body. The error message will contain the body if it was present. If the response was in JSON, it will be automatically parses by the request library, and the deep assertion will be performed.
@@ -581,7 +619,7 @@ example/test/spec/assert/code.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/9.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/10.svg?sanitize=true" width="25"></a></p>
 
 ### `assert(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: ?string,`<br/>`): Tester`
 
@@ -623,7 +661,7 @@ example/test/spec/assert/header.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/10.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/11.svg?sanitize=true" width="25"></a></p>
 
 ### `assert(`<br/>&nbsp;&nbsp;`assertion: function(Aqt.Return),`<br/>`): Tester`
 
@@ -683,7 +721,7 @@ example/test/spec/assert/function.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/11.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/12.svg?sanitize=true" width="25"></a></p>
 
 ### `set(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: string,`<br/>`): Tester`
 
@@ -721,7 +759,7 @@ example/test/spec/assert/set.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/12.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/13.svg?sanitize=true"></a></p>
 
 ## Extending
 
@@ -930,7 +968,7 @@ example/test/spec/cookie/ > sets cookie for a path
 <tr><td>Because we used <code>erotic</code>, the test will fail at the line of where the assertion method was called. It is useful to remove too much information in errors stacks, and especially for async assertions, which otherwise would have the stack beginning at <code>&lt;anonymous&gt;</code>, and only pointing to the internal lines in the <em>CookiesTester</em>, but not the test suite.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/13.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/14.svg?sanitize=true"></a></p>
 
 ## CookiesContext
 
@@ -944,7 +982,7 @@ The _CookiesContext_ provides assertion methods on the `set-cookie` header retur
 
 The context was adapted from the work in https://github.com/pillarjs/cookies. See how [the tests are implemented](https://github.com/idiocc/cookies/blob/master/test/spec/set.js) for more info.
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/14.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/15.svg?sanitize=true"></a></p>
 
 ## Copyright
 

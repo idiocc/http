@@ -57,6 +57,22 @@ const T = {
 }
 
 /** @type {TestSuite} */
+export const head = {
+  async 'sends head request'({ start }) {
+    let method
+    await start((req, res) => {
+      method = req.method
+      res.setHeader('x-test', 'test')
+      res.end('hello world')
+    })
+      .head('/')
+      .assert(200, '')
+      .assert('x-test', 'test')
+    equal(method, 'HEAD')
+  },
+}
+
+/** @type {TestSuite} */
 export const assertFunction = {
   async 'passes assert function'({ start }) {
     await start((req, res) => {

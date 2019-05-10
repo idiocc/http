@@ -66,6 +66,20 @@ export default class Tester extends Promise {
     return this
   }
   /**
+   * Send `HEAD` request to the server.
+   * @param {string} path The path to navigate, empty by default.
+   */
+  head(path = '') {
+    this._addLink(async () => {
+      const res = await aqt(`${this.url}${path}`, {
+        headers: this.headers,
+        method: 'HEAD',
+      })
+      this.res = res
+    })
+    return this
+  }
+  /**
    * Assert on the status code and body when a number is given.
    * Assert on the header when the string is given. If the second arg is null, asserts on the absence of the header.
    * @param {number|string|function(AqtReturn)} code The number of the status code, or name of the header, or the custom assertion function.
