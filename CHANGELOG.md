@@ -1,5 +1,9 @@
 ## 10 May 2019
 
+### [1.0.3](https://github.com/idiocc/http/compare/v1.0.2...v1.0.3)
+
+- [jsdoc-fix] Reference the `aqt.Return` import` from the index file to make it work in the _Tester_.
+
 ### [1.0.2](https://github.com/idiocc/http/compare/v1.0.1...v1.0.2)
 
 - [fix] Don't override the status code in the `start` method.

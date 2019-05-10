@@ -113,11 +113,9 @@ let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__e
   }
 }
 
-
 /**
  * @typedef {import('http').OutgoingHttpHeaders} http.OutgoingHttpHeaders
- * @typedef {import('@rqt/aqt').AqtReturn} AqtReturn
+ * @typedef {import('./').AqtReturn} AqtReturn
  */
-
 
 module.exports = Tester

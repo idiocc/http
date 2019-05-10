@@ -150,6 +150,7 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
  * @typedef {import('http').Server} http.Server
  * @typedef {import('https').Server} https.Server
  * @typedef {import('net').Socket} net.Socket
+ * @typedef {import('@rqt/aqt').AqtReturn} AqtReturn
  */
 
 /** @typedef {import('./types').TestSuite} TestSuite */

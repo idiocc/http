@@ -113,8 +113,7 @@ export default class Tester extends Promise {
   }
 }
 
-
 /**
  * @typedef {import('http').OutgoingHttpHeaders} http.OutgoingHttpHeaders
- * @typedef {import('@rqt/aqt').AqtReturn} AqtReturn
+ * @typedef {import('./').AqtReturn} AqtReturn
  */
