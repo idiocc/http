@@ -346,14 +346,14 @@ example/test/spec/plain
     ✗  throws an error
     | Error: Unhandled error.
     |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-    |     at Server.handler (/Users/zavr/idiocc/http/src/Http.js:82:15)
+    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:82:15)
     ✗  does not finish the request
     | Error: Test has timed out after 200ms
 
 example/test/spec/plain > plain > throws an error
   Error: Unhandled error.
       at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-      at Server.handler (/Users/zavr/idiocc/http/src/Http.js:82:15)
+      at Server.handler (/Users/zavr/idiocc/http/src/index.js:82:15)
 
 example/test/spec/plain > plain > does not finish the request
   Error: Test has timed out after 200ms
@@ -472,7 +472,7 @@ example/test/spec/debug.js > sets the code to 200
 ```
 Error: The authentication is required.
     at middleware (/Users/zavr/idiocc/http/example/src/index.js:12:21)
-    at Server.handler (/Users/zavr/idiocc/http/src/Http.js:60:15)
+    at Server.handler (/Users/zavr/idiocc/http/src/index.js:60:15)
 ```
 </td></tr>
 <tr><td>The <code>stderr</code> output, on the other hand, will now print the full error stack that lead to the error.</td></tr>
