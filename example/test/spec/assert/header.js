@@ -4,6 +4,7 @@ import HttpContext from '../../../../src'
 const TS = {
   context: HttpContext,
   /* start example */
+  // pass
   async 'header'({ startPlain }) {
     await startPlain((_, res) => {
       res.statusCode = 205
@@ -26,6 +27,7 @@ const TS = {
   },
   async 'absence of a header'({ startPlain }) {
     await startPlain((_, res) => {
+
       res.end()
     })
       .get('/sitemap')
