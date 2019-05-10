@@ -49,7 +49,7 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
     return this.response
   }
   /**
-   * Creates a server and wraps the supplied listener in the handler that will set status code `500` if the listener threw and the body to the error text, and `200` otherwise.
+   * Creates a server and wraps the supplied listener in the handler that will set status code `500` if the listener threw and the body to the error text.
    * @param {function(http.IncomingMessage, http.ServerResponse)} fn The server callback.
    * @param {boolean} [secure=false] Whether to start an https server.
    */
@@ -58,7 +58,6 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
       try {
         this.response = res
         await fn(req, res)
-        res.statusCode = 200
       } catch (err) {
         res.statusCode = 500
         res.write(err.message)

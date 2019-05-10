@@ -15,6 +15,14 @@ const T = {
       .get('/')
       .assert(200, 'hello world')
   },
+  async 'request the server with custom code'({ start }) {
+    await start((req, res) => {
+      res.statusCode = 201
+      res.end('hello world')
+    })
+      .get('/')
+      .assert(201, 'hello world')
+  },
   async 'request the server with 500'({ start }) {
     await start(() => {
       throw new Error('There was an error')

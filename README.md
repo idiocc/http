@@ -108,7 +108,7 @@ example/test/spec/default.js
 
 ### `start(`<br/>&nbsp;&nbsp;`fn: (req: IncomingMessage, res: ServerResponse),`<br/>&nbsp;&nbsp;`secure: boolean=,`<br/>`): Tester`
 
-Starts the server with the given request listener function. It will setup an upper layer over the listener to try it and catch any errors in it. If there were errors, the status code will be set to `500` and the response will be ended with the error message. Otherwise, the status is set to `200`. This is done so that assertion methods can be called inside of the supplied function. If the server needs to be started without the wrapper handler, the [`startPlain`](#startplainfn-req-incomingmessage-res-serverresponsesecure-boolean-tester) method can be used instead.
+Starts the server with the given request listener function. It will setup an upper layer over the listener to try it and catch any errors in it. If there were errors, the status code will be set to `500` and the response will be ended with the error message. If there was no error, the status code will be set by _Node.JS_ to `200` automatically, if the request listener didn't set it. This is done so that assertion methods can be called inside of the supplied function. If the server needs to be started without the wrapper handler, the [`startPlain`](#startplainfn-req-incomingmessage-res-serverresponsesecure-boolean-tester) method can be used instead.
 
 When the `secure` option is passed, the HTTPS server with self-signed keys will be started and `process.env.NODE_TLS_REJECT_UNAUTHORIZED` will be set to `0` so make sure this context is only used for testing, and not on the production env.
 
@@ -346,14 +346,14 @@ example/test/spec/plain
     ✗  throws an error
     | Error: Unhandled error.
     |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:82:15)
+    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:81:15)
     ✗  does not finish the request
     | Error: Test has timed out after 200ms
 
 example/test/spec/plain > plain > throws an error
   Error: Unhandled error.
       at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-      at Server.handler (/Users/zavr/idiocc/http/src/index.js:82:15)
+      at Server.handler (/Users/zavr/idiocc/http/src/index.js:81:15)
 
 example/test/spec/plain > plain > does not finish the request
   Error: Test has timed out after 200ms
