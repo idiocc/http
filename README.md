@@ -239,11 +239,11 @@ example/test/spec/constructor.js
   ✓  sets the user with https
   ✗  sets the correct name
   | Error: 500 == 200 'Actual-User' == 'Expected-User'
-  |     at sets the correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:54:8)
+  |     at sets the correct name (example/test/spec/constructor.js:54:8)
 
 example/test/spec/constructor.js > sets the correct name
   Error: 500 == 200 'Actual-User' == 'Expected-User'
-      at sets the correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:54:8)
+      at sets the correct name (example/test/spec/constructor.js:54:8)
 
 🦅  Executed 4 tests: 1 error.
 ```
@@ -458,11 +458,11 @@ async 'sets the code to 200'({ start, debug }) {
 example/test/spec/debug.js
   ✗  sets the code to 200
   | Error: 500 == 200 The authentication is required.
-  |     at sets the code to 200 (/Users/zavr/idiocc/http/example/test/spec/debug.js:12:8)
+  |     at sets the code to 200 (example/test/spec/debug.js:12:8)
 
 example/test/spec/debug.js > sets the code to 200
   Error: 500 == 200 The authentication is required.
-      at sets the code to 200 (/Users/zavr/idiocc/http/example/test/spec/debug.js:12:8)
+      at sets the code to 200 (example/test/spec/debug.js:12:8)
 
 🦅  Executed 1 test: 1 error.
 ```
@@ -640,6 +640,16 @@ async 'header'({ startPlain }) {
     .assert(205)
     .assert('content-type', 'application/json')
 },
+async 'header - fail'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.statusCode = 205
+    res.setHeader('content-type', 'application/xml')
+    res.end('<pages />')
+  })
+    .get('/sitemap')
+    .assert(205)
+    .assert('content-type', 'application/json')
+},
 async 'header with regexp'({ startPlain }) {
   await startPlain((_, res) => {
     res.setHeader('content-type',
@@ -649,7 +659,7 @@ async 'header with regexp'({ startPlain }) {
     .get('/')
     .assert('content-type', /application\/json/)
 },
-async 'header with regexp (fail)'({ startPlain }) {
+async 'header with regexp - fail'({ startPlain }) {
   await startPlain((_, res) => {
     res.setHeader('content-type',
       'application/json; charset=utf-8')
@@ -665,29 +675,63 @@ async 'absence of a header'({ startPlain }) {
     .get('/sitemap')
     .assert('content-type', null)
 },
+async 'absence of a header - fail'({ startPlain }) {
+  await startPlain((_, res) => {
+    res.setHeader('content-type', 'text/plain')
+    res.end()
+  })
+    .get('/sitemap')
+    .assert('content-type', null)
+},
 ```
 </td></tr>
 <tr><td>
 
+<details><summary>
+Show <em>Zoroaster</em> output
+</summary>
+
 ```
 example/test/spec/assert/header.js
   ✓  header
+  ✗  header - fail
+  | Error: Header content-type did not match value:
+  |   - application/json
+  |   + application/xml
+  |     at header - fail (example/test/spec/assert/header.js:25:8)
   ✓  header with regexp
-  ✗  header with regexp (fail)
-  | Error: The header content-type with the value of application/json; charset=utf-8 does not match /application//xml/
-  |     at header with regexp (fail) (/Users/zavr/idiocc/http/example/test/spec/assert/header.js:33:8)
-  |     at bb (/Users/zavr/idiocc/http/node_modules/zoroaster/depack/bin/zoroaster.js:425:66)
-  |     at <anonymous>
+  ✗  header with regexp - fail
+  | Error: Header content-type did not match RexExp:
+  |   - /application//xml/
+  |   + application/json; charset=utf-8
+  |     at header with regexp - fail (example/test/spec/assert/header.js:43:8)
   ✓  absence of a header
+  ✗  absence of a header - fail
+  | Error: Header content-type was not expected:
+  |   + text/plain
+  |     at absence of a header - fail (example/test/spec/assert/header.js:58:8)
 
-example/test/spec/assert/header.js > header with regexp (fail)
-  Error: The header content-type with the value of application/json; charset=utf-8 does not match /application//xml/
-      at header with regexp (fail) (/Users/zavr/idiocc/http/example/test/spec/assert/header.js:33:8)
-      at bb (/Users/zavr/idiocc/http/node_modules/zoroaster/depack/bin/zoroaster.js:425:66)
-      at <anonymous>
+example/test/spec/assert/header.js > header - fail
+  Error: Header content-type did not match value:
+    - application/json
+    + application/xml
+      at header - fail (example/test/spec/assert/header.js:25:8)
 
-🦅  Executed 4 tests: 1 error.
+example/test/spec/assert/header.js > header with regexp - fail
+  Error: Header content-type did not match RexExp:
+    - /application//xml/
+    + application/json; charset=utf-8
+      at header with regexp - fail (example/test/spec/assert/header.js:43:8)
+
+example/test/spec/assert/header.js > absence of a header - fail
+  Error: Header content-type was not expected:
+    + text/plain
+      at absence of a header - fail (example/test/spec/assert/header.js:58:8)
+
+🦅  Executed 6 tests: 3 errors.
 ```
+</details>
+
 </td></tr>
 </table>
 
@@ -986,11 +1030,11 @@ example/test/spec/cookie/
   ✓  deletes the cookie
   ✗  sets cookie for a path
   | Error: should set cookie with attribute path
-  |     at sets cookie for a path (/Users/zavr/idiocc/http/example/test/spec/cookie/default.js:32:8)
+  |     at sets cookie for a path (example/test/spec/cookie/default.js:32:8)
 
 example/test/spec/cookie/ > sets cookie for a path
   Error: should set cookie with attribute path
-      at sets cookie for a path (/Users/zavr/idiocc/http/example/test/spec/cookie/default.js:32:8)
+      at sets cookie for a path (example/test/spec/cookie/default.js:32:8)
 
 🦅  Executed 3 tests: 1 error.
 ```

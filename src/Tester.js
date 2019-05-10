@@ -96,19 +96,22 @@ export default class Tester extends Promise {
       if (typeof code == 'string') {
         const header = this.res.headers[code.toLowerCase()]
         if (message instanceof RegExp) {
-          ok(message.test(header), `The header ${
-            c(code, 'blue')
-          } with the value of ${
-            c(header, 'yellow')
-          } does not match ${c(message, 'green')}`)
+          ok(message.test(header), `Header ${c(code, 'blue')} did not match RexExp:
+  ${c(`- ${message}`, 'red')}
+  ${c(`+ ${header}`, 'green')}`)
           return
         } else if (message) {
-          equal(header, message)
+          equal(header, message, `Header ${c(code, 'blue')} did not match value:
+  ${c(`- ${message}`, 'red')}
+  ${c(`+ ${header}`, 'green')}`)
           return
         } else if (message === null) {
-          if (header) throw new Error(`The response had header ${code}: ${header}`)
+          if (header)
+            throw new Error(`Header ${c(code, 'blue')} was not expected:
+  ${c(`+ ${header}`, 'green')}`)
+          else return
         }
-        return
+        throw new Error('Nothing was tested')
       }
       // if we're here means code assertion
       try {
