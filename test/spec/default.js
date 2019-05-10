@@ -28,7 +28,7 @@ const T = {
       throw new Error('There was an error')
     })
       .get('/')
-      .assert(500, /There was an error/g)
+      .assert(500, /There was an error/)
   },
   async 'throws on wrong code'({ start }) {
     await throws({
@@ -52,6 +52,60 @@ const T = {
           .assert(200, 'world')
       },
       message: /'hello' == 'world'/,
+    })
+  },
+}
+
+export const headersFail = {
+  async 'throws on header missing'({ start }) {
+    await throws({
+      async fn() {
+        await start((req, res) => {
+          res.end('hello')
+        })
+          .get('/')
+          .assert('content-type', 'application/json')
+      },
+      message: /Header .+content-type.+ was expected:[\s\S]+- application\/json/,
+    })
+  },
+  async 'throws on header present'({ start }) {
+    await throws({
+      async fn() {
+        await start((req, res) => {
+          res.setHeader('content-type', 'application/xml')
+          res.end('hello')
+        })
+          .get('/')
+          .assert('content-type', null)
+      },
+      message: /Header .+content-type.+ was not expected:[\s\S]+\+ application\/xml/,
+    })
+  },
+  async 'throws on header mismatch by value'({ start }) {
+    await throws({
+      async fn() {
+        await start((req, res) => {
+          res.setHeader('content-type', 'application/xml')
+          res.end('hello')
+        })
+          .get('/')
+          .assert('content-type', 'application/json')
+      },
+      message: /Header .+content-type.+ did not match value:[\s\S]+- application\/json[\s\S]+\+ application\/xml/,
+    })
+  },
+  async 'throws on header mismatch by regexp'({ start }) {
+    await throws({
+      async fn() {
+        await start((req, res) => {
+          res.setHeader('content-type', 'application/xml')
+          res.end('hello')
+        })
+          .get('/')
+          .assert('content-type', /json/)
+      },
+      message: /Header .+content-type.+ did not match RexExp:[\s\S]+- \/json\/[\s\S]+\+ application\/xml/,
     })
   },
 }

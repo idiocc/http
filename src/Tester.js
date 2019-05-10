@@ -100,6 +100,9 @@ export default class Tester extends Promise {
   ${c(`- ${message}`, 'red')}
   ${c(`+ ${header}`, 'green')}`)
           return
+        } else if (message && !header){
+          throw new Error(`Header ${c(code, 'blue')} was expected:
+  ${c(`- ${message}`, 'red')}`)
         } else if (message) {
           equal(header, message, `Header ${c(code, 'blue')} did not match value:
   ${c(`- ${message}`, 'red')}
