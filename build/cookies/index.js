@@ -81,4 +81,4 @@ const $_CookiesTester = require('./CookiesTester');
  */
 
 module.exports = Cookies
-module.exports.Tester = $_CookiesTester
+module.exports.CookiesTester = $_CookiesTester.CookiesTester

@@ -73,7 +73,7 @@ export default class Cookies extends Http {
   }
 }
 
-export { default as Tester } from './CookiesTester'
+export { CookiesTester } from './CookiesTester'
 
 /**
  * @typedef {import('http').IncomingMessage} http.IncomingMessage
