@@ -1,11 +1,11 @@
-import { equal, ok } from 'assert'
-import aqt from '@rqt/aqt'
-import erotic from 'erotic'
-import { c } from 'erte'
-import deepEqual from '@zoroaster/deep-equal'
-import { wasExpectedError, didNotMatchValue, wasNotExpected } from '../lib'
+const { equal, ok } = require('assert');
+let aqt = require('@rqt/aqt'); if (aqt && aqt.__esModule) aqt = aqt.default;
+let erotic = require('erotic'); if (erotic && erotic.__esModule) erotic = erotic.default;
+const { c } = require('erte');
+let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__esModule) deepEqual = deepEqual.default;
+const { wasExpectedError, didNotMatchValue, wasNotExpected } = require('./lib');
 
-export default class Tester extends Promise {
+               class Tester extends Promise {
   constructor() {
     super(() => {})
     /**
@@ -143,3 +143,5 @@ export default class Tester extends Promise {
  * @typedef {import('http').OutgoingHttpHeaders} http.OutgoingHttpHeaders
  * @typedef {import('./').AqtReturn} AqtReturn
  */
+
+module.exports = Tester

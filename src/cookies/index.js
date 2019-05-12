@@ -1,4 +1,4 @@
-import Http from '../tester'
+import Http from '../'
 import CookiesTester from './CookiesTester'
 import mistmatch from 'mismatch'
 

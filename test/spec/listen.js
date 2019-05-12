@@ -1,5 +1,5 @@
 import { createServer } from 'http'
-import HttpContext from '../../src/tester'
+import HttpContext from '../../src'
 
 export const context = HttpContext
 

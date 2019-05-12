@@ -1,5 +1,5 @@
 import { equal, throws, ok } from '@zoroaster/assert'
-import HttpContext from '../../src/tester'
+import HttpContext from '../../src'
 
 export const context = HttpContext
 

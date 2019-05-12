@@ -1,4 +1,4 @@
-const Http = require('../tester');
+const Http = require('../');
 const CookiesTester = require('./CookiesTester');
 let mistmatch = require('mismatch'); if (mistmatch && mistmatch.__esModule) mistmatch = mistmatch.default;
 

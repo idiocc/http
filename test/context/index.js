@@ -37,4 +37,4 @@ export default class Context {
 /** @typedef {Object<string, Test & TestSuite1>} TestSuite2 */
 /** @typedef {Object<string, Test & TestSuite0>} TestSuite1 */
 /** @typedef {Object<string, Test>} TestSuite0 */
-/** @typedef {(c: import('../../src/tester').default)} Test */
+/** @typedef {(c: import('../../src').default)} Test */

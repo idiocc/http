@@ -6,8 +6,8 @@ import cleanStack from '@artdeco/clean-stack'
 import { c } from 'erte'
 import Tester from './Tester'
 
-const cert = readFileSync(join(__dirname, '../server.crt'), 'ascii')
-const key = readFileSync(join(__dirname, '../server.key'), 'ascii')
+const cert = readFileSync(join(__dirname, 'server.crt'), 'ascii')
+const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
 
 export default class Server {
   constructor() {
