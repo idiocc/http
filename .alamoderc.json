@@ -11,8 +11,8 @@
     "cookies": {
       "import": {
         "replacement": {
-          "from": "^((../)+)lib",
-          "to": "$1build/lib"
+          "from": "^\\.",
+          "to": "./build"
         }
       }
     }

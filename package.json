@@ -12,8 +12,8 @@
     "lint": "eslint .",
     "doc": "NODE_DEBUG=doc doc -o README.md",
     "b": "yarn-s b1 b2",
-    "b1": "ALAMODE_ENV=cookies alamode src/cookies -o cookies -s",
-    "b2": "alamode src -o build -s -i cookies",
+    "b1": "ALAMODE_ENV=cookies alamode src/cookies.js -o . -s",
+    "b2": "alamode src -o build -s -i cookies.js",
     "d": "yarn-s d1 externs",
     "d1": "typal types/index.js src -c -t types/index.xml",
     "externs": "typal externs.js",
@@ -22,7 +22,7 @@
   },
   "files": [
     "build",
-    "cookies"
+    "cookies.js"
   ],
   "externs": "types/externs.js",
   "repository": {
