@@ -1,15 +1,15 @@
-import { createServer } from 'http'
-import { join } from 'path'
-import { createServer as createSecureServer, Server as HttpsServer } from 'https'
-import { readFileSync } from 'fs'
-import cleanStack from '@artdeco/clean-stack'
-import { c } from 'erte'
-import Tester from './Tester'
+const { createServer } = require('http');
+const { join } = require('path');
+const { createServer: createSecureServer, Server: HttpsServer } = require('https');
+const { readFileSync } = require('fs');
+let cleanStack = require('@artdeco/clean-stack'); if (cleanStack && cleanStack.__esModule) cleanStack = cleanStack.default;
+const { c } = require('erte');
+const Tester = require('./Tester');
 
-const cert = readFileSync(join(__dirname, 'server.crt'), 'ascii')
-const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
+const cert = readFileSync(join(__dirname, '../server.crt'), 'ascii')
+const key = readFileSync(join(__dirname, '../server.key'), 'ascii')
 
-export default class Server {
+               class Server {
   constructor() {
     /**
      * The constructor for the tester that will be returned by the `start` method. Additional assertions can be implemented by extending the `Tester` class that comes with the server.
@@ -140,7 +140,7 @@ export default class Server {
   }
 }
 
-export { Tester }
+
 
 /**
  * @typedef {import('http').IncomingMessage} http.IncomingMessage
@@ -153,4 +153,7 @@ export { Tester }
  * @typedef {import('@rqt/aqt').AqtReturn} AqtReturn
  */
 
-/** @typedef {import('./types').TestSuite} TestSuite */
+/** @typedef {import('../types').TestSuite} TestSuite */
+
+module.exports = Server
+module.exports.Tester = Tester

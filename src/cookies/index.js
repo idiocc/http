@@ -1,4 +1,4 @@
-import Http from '../'
+import Http from '../tester'
 import CookiesTester from './CookiesTester'
 import mistmatch from 'mismatch'
 
@@ -73,7 +73,7 @@ export default class Cookies extends Http {
   }
 }
 
-export { CookiesTester } from './CookiesTester'
+export { CookiesTester }
 
 /**
  * @typedef {import('http').IncomingMessage} http.IncomingMessage

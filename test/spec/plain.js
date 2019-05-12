@@ -1,4 +1,4 @@
-import HttpContext from '../../src'
+import HttpContext from '../../src/tester'
 
 export const context = HttpContext
 
@@ -16,4 +16,4 @@ const T = {
 
 export default T
 
-/** @typedef {import('../../src').TestSuite} TestSuite */
+/** @typedef {import('../context').TestSuite} TestSuite */

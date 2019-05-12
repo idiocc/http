@@ -5,4 +5,4 @@ export {}
 /** @typedef {Object<string, Test & TestSuite1>} TestSuite2 */
 /** @typedef {Object<string, Test & TestSuite0>} TestSuite1 */
 /** @typedef {Object<string, Test>} TestSuite0 */
-/** @typedef {(c: import('./').default)} Test */
+/** @typedef {(c: import('./tester'))} Test */

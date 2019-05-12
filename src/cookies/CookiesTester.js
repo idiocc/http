@@ -1,6 +1,6 @@
 import { equal, ok } from 'assert'
 import erotic from 'erotic'
-import { Tester } from '../'
+import { Tester } from '../tester'
 import { c } from 'erte'
 import { wasExpectedError, didNotMatchValue, wasNotExpected } from '../lib'
 

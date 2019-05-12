@@ -1,6 +1,6 @@
 const { equal, ok } = require('assert');
 let erotic = require('erotic'); if (erotic && erotic.__esModule) erotic = erotic.default;
-const { Tester } = require('../');
+const { Tester } = require('../tester');
 const { c } = require('erte');
 const { wasExpectedError, didNotMatchValue, wasNotExpected } = require('../lib');
 

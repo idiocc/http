@@ -1,4 +1,4 @@
-const Http = require('../');
+const Http = require('../tester');
 const CookiesTester = require('./CookiesTester');
 let mistmatch = require('mismatch'); if (mistmatch && mistmatch.__esModule) mistmatch = mistmatch.default;
 
@@ -73,7 +73,7 @@ let mistmatch = require('mismatch'); if (mistmatch && mistmatch.__esModule) mist
   }
 }
 
-const $_CookiesTester = require('./CookiesTester');
+
 
 /**
  * @typedef {import('http').IncomingMessage} http.IncomingMessage
@@ -81,4 +81,4 @@ const $_CookiesTester = require('./CookiesTester');
  */
 
 module.exports = Cookies
-module.exports.CookiesTester = $_CookiesTester.CookiesTester
+module.exports.CookiesTester = CookiesTester

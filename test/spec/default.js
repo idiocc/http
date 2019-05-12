@@ -1,5 +1,5 @@
 import { equal, throws, ok } from '@zoroaster/assert'
-import HttpContext from '../../src'
+import HttpContext from '../../src/tester'
 
 export const context = HttpContext
 
@@ -231,4 +231,4 @@ export const JSON = {
 
 export default T
 
-/** @typedef {import('../../src').TestSuite} TestSuite */
+/** @typedef {import('../context').TestSuite} TestSuite */

@@ -2,7 +2,7 @@
   "name": "@contexts/http",
   "version": "1.2.2",
   "description": "The Http(s) Testing Context For Super-Test Style Assertions. Includes Standard Assertions (get, set, assert), And Allows To Be Extended With JSDocumented Custom Assertions.",
-  "main": "build/index.js",
+  "main": "build/tester/index.js",
   "scripts": {
     "t": "zoroaster -a",
     "test": "yarn t test/spec test/mask",
