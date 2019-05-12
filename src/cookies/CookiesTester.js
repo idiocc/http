@@ -1,7 +1,7 @@
 import { equal, ok } from 'assert'
 import erotic from 'erotic'
-import { Tester } from '../tester'
 import { c } from 'erte'
+import Tester from '../tester/Tester'
 import { wasExpectedError, didNotMatchValue, wasNotExpected } from '../lib'
 
 const assertAttribute = (name, cookie, attrib) => {
