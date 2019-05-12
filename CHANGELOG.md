@@ -1,5 +1,9 @@
 ## 12 May 2019
 
+### [1.2.6](https://github.com/idiocc/http/compare/v1.2.5...v1.2.6)
+
+- [jsdoc] Combine files to prevent going deeper than 1 level.
+
 ### [1.2.5](https://github.com/idiocc/http/compare/v1.2.4...v1.2.5)
 
 - [jsdoc] Build without `ln`.
