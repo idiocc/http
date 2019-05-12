@@ -1,5 +1,9 @@
 ## 12 May 2019
 
+### [1.2.5](https://github.com/idiocc/http/compare/v1.2.4...v1.2.5)
+
+- [jsdoc] Build without `ln`.
+
 ### [1.2.4](https://github.com/idiocc/http/compare/v1.2.3...v1.2.4)
 
 - [jsdoc] Fix JSDoc 🤞.
