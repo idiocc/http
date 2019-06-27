@@ -1,5 +1,9 @@
 ## 27 June 2019
 
+### [1.2.8](https://github.com/idiocc/http/compare/v1.2.7...v1.2.8)
+
+- [jsdoc] Import `@rqt/aqt` return type in cookies.
+
 ### [1.2.7](https://github.com/idiocc/http/compare/v1.2.6...v1.2.7)
 
 - [build] Upgrade `alamode` for cleaner build.

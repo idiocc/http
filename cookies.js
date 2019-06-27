@@ -174,6 +174,7 @@ const assertAttribute = (name, cookie, attrib) => {
 /**
  * @typedef {import('http').IncomingMessage} http.IncomingMessage
  * @typedef {import('http').ServerResponse} http.ServerResponse
+ * @typedef {import('@rqt/aqt').AqtReturn} AqtReturn
  */
 
 module.exports = Cookies
