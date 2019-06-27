@@ -1,3 +1,9 @@
+## 27 June 2019
+
+### [1.2.7](https://github.com/idiocc/http/compare/v1.2.6...v1.2.7)
+
+- [build] Upgrade `alamode` for cleaner build.
+
 ## 12 May 2019
 
 ### [1.2.6](https://github.com/idiocc/http/compare/v1.2.5...v1.2.6)
