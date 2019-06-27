@@ -2,19 +2,19 @@ const { createServer } = require('http');
 const { createServer: createSecureServer, Server: HttpsServer } = require('https');
 const { join } = require('path');
 const { readFileSync } = require('fs');
-let cleanStack = require('@artdeco/clean-stack'); if (cleanStack && cleanStack.__esModule) cleanStack = cleanStack.default;
+const cleanStack = require('@artdeco/clean-stack');
 const { c } = require('erte');
 const { equal, ok } = require('assert');
-let aqt = require('@rqt/aqt'); if (aqt && aqt.__esModule) aqt = aqt.default;
-let erotic = require('erotic'); if (erotic && erotic.__esModule) erotic = erotic.default;
+const aqt = require('@rqt/aqt');
+const erotic = require('erotic');
 const { format } = require('url');
-let deepEqual = require('@zoroaster/deep-equal'); if (deepEqual && deepEqual.__esModule) deepEqual = deepEqual.default;
+const deepEqual = require('@zoroaster/deep-equal');
 const { wasExpectedError, didNotMatchValue, wasNotExpected } = require('./lib');
 
 const cert = readFileSync(join(__dirname, 'server.crt'), 'ascii')
 const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
 
-               class Server {
+class Server {
   constructor() {
     /**
      * The constructor for the tester that will be returned by the `start` method. Additional assertions can be implemented by extending the `Tester` class that comes with the server.
@@ -152,7 +152,7 @@ const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
 /**
  * The tester for assertions.
  */
-       class Tester extends Promise {
+class Tester extends Promise {
   constructor() {
     super(() => {})
     /**

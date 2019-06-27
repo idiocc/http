@@ -1,14 +1,14 @@
 const Http = require('./build/'); const { Tester } = Http;
-let mistmatch = require('mismatch'); if (mistmatch && mistmatch.__esModule) mistmatch = mistmatch.default;
+const mistmatch = require('mismatch');
 const { equal, ok } = require('assert');
-let erotic = require('erotic'); if (erotic && erotic.__esModule) erotic = erotic.default;
+const erotic = require('erotic');
 const { c } = require('erte');
 const { wasExpectedError, didNotMatchValue, wasNotExpected } = require('./build/lib');
 
 /**
  * Extends _HTTPContext_ to assert on the cookies.
  */
-               class Cookies extends Http {
+class Cookies extends Http {
   constructor() {
     super()
     this.TesterConstructor = CookiesTester
@@ -79,7 +79,7 @@ const { wasExpectedError, didNotMatchValue, wasNotExpected } = require('./build/
 /**
  * The tester for assertion on cookies.
  */
-       class CookiesTester extends Tester {
+class CookiesTester extends Tester {
   constructor() {
     super()
     /** @type {import('.').default} */

@@ -13,8 +13,26 @@
         "replacement": {
           "from": "^\\.",
           "to": "./build"
-        }
+        },
+        "alamodeModules": [
+          "@artdeco/clean-stack",
+          "@rqt/aqt",
+          "@zoroaster/deep-equal",
+          "erotic",
+          "erte",
+          "mismatch"
+        ]
       }
     }
+  },
+  "import": {
+    "alamodeModules": [
+      "@artdeco/clean-stack",
+      "@rqt/aqt",
+      "@zoroaster/deep-equal",
+      "erotic",
+      "erte",
+      "mismatch"
+    ]
   }
 }

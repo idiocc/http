@@ -45,10 +45,10 @@
   },
   "homepage": "https://github.com/idiocc/http#readme",
   "devDependencies": {
-    "alamode": "^2.1.2",
+    "alamode": "^2.3.4",
     "aty": "^1.1.2",
-    "connect": "^3.6.6",
-    "documentary": "^1.27.2",
+    "connect": "^3.7.0",
+    "documentary": "^1.27.3",
     "eslint-config-artdeco": "1.0.1",
     "yarn-s": "1.1.0",
     "zoroaster": "^4.1.1-alpha"
