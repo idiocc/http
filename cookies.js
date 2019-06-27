@@ -74,6 +74,10 @@ class Cookies extends Http {
       return name == n
     })
   }
+  _reset() {
+    super._reset()
+    this._cookies = null
+  }
 }
 
 /**
@@ -110,6 +114,18 @@ class CookiesTester extends Tester {
       ok(cookie, wasExpectedError('Cookie', name, val))
       equal(cookie.value, val,
         didNotMatchValue('Cookie', name, val, cookie.value))
+    }, e)
+    return this
+  }
+  /**
+   * Asserts on the presence of the cookie.
+   * @param {string} name The name of the cookie.
+   */
+  name(name) {
+    const e = erotic(true)
+    this._addLink(() => {
+      const cookie = this.context.getCookieForName(name)
+      ok(cookie, wasExpectedError('Cookie', name))
     }, e)
     return this
   }

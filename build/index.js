@@ -147,6 +147,12 @@ class Server {
     this.tester = tester
     return tester
   }
+  /**
+   * The method will be called prior to making further requests.
+   */
+  _reset() {
+
+  }
 }
 
 /**
@@ -167,7 +173,7 @@ class Tester extends Promise {
     this._chain = Promise.resolve(true)
     /**
      * The reference to the parent context that started the server.
-     * @type {import('./Http').default}
+     * @type {Server}
      */
     this.context = null
     /**
@@ -207,6 +213,7 @@ class Tester extends Promise {
    */
   get(path = '') {
     this._addLink(async () => {
+      this.context._reset()
       const res = await aqt(`${this.url}${path}`, {
         headers: this.headers,
       })
@@ -278,10 +285,15 @@ class Tester extends Promise {
   /**
    * Sets the value for the header in the upcoming request.
    * @param {string} name The name of the header to set.
-   * @param {string} value The value to set.
+   * @param {string|function(): (Promise<string>|string)} value The value to set.
    */
   set(name, value) {
-    this.headers[name] = value
+    this._addLink(async () => {
+      if (typeof value == 'function') {
+        value = await value()
+      }
+      this.headers[name] = value
+    })
     return this
   }
 }
