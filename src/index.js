@@ -243,9 +243,9 @@ export class Tester extends Promise {
    */
   assert(code, message) {
     const e = erotic(true)
-    this._addLink(() => {
+    this._addLink(async () => {
       if (typeof code == 'function') {
-        code(this.res)
+        await code(this.res)
         return
       }
       if (typeof code == 'string') {
