@@ -1,5 +1,4 @@
 import HttpContext from '../../../../src'
-import { equal } from 'assert'
 
 /** @type {Object<string, (h: HttpContext)} */
 const TS = {

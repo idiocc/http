@@ -29,7 +29,7 @@ yarn add @contexts/http
 - [CookiesContext](#cookiescontext)
 - [Copyright](#copyright)
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/0.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/0.svg?sanitize=true"></a></p>
 
 ## API
 
@@ -40,7 +40,7 @@ import HttpContext, { Tester } from '@contexts/http'
 import CookiesContext, { CookiesTester } from '@contexts/http/cookie'
 ```
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/1.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/1.svg?sanitize=true"></a></p>
 
 ## class HttpContext
 
@@ -103,7 +103,7 @@ example/test/spec/default.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/2.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/2.svg?sanitize=true" width="25"></a></p>
 
 
 
@@ -239,11 +239,11 @@ example/test/spec/constructor.js
   ✓  sets the user with https
   ✗  sets the correct name
   | Error: 500 == 200 'Actual-User' == 'Expected-User'
-  |     at sets the correct name (example/test/spec/constructor.js:54:8)
+  |     at sets the correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:54:8)
 
 example/test/spec/constructor.js > sets the correct name
   Error: 500 == 200 'Actual-User' == 'Expected-User'
-      at sets the correct name (example/test/spec/constructor.js:54:8)
+      at sets the correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:54:8)
 
 🦅  Executed 4 tests: 1 error.
 ```
@@ -251,7 +251,7 @@ example/test/spec/constructor.js > sets the correct name
 <tr><td>We expected the last test to fail because in the assertion method we specified that the user name should be different from the one that was passed in the options to the middleware. Other tests pass because there were no errors in the assertion middleware. It is always required to call <code>assert</code> on the context instance, because simply requesting data with <code>get</code> will not throw anything even if the status code was not <em>200</em>.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/3.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/3.svg?sanitize=true" width="25"></a></p>
 
 ### `startPlain(`<br/>&nbsp;&nbsp;`fn: (req: IncomingMessage, res: ServerResponse),`<br/>&nbsp;&nbsp;`secure: boolean=,`<br/>`): Tester`
 
@@ -347,14 +347,14 @@ example/test/spec/plain
     ✗  throws an error
     | Error: Unhandled error.
     |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:81:15)
+    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:86:15)
     ✗  does not finish the request
     | Error: Test has timed out after 200ms
 
 example/test/spec/plain > plain > throws an error
   Error: Unhandled error.
       at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-      at Server.handler (/Users/zavr/idiocc/http/src/index.js:81:15)
+      at Server.handler (/Users/zavr/idiocc/http/src/index.js:86:15)
 
 example/test/spec/plain > plain > does not finish the request
   Error: Test has timed out after 200ms
@@ -365,7 +365,7 @@ example/test/spec/plain > plain > does not finish the request
 <tr><td colspan="2">The output shows how tests with listeners that did not handle errors fail, so did the tests with listeners that did not end the request. The <code>handled</code> test suite (on the right above), wraps the plain listener in a middleware that closed the connection and caught errors, setting the status code to <code>500</code>, therefore all tests passed there. The strategy is similar to the <code>start</code> method, but allows to implement a custom handler.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/4.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/4.svg?sanitize=true" width="25"></a></p>
 
 ### `listen(`<br/>&nbsp;&nbsp;`server: http.Server|https.Server,`<br/>`): Tester`
 
@@ -432,7 +432,7 @@ example/test/spec/listen.js
 <tr><td colspan="2">The tests will be run as usual, but if there were any errors, they will be either handled by the server library, or caught by <em>Zoroaster</em> as global errors. Any unended requests will result in the test timing out.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/5.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/5.svg?sanitize=true" width="25"></a></p>
 
 ### `debug(`<br/>&nbsp;&nbsp;`on: boolean=,`<br/>`): void`
 
@@ -458,11 +458,11 @@ async 'sets the code to 200'({ start, debug }) {
 example/test/spec/debug.js
   ✗  sets the code to 200
   | Error: 500 == 200 The authentication is required.
-  |     at sets the code to 200 (example/test/spec/debug.js:12:8)
+  |     at sets the code to 200 (/Users/zavr/idiocc/http/example/test/spec/debug.js:12:8)
 
 example/test/spec/debug.js > sets the code to 200
   Error: 500 == 200 The authentication is required.
-      at sets the code to 200 (example/test/spec/debug.js:12:8)
+      at sets the code to 200 (/Users/zavr/idiocc/http/example/test/spec/debug.js:12:8)
 
 🦅  Executed 1 test: 1 error.
 ```
@@ -473,20 +473,20 @@ example/test/spec/debug.js > sets the code to 200
 ```
 Error: The authentication is required.
     at middleware (/Users/zavr/idiocc/http/example/src/index.js:12:21)
-    at Server.handler (/Users/zavr/idiocc/http/src/index.js:60:15)
+    at Server.handler (/Users/zavr/idiocc/http/src/index.js:65:15)
 ```
 </td></tr>
 <tr><td>The <code>stderr</code> output, on the other hand, will now print the full error stack that lead to the error.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/6.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/6.svg?sanitize=true"></a></p>
 
 ## class Tester
 
 The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.
 
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/7.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/7.svg?sanitize=true" width="25"></a></p>
 
 ### `get(`<br/>&nbsp;&nbsp;`path: string=,`<br/>`): Tester`
 
@@ -522,7 +522,7 @@ example/test/spec/get.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/8.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/8.svg?sanitize=true" width="25"></a></p>
 
 ### `head(`<br/>&nbsp;&nbsp;`path: string=,`<br/>`): Tester`
 
@@ -559,7 +559,7 @@ example/test/spec/head.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/9.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/9.svg?sanitize=true" width="25"></a></p>
 
 ### `assert(`<br/>&nbsp;&nbsp;`code: number,`<br/>&nbsp;&nbsp;`body: (string|RegExp|Object)=,`<br/>`): Tester`
 
@@ -619,7 +619,7 @@ example/test/spec/assert/code.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/10.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/10.svg?sanitize=true" width="25"></a></p>
 
 ### `assert(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: ?(string|RegExp),`<br/>`): Tester`
 
@@ -716,33 +716,33 @@ example/test/spec/assert/header.js
   | Error: Header content-type did not match value:
   | - application/json
   | + application/xml
-  |     at header (example/test/spec/assert/header-fail.js:17:8)
+  |     at header (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:17:8)
   ✗  header with regexp
   | Error: Header content-type did not match RexExp:
   |   - /application//xml/
   |   + application/json; charset=utf-8
-  |     at header with regexp (example/test/spec/assert/header-fail.js:27:8)
+  |     at header with regexp (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:27:8)
   ✗  absence of a header
   | Error: Header content-type was not expected:
   |   + text/plain
-  |     at absence of a header (example/test/spec/assert/header-fail.js:37:8)
+  |     at absence of a header (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:37:8)
 
 example/test/spec/assert/header-fail.js > header
   Error: Header content-type did not match value:
   - application/json
   + application/xml
-      at header (example/test/spec/assert/header-fail.js:17:8)
+      at header (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:17:8)
 
 example/test/spec/assert/header-fail.js > header with regexp
   Error: Header content-type did not match RexExp:
     - /application//xml/
     + application/json; charset=utf-8
-      at header with regexp (example/test/spec/assert/header-fail.js:27:8)
+      at header with regexp (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:27:8)
 
 example/test/spec/assert/header-fail.js > absence of a header
   Error: Header content-type was not expected:
     + text/plain
-      at absence of a header (example/test/spec/assert/header-fail.js:37:8)
+      at absence of a header (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:37:8)
 
 🦅  Executed 6 tests: 3 errors.
 ```
@@ -750,7 +750,7 @@ example/test/spec/assert/header-fail.js > absence of a header
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/11.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/11.svg?sanitize=true" width="25"></a></p>
 
 ### `assert(`<br/>&nbsp;&nbsp;`assertion: function(Aqt.Return),`<br/>`): Tester`
 
@@ -810,11 +810,11 @@ example/test/spec/assert/function.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/12.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/12.svg?sanitize=true" width="25"></a></p>
 
 ### `set(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: string,`<br/>`): Tester`
 
-Sets the outgoing headers. Must be called before the `get` method.
+Sets the outgoing headers. Must be called before the `get` method. It is possible to remember the result of the first request using the `assert` method by storing it in a variable, and then use it for headers in the second request (see example).
 
 <table>
 <tr><th colspan="2">set(header, value)</th></tr>
@@ -839,16 +839,44 @@ async 'sets the header'({ startPlain }) {
 </td>
 <td>
 
+```js
+async 'sets a header with a function'({ start }) {
+  let cookie
+  await start((req, res) => {
+    res.setHeader('x-test', 'world')
+    res.end(req.headers['test'])
+  })
+    .set('test', 'hello')
+    .get('/')
+    .assert(200, 'hello')
+    .assert(({ headers: h }) => {
+      cookie = h['x-test']
+    })
+    .set('test', () => cookie)
+    .get('/')
+    .assert(200, 'world')
+},
+```
+</td></tr>
+<tr><td colspan="2">
+
+<details><summary>
+Show <em>Zoroaster</em> output
+</summary>
+
 ```
 example/test/spec/assert/set.js
   ✓  sets the header
+ example/test/spec/assert/set-fn.js
+  ✓  sets a header with a function
 
-🦅  Executed 1 test.
+🦅  Executed 2 tests.
 ```
+</details>
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/13.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/13.svg?sanitize=true"></a></p>
 
 ## Extending
 
@@ -862,7 +890,7 @@ There are 2 parts of the _@contexts/Http_ software: the context and the tester. 
 
 ```js
 import Http from '@context/http'
-import CookiesTester from './CookiesTester'
+import CookiesTester from './tester'
 import mistmatch from 'mismatch'
 
 /**
@@ -934,36 +962,27 @@ export default class Cookies extends Http {
       return name == n
     })
   }
+  _reset() {
+    super._reset()
+    this._cookies = null
+  }
 }
-
-export { default as Tester } from './CookiesTester'
-
-/**
- * @typedef {import('http').IncomingMessage} http.IncomingMessage
- * @typedef {import('http').ServerResponse} http.ServerResponse
- */
 ```
 </td></tr>
 <tr><td>The <em>Cookies</em> context should extend the <em>Http</em> context, and set <code>this.TesterConstructor = CookieTester</code> in its constructor, so that the <code>start/startPlain/listen</code> methods of the superclass will construct the appropriate tester. The additional step involved is overriding the <code>start</code> method to update the JSDoc type of the tester returned to <code>CookieTester</code> so that the autocompletion hints are available in tests. Now, additional methods that are required for assertions, can be added to the context. They will be accessible via the <code>this.context</code> in the tester as shown below. The tester itself is accessible via the <code>this.tester</code>, and the AQT response object can be accessed via the <code>this.tester.res</code> property.</td></tr>
 <tr><td>
 
 ```js
-import { equal, ok } from 'assert'
-import erotic from 'erotic'
 import { Tester } from '@context/http'
-import { c } from 'erte'
-import { wasExpectedError, didNotMatchValue, wasNotExpected } from '../lib'
+import erotic from 'erotic'
 
-const assertAttribute = (name, cookie, attrib) => {
-  ok(cookie, wasExpectedError('Cookie', name))
-  ok((attrib.toLowerCase() in cookie),
-    `Attribute ${c(attrib, 'blue')} of cookie ${c(name, 'yellow')} was expected.`)
-}
-
-export default class CookiesTester extends Tester {
+/**
+ * The tester for assertion on cookies.
+ */
+export class CookiesTester extends Tester {
   constructor() {
     super()
-    /** @type {import('.').default} */
+    /** @type {import('./').default} */
     this.context = null
   }
   /**
@@ -994,7 +1013,6 @@ export default class CookiesTester extends Tester {
     }, e)
     return this
   }
-
   /**
    * Asserts on the presence of an attribute in the cookie.
    * @param {string} name The name of the cookie.
@@ -1005,42 +1023,6 @@ export default class CookiesTester extends Tester {
     this._addLink(() => {
       const cookie = this.context.getCookieForName(name)
       assertAttribute(name, cookie, attrib)
-    }, e)
-    return this
-  }
-
-  /**
-   * Asserts on the value of the cookie's attribute.
-   * @param {string} name The name of the cookie.
-   * @param {string} attrib The name of the attribute.
-   * @param {string} value The value of the attribute.
-   */
-  attributeAndValue(name, attrib, value) {
-    const e = erotic(true)
-    this._addLink(() => {
-      const cookie = this.context.getCookieForName(name)
-      assertAttribute(name, cookie, attrib)
-      const actual = cookie[attrib.toLowerCase()]
-      equal(actual, value,
-        didNotMatchValue(`Attribute ${c(attrib, 'blue')} of cookie ${c(name, 'yellow')}`,
-          null, value, actual))
-    }, e)
-    return this
-  }
-  /**
-   * Asserts on the absence of an attribute in the cookie.
-   * @param {string} name The name of the cookie.
-   * @param {string} attrib The name of the attribute.
-   */
-  noAttribute(name, attrib) {
-    const e = erotic(true)
-    this._addLink(() => {
-      const cookie = this.context.getCookieForName(name)
-      ok(cookie, wasExpectedError('Cookie', name))
-      const a = attrib.toLowerCase()
-      ok(!(a in cookie),
-        wasNotExpected(`Attribute ${c(attrib, 'blue')} of cookie ${c(name, 'yellow')}`,
-          null, cookie[a]))
     }, e)
     return this
   }
@@ -1063,11 +1045,11 @@ example/test/spec/cookie/
   ✓  deletes the cookie
   ✗  sets cookie for a path
   | Error: Attribute path of cookie example was expected.
-  |     at sets cookie for a path (example/test/spec/cookie/default.js:32:8)
+  |     at sets cookie for a path (/Users/zavr/idiocc/http/example/test/spec/cookie/default.js:32:8)
 
 example/test/spec/cookie/ > sets cookie for a path
   Error: Attribute path of cookie example was expected.
-      at sets cookie for a path (example/test/spec/cookie/default.js:32:8)
+      at sets cookie for a path (/Users/zavr/idiocc/http/example/test/spec/cookie/default.js:32:8)
 
 🦅  Executed 3 tests: 1 error.
 ```
@@ -1075,7 +1057,7 @@ example/test/spec/cookie/ > sets cookie for a path
 <tr><td>Because we used <code>erotic</code>, the test will fail at the line of where the assertion method was called. It is useful to remove too much information in errors stacks, and especially for async assertions, which otherwise would have the stack beginning at <code>&lt;anonymous&gt;</code>, and only pointing to the internal lines in the <em>CookiesTester</em>, but not the test suite.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/14.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/14.svg?sanitize=true"></a></p>
 
 ## CookiesContext
 
@@ -1089,7 +1071,7 @@ The _CookiesContext_ provides assertion methods on the `set-cookie` header retur
 
 The context was adapted from the work in https://github.com/pillarjs/cookies. See how [the tests are implemented](https://github.com/idiocc/cookies/blob/master/test/spec/set.js) for more info.
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/15.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/15.svg?sanitize=true"></a></p>
 
 ## Copyright
 
@@ -1097,23 +1079,23 @@ The context was adapted from the work in https://github.com/pillarjs/cookies. Se
   <tr>
     <th>
       <a href="https://artd.eco">
-        <img src="https://raw.githubusercontent.com/wrote/wrote/master/images/artdeco.png" alt="Art Deco" />
+        <img src="https://raw.githubusercontent.com/wrote/wrote/master/images/artdeco.png" alt="Art Deco">
       </a>
     </th>
     <th>© <a href="https://artd.eco">Art Deco</a> for <a href="https://idio.cc">Idio</a> 2019</th>
     <th>
       <a href="https://idio.cc">
-        <img src="https://avatars3.githubusercontent.com/u/40834161?s=100" width="100" alt="Idio" />
+        <img src="https://avatars3.githubusercontent.com/u/40834161?s=100" width="100" alt="Idio">
       </a>
     </th>
     <th>
       <a href="https://www.technation.sucks" title="Tech Nation Visa">
         <img src="https://raw.githubusercontent.com/artdecoweb/www.technation.sucks/master/anim.gif"
-          alt="Tech Nation Visa" />
+          alt="Tech Nation Visa">
       </a>
     </th>
     <th><a href="https://www.technation.sucks">Tech Nation Visa Sucks</a></th>
   </tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src=".documentary/section-breaks/-1.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/-1.svg?sanitize=true"></a></p>

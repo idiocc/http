@@ -9,7 +9,7 @@ There are 2 parts of the _@contexts/Http_ software: the context and the tester. 
 <!-- block-start -->
 <tr><td>
 
-%EXAMPLE: src/cookies/index.js, ../ => @context/http%
+%EXAMPLE: example/impl, ../../ => @context/http%
 </td></tr>
 <tr><td><md2html>
 
@@ -19,7 +19,7 @@ The _Cookies_ context should extend the _Http_ context, and set `this.TesterCons
 <!-- block-start -->
 <tr><td>
 
-%EXAMPLE: src/cookies/CookiesTester, ../ => @context/http%
+%EXAMPLE: example/impl/tester, ../../ => @context/http%
 </td></tr>
 <tr><td><md2html>
 

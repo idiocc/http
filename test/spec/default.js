@@ -174,6 +174,22 @@ export const headers = {
       .get('/')
       .assert(200, 'hello-world')
   },
+  async 'sets header with a function'({ start }) {
+    let cookie
+    await start((req, res) => {
+      res.setHeader('x-test', 'world')
+      res.end(req.headers['test'])
+    })
+      .set('test', 'hello')
+      .get('/')
+      .assert(200, 'hello')
+      .assert(({ headers: h }) => {
+        cookie = h['x-test']
+      })
+      .set('test', () => cookie)
+      .get('/')
+      .assert(200, 'world')
+  },
 }
 
 /** @type {TestSuite} */
