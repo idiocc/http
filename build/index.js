@@ -9,10 +9,10 @@ const aqt = require('@rqt/aqt');
 const erotic = require('erotic');
 const { format } = require('url');
 const deepEqual = require('@zoroaster/deep-equal');
-const { wasExpectedError, didNotMatchValue, wasNotExpected } = require('./lib');
+const { parseSetCookie, wasExpectedError, didNotMatchValue, wasNotExpected } = require('./lib');
 
-const cert = readFileSync(join(__dirname, 'server.crt'), 'ascii')
-const key = readFileSync(join(__dirname, 'server.key'), 'ascii')
+const CERT = readFileSync(join(__dirname, 'server.crt'), 'ascii')
+const KEY = readFileSync(join(__dirname, 'server.key'), 'ascii')
 
 class Server {
   constructor() {
@@ -39,6 +39,10 @@ class Server {
      * The tester created after the start, startPlain or listen methods.
      */
     this.tester = null
+    /**
+     * Whether to manage the session cookies.
+     */
+    this.session = false
   }
   /**
    * Call to switch on printing of debug messages and error stacks in the response body.
@@ -99,7 +103,7 @@ class Server {
     // const handler
     if (secure) {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED=0
-      server = createSecureServer({ cert, key }, handler)
+      server = createSecureServer({ cert: CERT, key: KEY }, handler)
     } else {
       server = createServer(handler)
     }
@@ -136,6 +140,7 @@ class Server {
       this.server = server
     })
     tester.context = this
+    if (this.session) tester._session = true
     server.on('connection', (con) => {
       const { remoteAddress, remotePort } = con
       const k = [remoteAddress, remotePort].join(':')
@@ -165,7 +170,7 @@ class Tester extends Promise {
      * The headers to send with the request, must be set before the `get` method is called using the `set` method.
      * @type {http.OutgoingHttpHeaders}
      */
-    this.headers = {}
+    this._headers = {}
 
     /**
      * @private
@@ -181,6 +186,14 @@ class Tester extends Promise {
      * @type {import('@rqt/aqt').AqtReturn}
      */
     this.res = null
+    /**
+     * Whether the cookies will be maintained by the tester.
+     */
+    this._session = false
+    /**
+     * When using the session, stores the cookies.
+     */
+    this._cookies = {}
   }
   /**
    * Adds the action to the list.
@@ -196,6 +209,45 @@ class Tester extends Promise {
         throw err
       }
     })
+  }
+  /**
+   * Save the result.
+   * @param {AqtReturn} res
+   * @param {string} path The request path.
+   * @private
+   */
+  _assignRes(res, path) {
+    this.res = res
+    if (this._session) {
+      const ch = res.headers['set-cookie'] || []
+      const parsed = ch.map(parseSetCookie)
+      parsed.forEach(({ name, expires, value }) => {
+        if (!value) {
+          if (this.context._debug)
+            console.error(
+              c(path, 'grey'),
+              c(`Server deleted cookie ${name}`, 'yellow'))
+          delete this._cookies[name]
+          return
+        }
+        if (expires && (new Date(expires) <= new Date())) {
+          if (this.context._debug)
+            console.error(
+              c(path, 'grey'),
+              c(`Cookie ${name} expired`, 'yellow'))
+          delete this._cookies[name]
+          return
+        }
+        this._cookies[name] = value
+        if (this.context._debug)
+          console.error(
+            c(path, 'grey'),
+            c('Setting cookie', 'yellow'),
+            c(name, 'blue'),
+            c(`to ${value}`, 'yellow'),
+            expires ? c(`(expires ${expires})`, 'grey') : '')
+      })
+    }
   }
   /**
    * @private
@@ -217,12 +269,12 @@ class Tester extends Promise {
       const res = await aqt(`${this.url}${path}`, {
         headers: this.headers,
       })
-      this.res = res
+      this._assignRes(res, path)
     })
     return this
   }
   /**
-   * Send `HEAD` request to the server.
+   * Send a `HEAD` request to the server.
    * @param {string} path The path to navigate, empty by default.
    */
   head(path = '') {
@@ -231,9 +283,21 @@ class Tester extends Promise {
         headers: this.headers,
         method: 'HEAD',
       })
-      this.res = res
+      this._assignRes(res)
     })
     return this
+  }
+  get headers() {
+    const cookies = Object.keys(this._cookies).map(((k) => {
+      const val = this._cookies[k]
+      return `${k}=${val}`
+    }))
+    if (this._headers.Cookie) cookies.push(this._headers.Cookie)
+    const Cookie = cookies.join(';')
+    return {
+      ...this._headers,
+      ...(Cookie ? { Cookie } : {}),
+    }
   }
   /**
    * Assert on the status code and body when a number is given.
@@ -292,8 +356,15 @@ class Tester extends Promise {
       if (typeof value == 'function') {
         value = await value()
       }
-      this.headers[name] = value
+      this._headers[name] = value
     })
+    return this
+  }
+  /**
+   * Start the session, by keeping track of the cookies that are send via the `set-cookies` header (added, removed).
+   */
+  session() {
+    this._session = true
     return this
   }
 }

@@ -1,4 +1,5 @@
 const { c } = require('erte');
+const mistmatch = require('mismatch');
 
 /**
  * Creates the was expected error.
@@ -34,7 +35,28 @@ const compare = (actual, expected) => {
   return ar.join('\n')
 }
 
+/**
+ * Parses the `set-cookie` header.
+ * @param {string} header
+ */
+function parseSetCookie(header) {
+  const pattern = /\s*([^=;]+)(?:=([^;]*);?|;|$)/g
+
+  const pairs = mistmatch(pattern, header, ['name', 'value'])
+
+  /** @type {{ name: string, value: string }} */
+  const cookie = pairs.shift()
+
+  for (let i = 0; i < pairs.length; i++) {
+    const match = pairs[i]
+    cookie[match.name.toLowerCase()] = (match.value || true)
+  }
+
+  return cookie
+}
+
 module.exports.wasExpectedError = wasExpectedError
 module.exports.wasNotExpected = wasNotExpected
 module.exports.didNotMatchValue = didNotMatchValue
 module.exports.compare = compare
+module.exports.parseSetCookie = parseSetCookie

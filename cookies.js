@@ -1,9 +1,8 @@
 const Http = require('./build/'); const { Tester } = Http;
-const mistmatch = require('mismatch');
 const { equal, ok } = require('assert');
 const erotic = require('erotic');
 const { c } = require('erte');
-const { wasExpectedError, didNotMatchValue, wasNotExpected } = require('./build/lib');
+const { wasExpectedError, didNotMatchValue, wasNotExpected, parseSetCookie } = require('./build/lib');
 
 /**
  * Extends _HTTPContext_ to assert on the cookies.
@@ -49,19 +48,7 @@ class Cookies extends Http {
    * @param {string} header
    */
   static parseSetCookie(header) {
-    const pattern = /\s*([^=;]+)(?:=([^;]*);?|;|$)/g
-
-    const pairs = mistmatch(pattern, header, ['name', 'value'])
-
-    /** @type {{ name: string, value: string }} */
-    const cookie = pairs.shift()
-
-    for (let i = 0; i < pairs.length; i++) {
-      const match = pairs[i]
-      cookie[match.name.toLowerCase()] = (match.value || true)
-    }
-
-    return cookie
+    return parseSetCookie(header)
   }
   /**
    * Returns the cookie record for the given name.

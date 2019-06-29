@@ -213,26 +213,39 @@ export class Tester extends Promise {
   /**
    * Save the result.
    * @param {AqtReturn} res
+   * @param {string} path The request path.
    * @private
    */
-  _assignRes(res) {
+  _assignRes(res, path) {
     this.res = res
     if (this._session) {
       const ch = res.headers['set-cookie'] || []
       const parsed = ch.map(parseSetCookie)
       parsed.forEach(({ name, expires, value }) => {
         if (!value) {
-          if (this.context._debug) console.error(c('Server deleted cookie %s', 'yellow'), name)
+          if (this.context._debug)
+            console.error(
+              c(path, 'grey'),
+              c(`Server deleted cookie ${name}`, 'yellow'))
           delete this._cookies[name]
           return
         }
-        if (expires && (new Date(expires) > new Date())) {
-          if (this.context._debug) console.error(c('Cookie %s expired', 'yellow'), name)
+        if (expires && (new Date(expires) <= new Date())) {
+          if (this.context._debug)
+            console.error(
+              c(path, 'grey'),
+              c(`Cookie ${name} expired`, 'yellow'))
           delete this._cookies[name]
           return
         }
         this._cookies[name] = value
-        if (this.context._debug) console.error(c('Setting cookie %s to %s', 'yellow'), name, value)
+        if (this.context._debug)
+          console.error(
+            c(path, 'grey'),
+            c('Setting cookie', 'yellow'),
+            c(name, 'blue'),
+            c(`to ${value}`, 'yellow'),
+            expires ? c(`(expires ${expires})`, 'grey') : '')
       })
     }
   }
@@ -256,7 +269,7 @@ export class Tester extends Promise {
       const res = await aqt(`${this.url}${path}`, {
         headers: this.headers,
       })
-      this._assignRes(res)
+      this._assignRes(res, path)
     })
     return this
   }
