@@ -1,3 +1,11 @@
+## 29 June 2019
+
+### [1.4.0](https://github.com/idiocc/http/compare/v1.3.0...v1.4.0)
+
+- [feature] Initial support for sessions (without `path`).
+- [fix] Correctly compare an empty body (`''`) in the assertion method which was skipped previously.
+- [doc] Doc cookiecs better, with `.name` and examples.
+
 ## 28 June 2019
 
 ### [1.3.0](https://github.com/idiocc/http/compare/v1.2.8...v1.3.0)
@@ -5,7 +13,6 @@
 - [fix/feature] Async _set_ that accepts a function.
 - [feature] The `name` method of the Cookie Tester to test the presence of a cookie.
 - [fix] Reset cookies state between the calls with the `reset` method.
-- [fix] Correctly compare an empty body (`''`) in the assertion method which was skipped previously.
 
 ## 27 June 2019
 
