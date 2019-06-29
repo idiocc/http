@@ -54,6 +54,18 @@ const T = {
       message: /'hello' == 'world'/,
     })
   },
+  async 'throws on empty string'({ start }) {
+    await throws({
+      async fn() {
+        await start((req, res) => {
+          res.end('hello')
+        })
+          .get('/')
+          .assert(200, '')
+      },
+      message: /'hello' == ''/,
+    })
+  },
 }
 
 export const headersFail = {

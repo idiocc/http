@@ -19,11 +19,12 @@ export const viaSessionMethod = {
       .session()
       .get('/')
       .assert(200, 'hello world')
+      .set('Cookie', 'testing=true')
       .get('/test')
-      .assert(200, 'koa:sess=eyJtZ')
+      .assert(200, 'koa:sess=eyJtZ;testing=true')
       .get('/exit')
       .get('/test')
-      .assert(200, '')
+      .assert(200, 'testing=true')
   },
 }
 

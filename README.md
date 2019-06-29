@@ -25,6 +25,7 @@ yarn add @contexts/http
   * [`assert(assertion: function(Aqt.Return)): Tester`](#assertassertion-functionaqtreturn-tester)
     * [`AqtReturn`](#type-aqtreturn)
   * [`set(header: string, value: string): Tester`](#setheader-stringvalue-string-tester)
+  * [`session(): Tester`](#session-tester)
 - [Extending](#extending)
 - [CookiesContext](#cookiescontext)
 - [Copyright](#copyright)
@@ -347,14 +348,14 @@ example/test/spec/plain
     ✗  throws an error
     | Error: Unhandled error.
     |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:86:15)
+    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:90:15)
     ✗  does not finish the request
     | Error: Test has timed out after 200ms
 
 example/test/spec/plain > plain > throws an error
   Error: Unhandled error.
       at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-      at Server.handler (/Users/zavr/idiocc/http/src/index.js:86:15)
+      at Server.handler (/Users/zavr/idiocc/http/src/index.js:90:15)
 
 example/test/spec/plain > plain > does not finish the request
   Error: Test has timed out after 200ms
@@ -473,7 +474,7 @@ example/test/spec/debug.js > sets the code to 200
 ```
 Error: The authentication is required.
     at middleware (/Users/zavr/idiocc/http/example/src/index.js:12:21)
-    at Server.handler (/Users/zavr/idiocc/http/src/index.js:65:15)
+    at Server.handler (/Users/zavr/idiocc/http/src/index.js:69:15)
 ```
 </td></tr>
 <tr><td>The <code>stderr</code> output, on the other hand, will now print the full error stack that lead to the error.</td></tr>
@@ -869,6 +870,105 @@ example/test/spec/assert/set.js
   ✓  sets the header
  example/test/spec/assert/set-fn.js
   ✓  sets a header with a function
+
+🦅  Executed 2 tests.
+```
+</details>
+</td></tr>
+</table>
+
+### `session(): Tester`
+
+Turns the session mode on. In the session mode, the cookies received from the server will be stored in the internal variable, and sent along with each following request. If the server removed the cookies by setting them to an empty string, or by setting the expiry date to be in the past, they will be removed from the tester and not sent to the server.
+
+This feature can also be switched on by setting `session=true` on the context itself, so that `.session()` calls are not required.
+
+Additional cookies can be set using the `.set('Cookie', {value})` method, and they will be concatenated to the cookies maintained by the session.
+
+At the moment, only `expire` property is handled, without the `path`, or `httpOnly` directives. This will be added in future versions.
+
+<table>
+<tr><th colspan="2">session()</th></tr>
+<tr><td>
+
+```js
+import HttpContext from '../../src'
+
+/** @type {TestSuite} */
+export const viaSessionMethod = {
+  context: HttpContext,
+  async 'maintains the session'({ start, debug }) {
+    debug()
+    await start((req, res) => {
+      if (req.url == '/') {
+        res.setHeader('set-cookie', 'koa:sess=eyJtZ; path=/; httponly')
+        res.end('hello world')
+      } else if (req.url == '/exit') {
+        res.setHeader('set-cookie', 'koa:sess=; path=/; httponly')
+        res.end()
+      } else if (req.url == '/test') {
+        res.end(req.headers['cookie'])
+      }
+    })
+      .session()
+      .get('/')
+      .assert(200, 'hello world')
+      .set('Cookie', 'testing=true')
+      .get('/test')
+      .assert(200, 'koa:sess=eyJtZ;testing=true')
+      .get('/exit')
+      .get('/test')
+      .assert(200, 'testing=true')
+  },
+}
+
+/** @type {TestSuite} */
+export const viaExtendingContext = {
+  context: class extends HttpContext {
+    constructor() {
+      super()
+      this.session = true
+    }
+  },
+  async 'maintains the session'({ start, debug }) {
+    debug()
+    await start((req, res) => {
+      if (req.url == '/') {
+        res.setHeader('set-cookie', 'koa:sess=eyJtZ; path=/; httponly')
+        res.end('hello world')
+      } else if (req.url == '/exit') {
+        res.setHeader('set-cookie', 'koa:sess=; path=/; httponly')
+        res.end()
+      } else if (req.url == '/test') {
+        res.end(req.headers['cookie'])
+      }
+    })
+      .get('/')
+      .assert(200, 'hello world')
+      .get('/test')
+      .assert(200, 'koa:sess=eyJtZ')
+      .get('/exit')
+      .get('/test')
+      .assert(200, '')
+  },
+}
+
+/** @typedef {import('../context').TestSuite} TestSuite */
+```
+</td>
+</tr>
+<tr><td colspan="2">
+
+<details><summary>
+Show <em>Zoroaster</em> output
+</summary>
+
+```
+test/spec/session.js
+   viaSessionMethod
+    ✓  maintains the session
+   viaExtendingContext
+    ✓  maintains the session
 
 🦅  Executed 2 tests.
 ```

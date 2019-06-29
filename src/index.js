@@ -342,7 +342,7 @@ export class Tester extends Promise {
         ok(message.test(this.res.body), `The body does not match ${message}`)
       } else if (typeof message == 'object') {
         deepEqual(this.res.body, message)
-      } else if (message) equal(this.res.body, message)
+      } else if (message !== undefined) equal(this.res.body, message)
     }, e)
     return this
   }
