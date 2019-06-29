@@ -1,4 +1,5 @@
 import { c } from 'erte'
+import mistmatch from 'mismatch'
 
 /**
  * Creates the was expected error.
@@ -32,4 +33,24 @@ export const compare = (actual, expected) => {
   if (expected !== undefined) ar.push(`${c(`- ${expected}`, 'red')}`)
   if (actual !== undefined) ar.push(`${c(`+ ${actual}`, 'green')}`)
   return ar.join('\n')
+}
+
+/**
+ * Parses the `set-cookie` header.
+ * @param {string} header
+ */
+export function parseSetCookie(header) {
+  const pattern = /\s*([^=;]+)(?:=([^;]*);?|;|$)/g
+
+  const pairs = mistmatch(pattern, header, ['name', 'value'])
+
+  /** @type {{ name: string, value: string }} */
+  const cookie = pairs.shift()
+
+  for (let i = 0; i < pairs.length; i++) {
+    const match = pairs[i]
+    cookie[match.name.toLowerCase()] = (match.value || true)
+  }
+
+  return cookie
 }

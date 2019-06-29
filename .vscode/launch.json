@@ -17,7 +17,7 @@
         "test/spec",
         "test/mask",
         "-a", "-w",
-        // "-t", "9999999"
+        "-t", "9999999"
       ],
       "skipFiles": [
         "<node_internals>/**/*.js"

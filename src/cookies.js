@@ -1,9 +1,8 @@
 import Http, { Tester } from './'
-import mistmatch from 'mismatch'
 import { equal, ok } from 'assert'
 import erotic from 'erotic'
 import { c } from 'erte'
-import { wasExpectedError, didNotMatchValue, wasNotExpected } from './lib'
+import { wasExpectedError, didNotMatchValue, wasNotExpected, parseSetCookie } from './lib'
 
 /**
  * Extends _HTTPContext_ to assert on the cookies.
@@ -49,19 +48,7 @@ export default class Cookies extends Http {
    * @param {string} header
    */
   static parseSetCookie(header) {
-    const pattern = /\s*([^=;]+)(?:=([^;]*);?|;|$)/g
-
-    const pairs = mistmatch(pattern, header, ['name', 'value'])
-
-    /** @type {{ name: string, value: string }} */
-    const cookie = pairs.shift()
-
-    for (let i = 0; i < pairs.length; i++) {
-      const match = pairs[i]
-      cookie[match.name.toLowerCase()] = (match.value || true)
-    }
-
-    return cookie
+    return parseSetCookie(header)
   }
   /**
    * Returns the cookie record for the given name.
