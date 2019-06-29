@@ -5,6 +5,7 @@
 - [fix/feature] Async _set_ that accepts a function.
 - [feature] The `name` method of the Cookie Tester to test the presence of a cookie.
 - [fix] Reset cookies state between the calls with the `reset` method.
+- [fix] Correctly compare an empty body (`''`) in the assertion method which was skipped previously.
 
 ## 27 June 2019
 
