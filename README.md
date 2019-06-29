@@ -972,6 +972,12 @@ test/spec/session.js
 
 🦅  Executed 2 tests.
 ```
+```
+/ Setting cookie koa:sess to eyJtZ 
+/exit Server deleted cookie koa:sess
+/ Setting cookie koa:sess to eyJtZ 
+/exit Server deleted cookie koa:sess
+```
 </details>
 </td></tr>
 </table>
