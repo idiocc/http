@@ -48,14 +48,15 @@
     "alamode": "^2.3.4",
     "aty": "^1.1.2",
     "connect": "^3.7.0",
-    "documentary": "^1.27.3",
+    "documentary": "^1.27.4",
     "eslint-config-artdeco": "1.0.1",
     "yarn-s": "1.1.0",
     "zoroaster": "^4.1.1-alpha"
   },
   "dependencies": {
     "@artdeco/clean-stack": "^1.1.1",
-    "@rqt/aqt": "^1.2.5",
+    "@rqt/aqt": "^1.2.6",
+    "@wrote/read": "^1.0.4",
     "@zoroaster/deep-equal": "^1.0.1",
     "erotic": "^2.1.1",
     "erte": "^1.2.0",

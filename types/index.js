@@ -1,9 +1,9 @@
 /* typal types/index.xml closure noSuppress */
 /**
- * @typedef {_@contexts/http.Config} Config Options for the program.
+ * @typedef {_contexts.HttpContext} HttpContext The HTTP context interface.
  */
 /**
- * @typedef {Object} _@contexts/http.Config Options for the program.
+ * @typedef {Object} _contexts.HttpContext The HTTP context interface.
  * @prop {boolean} [shouldRun=true] A boolean option. Default `true`.
  * @prop {string} text A text to return.
  */
