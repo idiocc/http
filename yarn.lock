@@ -34,6 +34,13 @@
   resolved "https://registry.yarnpkg.com/@depack/split/-/split-1.0.0.tgz#37fea28d9bc6f01e5a2da87d393f402781bb7e99"
   integrity sha512-PNJPl01VFMKtyN7qBZ2cds4N/lO2KvzLrR7JamODFiuuL2X8mGoTKp1SI8fxlT2MwLV8mScCUKn55QPwsUX7iA==
 
+"@multipart/form@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@multipart/form/-/form-1.0.0.tgz#c318d7185300d2d3339e64d38b64197d64613620"
+  integrity sha512-FDeaYHoXe4HeEZ3QYJzfrFH8EJFKTG2WIoEGwL3Vms71LT20skaMifehgMNmQ8pNrTq+Zg8FKTGJDxDTTXoM3A==
+  dependencies:
+    "@wrote/read" "^1.0.4"
+
 "@rqt/aqt@^1.2.6":
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/@rqt/aqt/-/aqt-1.2.6.tgz#0f41a4596b6a84ec8caa77d456972c0bb026cc2b"

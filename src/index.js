@@ -9,11 +9,8 @@ import aqt from '@rqt/aqt'
 import erotic from 'erotic'
 import { format } from 'url'
 import deepEqual from '@zoroaster/deep-equal'
-import { readBuffer } from '@wrote/read'
+import Form from '@multipart/form'
 import { parseSetCookie, wasExpectedError, didNotMatchValue, wasNotExpected } from './lib'
-
-const CERT = readFileSync(join(__dirname, 'server.crt'), 'ascii')
-const KEY = readFileSync(join(__dirname, 'server.key'), 'ascii')
 
 export default class Server {
   constructor() {
@@ -103,6 +100,9 @@ export default class Server {
     let server
     // const handler
     if (secure) {
+      const CERT = readFileSync(join(__dirname, 'server.crt'), 'ascii')
+      const KEY = readFileSync(join(__dirname, 'server.key'), 'ascii')
+
       process.env.NODE_TLS_REJECT_UNAUTHORIZED=0
       server = createSecureServer({ cert: CERT, key: KEY }, handler)
     } else {
@@ -408,70 +408,6 @@ export class Tester extends Promise {
     return this
   }
 }
-
-class Form {
-  constructor() {
-    /**
-     * @type {Array<Buffer>}
-     */
-    this._data = []
-  }
-  /**
-   * @param {string} path The path to the file.
-   * @param {string} name The name of the field.
-   * @param {Object} [options] Options for the file.
-   * @param {string} [options.contentType="application/octet-stream"] The content-type.
-   * @param {string} [options.noCache=false] Disable caching.
-   */
-  async addFile(path, name, {
-    contentType = 'application/octet-stream',
-    noCache = false,
-  } = {}) {
-    let file
-    if (path in formCache || noCache) {
-      file = formCache[path]
-    } else {
-      file = await readBuffer(path)
-      formCache[path] = file
-    }
-    this.writeLine(`\r\n--${this.boundary}`)
-    this.writeLine(`Content-Disposition: form-data; name="${name}"; filename="${path}"`)
-    this.writeLine(`Content-Type: ${contentType}`)
-    this.writeLine()
-    this._data.push(file)
-  }
-  writeLine(line) {
-    if (line) this._data.push(typeof line == 'string' ? Buffer.from(line) : line)
-    this._data.push(Buffer.from('\r\n'))
-  }
-  /**
-   * The boundary.
-   */
-  get boundary() {
-    return 'u2KxIV5yF1y+xUspOQCCZopaVgeV6Jxihv35XQJmuTx8X3sh'
-  }
-  /**
-   * Complete data.
-   */
-  get data() {
-    this.writeLine(`\r\n--${this.boundary}--`)
-
-    return Buffer.concat(this._data).toString()
-  }
-  /**
-   * Adds a key-value pair to the form.
-   * @param {string} key The key to add.
-   * @param {string} value The value for the key.
-   */
-  addSection(key, value) {
-    this.writeLine(`\r\n--${this.boundary}`)
-    this.writeLine(`Content-Disposition: form-data; name="${key}"`)
-    this.writeLine()
-    this._data.push(Buffer.from(value))
-  }
-}
-
-const formCache = {}
 
 /**
  * @typedef {import('http').IncomingMessage} http.IncomingMessage
