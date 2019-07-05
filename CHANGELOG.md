@@ -1,3 +1,9 @@
+## 5 July 2019
+
+### [1.5.0](https://github.com/idiocc/http/compare/v1.4.0...v1.5.0)
+
+- [feature] Implement `post` and `postForm` requests.
+
 ## 29 June 2019
 
 ### [1.4.0](https://github.com/idiocc/http/compare/v1.3.0...v1.4.0)

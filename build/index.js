@@ -277,7 +277,7 @@ class Tester extends Promise {
   /**
    * Post data to the path. By default, sends JSON-stringified body with `application/json` content type, unless specified otherwise in options (e.g., pass `{ type: form }` for `application/x-www-form-urlencoded` content-type).
    * @param {string} [path] The path to navigate, empty by default.
-   * @param {string|Buffer} [data] The data to send.
+   * @param {*} [data] The data to send. If an object is passed, the default content-type is `application/json`, and if a string is passed, it's `text/plain`. This can be overridden with the `type` option.
    * @param {!AqtOptions} [options] The options for the request library.
    */
   post(path = '', data = undefined, options = {}) {
@@ -286,6 +286,7 @@ class Tester extends Promise {
       const res = await aqt(`${this.url}${path}`, {
         headers: this.headers,
         data,
+        type: typeof data == 'string' ? 'text/plain' : undefined,
         ...options,
       })
       this._assignRes(res, path)
@@ -295,9 +296,10 @@ class Tester extends Promise {
   /**
    * Post form-data to the path.
    * @param {string} path The path to post data to, empty by default.
-   * @param {(form: Form) => void} [cb] The callback with the form.
+   * @param {(form: Form) => Promise<void>|void} [cb] The callback with the form.
+   * @param {!AqtOptions} [options] The options for the request library.
    */
-  postForm(path = '', cb) {
+  postForm(path = '', cb, options = {}) {
     this._addLink(async () => {
       this.context._reset()
       const form = new Form()
@@ -308,6 +310,7 @@ class Tester extends Promise {
           'Content-Type': `multipart/form-data; boundary=${form.boundary}` },
         type: null,
         data,
+        ...options,
       })
       this._assignRes(res, path)
     })
@@ -382,7 +385,7 @@ class Tester extends Promise {
         ok(message.test(this.res.body), `The body does not match ${message}`)
       } else if (typeof message == 'object') {
         deepEqual(this.res.body, message)
-      } else if (message !== undefined) equal(this.res.body, message)
+      } else if (message !== undefined) deepEqual(this.res.body, message)
     }, e)
     return this
   }
