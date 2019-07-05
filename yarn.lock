@@ -34,6 +34,13 @@
   resolved "https://registry.yarnpkg.com/@depack/split/-/split-1.0.0.tgz#37fea28d9bc6f01e5a2da87d393f402781bb7e99"
   integrity sha512-PNJPl01VFMKtyN7qBZ2cds4N/lO2KvzLrR7JamODFiuuL2X8mGoTKp1SI8fxlT2MwLV8mScCUKn55QPwsUX7iA==
 
+"@goa/busboy@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@goa/busboy/-/busboy-1.1.1.tgz#b51fdf295544ac3f4dc59178633036fed7f19d90"
+  integrity sha512-5xVzyQWAIZ9yLXEIds94rtTAkyoCo8vzy0rMto2lYijeR8mc84UKIzE9VseaUVAn0YXlJlDGMDNWiLTS/dQS7A==
+  dependencies:
+    text-decoding "^1.0.0"
+
 "@multipart/form@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@multipart/form/-/form-1.0.0.tgz#c318d7185300d2d3339e64d38b64197d64613620"
@@ -386,6 +393,11 @@ statuses@~1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
+
+text-decoding@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/text-decoding/-/text-decoding-1.0.0.tgz#38a5692d23b5c2b12942d6e245599cb58b1bc52f"
+  integrity sha512-/0TJD42KDnVwKmDK6jj3xP7E2MG7SHAOG4tyTgyUCRPdHwvkquYNLEQltmdMa3owq3TkddCVcTsoctJI8VQNKA==
 
 typal@^1.14.0:
   version "1.14.0"

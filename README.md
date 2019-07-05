@@ -890,7 +890,7 @@ example/test/spec/assert/set.js
 Posts data to the server. By default, a string will be sent with the `text/plain` _Content-Type_, whereas an object will be encoded as the `application/json` type, or it can be sent as `application/x-www-form-urlencoded` data by specifying `type: form` in options. To send `multipart/form-data` requests, use the `postForm` method.
 
 <table>
-<tr><th colspan="2"><a href="example/test/spec/post.js">post(path, data?, options?)</a></th></tr>
+<tr><th colspan="2"><a href="example/test/spec/assert/post.js">post(path, data?, options?)</a></th></tr>
 <tr><td colspan="2">
 
 ```js
@@ -946,10 +946,26 @@ example/test/spec/assert/post.js
 Creates a form instance, to which data and files can be appended via the supplied callback, and sends the request as `multipart/form-data` to the server. See the [Form interface](https://github.com/idiocc/form#class-form) full documentation.
 
 <table>
-<tr><th colspan="2">postForm(path, cb, options?)</th></tr>
-<tr><td>
+<tr><th colspan="2"><a href="example/test/spec/assert/post-form.js">postForm(path, cb, options?)</a></th></tr>
+<tr><td colspan="2">
 
-%EXAMPLE: example/test/spec/assert/post-form%
+```js
+async 'posts multipart/form-data'({ startPlain }, { middleware }) {
+  await startPlain(middleware)
+    .postForm('/submit', async (form) => {
+      form.addSection('field', 'hello-world')
+      await form.addFile('test/fixture/test.txt', 'file')
+      await form.addFile('test/fixture/test.txt', 'file', {
+        filename: 'testfile.txt',
+      })
+    })
+    .assert(200, [
+      [ 'field', 'hello-world', '7bit', 'text/plain' ],
+      [ 'file',  'test.txt', '7bit', 'application/octet-stream' ],
+      [ 'file',  'testfile.txt', '7bit', 'application/octet-stream' ],
+    ])
+},
+```
 </td>
 </tr>
 <tr><td colspan="2">
@@ -959,10 +975,10 @@ Show <em>Zoroaster</em> output
 </summary>
 
 ```
-Error: ENOENT: no such file or directory, lstat 'example/test/spec/assert/post-form.js'
-    at Vb (node_modules/zoroaster/depack/bin/zoroaster.js:1100:21)
-    at Wb.a.reduce (node_modules/zoroaster/depack/bin/zoroaster.js:1070:21)
-    at <anonymous>
+example/test/spec/assert/post-form.js
+  ✓  posts multipart/form-data
+
+🦅  Executed 1 test.
 ```
 </details>
 </td></tr>

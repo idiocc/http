@@ -9,7 +9,7 @@
 Posts data to the server. By default, a string will be sent with the `text/plain` _Content-Type_, whereas an object will be encoded as the `application/json` type, or it can be sent as `application/x-www-form-urlencoded` data by specifying `type: form` in options. To send `multipart/form-data` requests, use the `postForm` method.
 
 <table>
-<tr><th colspan="2"><a href="example/test/spec/post.js">post(path, data?, options?)</a></th></tr>
+<tr><th colspan="2"><a href="example/test/spec/assert/post.js">post(path, data?, options?)</a></th></tr>
 <!-- block-start -->
 <tr><td colspan="2">
 

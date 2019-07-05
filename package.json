@@ -45,6 +45,7 @@
   },
   "homepage": "https://github.com/idiocc/http#readme",
   "devDependencies": {
+    "@goa/busboy": "^1.1.1",
     "alamode": "^2.3.4",
     "aty": "^1.1.2",
     "connect": "^3.7.0",

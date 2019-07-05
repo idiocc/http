@@ -9,9 +9,9 @@
 Creates a form instance, to which data and files can be appended via the supplied callback, and sends the request as `multipart/form-data` to the server. See the [Form interface](https://github.com/idiocc/form#class-form) full documentation.
 
 <table>
-<tr><th colspan="2">postForm(path, cb, options?)</th></tr>
+<tr><th colspan="2"><a href="example/test/spec/assert/post-form.js">postForm(path, cb, options?)</a></th></tr>
 <!-- block-start -->
-<tr><td>
+<tr><td colspan="2">
 
 %EXAMPLE: example/test/spec/assert/post-form%
 </td>
