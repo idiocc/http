@@ -43,7 +43,7 @@ The tests are written for _Zoroaster_ in such a way that test suite objects are 
 <!-- block-end -->
 <tr><td>
 
-%FORK node_modules/.bin/zoroaster example/test/spec/default.js -a%
+%/FORK node_modules/.bin/zoroaster example/test/spec/default.js -a%
 </td></tr>
 <tr><td><md2html>
 

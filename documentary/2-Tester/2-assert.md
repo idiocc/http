@@ -16,7 +16,7 @@ Assert on the status code and body. The error message will contain the body if i
 </td>
 <td>
 
-%FORK node_modules/.bin/zoroaster example/test/spec/assert/code.js -a%
+%/FORK node_modules/.bin/zoroaster example/test/spec/assert/code.js -a%
 </td></tr>
 </table>
 
@@ -47,7 +47,7 @@ Assert on the response header. The value must be either a string, regular expres
 Show <em>Zoroaster</em> output
 </summary>
 
-%FORK node_modules/.bin/zoroaster example/test/spec/assert/header.js example/test/spec/assert/header-fail.js -a%
+%/FORK-diff node_modules/.bin/zoroaster example/test/spec/assert/header.js example/test/spec/assert/header-fail.js -a%
 </details>
 </td></tr>
 </table>
@@ -73,7 +73,7 @@ Perform an assertion using the function that will receive the response object wh
 </td>
 <td>
 
-%FORK node_modules/.bin/zoroaster example/test/spec/assert/function.js -a%
+%/FORK node_modules/.bin/zoroaster example/test/spec/assert/function.js -a%
 </td></tr>
 </table>
 

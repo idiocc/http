@@ -51,7 +51,7 @@ const T = {
           .get('/')
           .assert(200, 'world')
       },
-      message: /'hello' == 'world'/,
+      message: /- world(.+?)\s+(.+?)\+ hello/,
     })
   },
   async 'throws on empty string'({ start }) {
@@ -63,7 +63,7 @@ const T = {
           .get('/')
           .assert(200, '')
       },
-      message: /'hello' == ''/,
+      message: /- (.+?)\s+(.+?)\+ hello/,
     })
   },
 }

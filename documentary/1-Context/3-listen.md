@@ -25,7 +25,7 @@ When a server needs to be tested as a whole of its middleware, the `listen` meth
 <!-- block-start -->
 <tr><td colspan="2">
 
-%FORK node_modules/.bin/zoroaster example/test/spec/listen.js -a%
+%/FORK node_modules/.bin/zoroaster example/test/spec/listen.js -a%
 </td></tr>
 <tr><td colspan="2"><md2html>
 

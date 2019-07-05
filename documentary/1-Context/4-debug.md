@@ -21,7 +21,7 @@ The debug is called once before the test. When called with `false`, it will be s
 <!-- block-start -->
 <tr><td>
 
-%_FORK node_modules/.bin/zoroaster example/test/spec/debug.js -a%
+%/_FORK node_modules/.bin/zoroaster example/test/spec/debug.js -a%
 </td></tr>
 <tr><td><md2html>
 

@@ -24,7 +24,9 @@ Sets the outgoing headers. Must be called before the `get` method. It is possibl
 Show <em>Zoroaster</em> output
 </summary>
 
-%FORK node_modules/.bin/zoroaster example/test/spec/assert/set.js example/test/spec/assert/set-fn.js -a%
+%/FORK node_modules/.bin/zoroaster example/test/spec/assert/set.js example/test/spec/assert/set-fn.js -a%
 </details>
 </td></tr>
 </table>
+
+%~ width="25"%

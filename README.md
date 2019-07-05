@@ -29,6 +29,8 @@ yarn add @contexts/http
   * [`assert(assertion: function(Aqt.Return)): Tester`](#assertassertion-functionaqtreturn-tester)
     * [`AqtReturn`](#type-aqtreturn)
   * [`set(header: string, value: string): Tester`](#setheader-stringvalue-string-tester)
+  * [`post(path: string?, data: string|Object?, options: AqtOptions?): Tester`](#postpath-stringdata-stringobjectoptions-aqtoptions-tester)
+  * [`postForm(path: string?, cb: async function(Form), options: AqtOptions?): Tester`](#postformpath-stringcb-async-functionformoptions-aqtoptions-tester)
   * [`session(): Tester`](#session-tester)
 - [Extending](#extending)
 - [CookiesContext](#cookiescontext)
@@ -244,11 +246,11 @@ example/test/spec/constructor.js
   ✓  sets the user with https
   ✗  sets the correct name
   | Error: 500 == 200 'Actual-User' == 'Expected-User'
-  |     at sets the correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:54:8)
+  |     at sets the correct name (example/test/spec/constructor.js:54:8)
 
 example/test/spec/constructor.js > sets the correct name
   Error: 500 == 200 'Actual-User' == 'Expected-User'
-      at sets the correct name (/Users/zavr/idiocc/http/example/test/spec/constructor.js:54:8)
+      at sets the correct name (example/test/spec/constructor.js:54:8)
 
 🦅  Executed 4 tests: 1 error.
 ```
@@ -351,15 +353,15 @@ example/test/spec/plain
     ✓  sets the status code and body
     ✗  throws an error
     | Error: Unhandled error.
-    |     at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-    |     at Server.handler (/Users/zavr/idiocc/http/src/index.js:90:15)
+    |     at startPlain (example/test/spec/plain/plain.js:18:13)
+    |     at Server.handler (src/index.js:88:15)
     ✗  does not finish the request
     | Error: Test has timed out after 200ms
 
 example/test/spec/plain > plain > throws an error
   Error: Unhandled error.
-      at startPlain (/Users/zavr/idiocc/http/example/test/spec/plain/plain.js:18:13)
-      at Server.handler (/Users/zavr/idiocc/http/src/index.js:90:15)
+      at startPlain (example/test/spec/plain/plain.js:18:13)
+      at Server.handler (src/index.js:88:15)
 
 example/test/spec/plain > plain > does not finish the request
   Error: Test has timed out after 200ms
@@ -463,11 +465,11 @@ async 'sets the code to 200'({ start, debug }) {
 example/test/spec/debug.js
   ✗  sets the code to 200
   | Error: 500 == 200 The authentication is required.
-  |     at sets the code to 200 (/Users/zavr/idiocc/http/example/test/spec/debug.js:12:8)
+  |     at sets the code to 200 (example/test/spec/debug.js:12:8)
 
 example/test/spec/debug.js > sets the code to 200
   Error: 500 == 200 The authentication is required.
-      at sets the code to 200 (/Users/zavr/idiocc/http/example/test/spec/debug.js:12:8)
+      at sets the code to 200 (example/test/spec/debug.js:12:8)
 
 🦅  Executed 1 test: 1 error.
 ```
@@ -478,7 +480,7 @@ example/test/spec/debug.js > sets the code to 200
 ```
 Error: The authentication is required.
     at middleware (/Users/zavr/idiocc/http/example/src/index.js:12:21)
-    at Server.handler (/Users/zavr/idiocc/http/src/index.js:69:15)
+    at Server.handler (/Users/zavr/idiocc/http/src/index.js:67:15)
 ```
 </td></tr>
 <tr><td>The <code>stderr</code> output, on the other hand, will now print the full error stack that lead to the error.</td></tr>
@@ -711,7 +713,7 @@ async 'absence of a header'({ startPlain }) {
 Show <em>Zoroaster</em> output
 </summary>
 
-```
+```diff
 example/test/spec/assert/header.js
   ✓  header
   ✓  header with regexp
@@ -721,33 +723,33 @@ example/test/spec/assert/header.js
   | Error: Header content-type did not match value:
   | - application/json
   | + application/xml
-  |     at header (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:17:8)
+  |     at header (example/test/spec/assert/header-fail.js:17:8)
   ✗  header with regexp
   | Error: Header content-type did not match RexExp:
   |   - /application//xml/
   |   + application/json; charset=utf-8
-  |     at header with regexp (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:27:8)
+  |     at header with regexp (example/test/spec/assert/header-fail.js:27:8)
   ✗  absence of a header
   | Error: Header content-type was not expected:
   |   + text/plain
-  |     at absence of a header (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:37:8)
+  |     at absence of a header (example/test/spec/assert/header-fail.js:37:8)
 
 example/test/spec/assert/header-fail.js > header
   Error: Header content-type did not match value:
   - application/json
   + application/xml
-      at header (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:17:8)
+      at header (example/test/spec/assert/header-fail.js:17:8)
 
 example/test/spec/assert/header-fail.js > header with regexp
   Error: Header content-type did not match RexExp:
     - /application//xml/
     + application/json; charset=utf-8
-      at header with regexp (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:27:8)
+      at header with regexp (example/test/spec/assert/header-fail.js:27:8)
 
 example/test/spec/assert/header-fail.js > absence of a header
   Error: Header content-type was not expected:
     + text/plain
-      at absence of a header (/Users/zavr/idiocc/http/example/test/spec/assert/header-fail.js:37:8)
+      at absence of a header (example/test/spec/assert/header-fail.js:37:8)
 
 🦅  Executed 6 tests: 3 errors.
 ```
@@ -881,6 +883,93 @@ example/test/spec/assert/set.js
 </td></tr>
 </table>
 
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/13.svg?sanitize=true" width="25"></a></p>
+
+### `post(`<br/>&nbsp;&nbsp;`path: string?,`<br/>&nbsp;&nbsp;`data: string|Object?,`<br/>&nbsp;&nbsp;`options: AqtOptions?,`<br/>`): Tester`
+
+Posts data to the server. By default, a string will be sent with the `text/plain` _Content-Type_, whereas an object will be encoded as the `application/json` type, or it can be sent as `application/x-www-form-urlencoded` data by specifying `type: form` in options. To send `multipart/form-data` requests, use the `postForm` method.
+
+<table>
+<tr><th colspan="2"><a href="example/test/spec/post.js">post(path, data?, options?)</a></th></tr>
+<tr><td colspan="2">
+
+```js
+async 'posts string data'({ startPlain }, { middleware }) {
+  await startPlain(middleware)
+    .post('/submit', 'hello')
+    .assert(200, `Received data: hello `
+      + `with Content-Type text/plain`)
+},
+async 'posts object data'({ startPlain }, { middleware }) {
+  await startPlain(middleware)
+    .post('/submit', { test: 'ok' })
+    .assert(200, `Received data: {"test":"ok"} `
+      + `with Content-Type application/json`)
+},
+async 'posts urlencoded data'({ startPlain }, { middleware }) {
+  await startPlain(middleware)
+    .post('/submit', { test: 'ok' }, {
+      type: 'form',
+      headers: {
+        'User-Agent': 'testing',
+      },
+    })
+    .assert(200, `Received data: test=ok `
+      + `with Content-Type application/x-www-form-urlencoded `
+      + `and User-Agent testing`)
+},
+```
+</td>
+</tr>
+<tr><td colspan="2">
+
+<details><summary>
+Show <em>Zoroaster</em> output
+</summary>
+
+```
+example/test/spec/assert/post.js
+  ✓  posts string data
+  ✓  posts object data
+  ✓  posts urlencoded data
+
+🦅  Executed 3 tests.
+```
+</details>
+</td></tr>
+</table>
+
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/14.svg?sanitize=true" width="25"></a></p>
+
+### `postForm(`<br/>&nbsp;&nbsp;`path: string?,`<br/>&nbsp;&nbsp;`cb: async function(Form),`<br/>&nbsp;&nbsp;`options: AqtOptions?,`<br/>`): Tester`
+
+Creates a form instance, to which data and files can be appended via the supplied callback, and sends the request as `multipart/form-data` to the server. See the [Form interface](https://github.com/idiocc/form#class-form) full documentation.
+
+<table>
+<tr><th colspan="2">postForm(path, cb, options?)</th></tr>
+<tr><td>
+
+%EXAMPLE: example/test/spec/assert/post-form%
+</td>
+</tr>
+<tr><td colspan="2">
+
+<details><summary>
+Show <em>Zoroaster</em> output
+</summary>
+
+```
+Error: ENOENT: no such file or directory, lstat 'example/test/spec/assert/post-form.js'
+    at Vb (node_modules/zoroaster/depack/bin/zoroaster.js:1100:21)
+    at Wb.a.reduce (node_modules/zoroaster/depack/bin/zoroaster.js:1070:21)
+    at <anonymous>
+```
+</details>
+</td></tr>
+</table>
+
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/15.svg?sanitize=true" width="25"></a></p>
+
 ### `session(): Tester`
 
 Turns the session mode on. In the session mode, the cookies received from the server will be stored in the internal variable, and sent along with each following request. If the server removed the cookies by setting them to an empty string, or by setting the expiry date to be in the past, they will be removed from the tester and not sent to the server.
@@ -986,7 +1075,7 @@ test/spec/session.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/13.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/16.svg?sanitize=true"></a></p>
 
 ## Extending
 
@@ -1156,11 +1245,11 @@ example/test/spec/cookie/
   ✓  deletes the cookie
   ✗  sets cookie for a path
   | Error: Attribute path of cookie example was expected.
-  |     at sets cookie for a path (/Users/zavr/idiocc/http/example/test/spec/cookie/default.js:32:8)
+  |     at sets cookie for a path (example/test/spec/cookie/default.js:32:8)
 
 example/test/spec/cookie/ > sets cookie for a path
   Error: Attribute path of cookie example was expected.
-      at sets cookie for a path (/Users/zavr/idiocc/http/example/test/spec/cookie/default.js:32:8)
+      at sets cookie for a path (example/test/spec/cookie/default.js:32:8)
 
 🦅  Executed 3 tests: 1 error.
 ```
@@ -1168,7 +1257,7 @@ example/test/spec/cookie/ > sets cookie for a path
 <tr><td>Because we used <code>erotic</code>, the test will fail at the line of where the assertion method was called. It is useful to remove too much information in errors stacks, and especially for async assertions, which otherwise would have the stack beginning at <code>&lt;anonymous&gt;</code>, and only pointing to the internal lines in the <em>CookiesTester</em>, but not the test suite.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/14.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/17.svg?sanitize=true"></a></p>
 
 ## CookiesContext
 
@@ -1206,7 +1295,7 @@ The context was adapted from the work in https://github.com/pillarjs/cookies. Se
     },
     ```
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/15.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/18.svg?sanitize=true"></a></p>
 
 ## Copyright
 

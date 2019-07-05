@@ -23,8 +23,8 @@ At the moment, only `expire` property is handled, without the `path`, or `httpOn
 Show <em>Zoroaster</em> output
 </summary>
 
-%_FORK node_modules/.bin/zoroaster test/spec/session.js -a%
-%_FORKERR node_modules/.bin/zoroaster test/spec/session.js -a%
+%/_FORK node_modules/.bin/zoroaster test/spec/session.js -a%
+%/_FORKERR node_modules/.bin/zoroaster test/spec/session.js -a%
 </details>
 </td></tr>
 </table>

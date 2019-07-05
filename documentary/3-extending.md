@@ -41,7 +41,7 @@ Now the _CookiesTester_ methods which are used in tests, will come up with JSDoc
 <!-- block-start -->
 <tr><td>
 
-%FORK node_modules/.bin/zoroaster example/test/spec/cookie/ -a%
+%/FORK node_modules/.bin/zoroaster example/test/spec/cookie/ -a%
 </td></tr>
 <tr><td><md2html>
 

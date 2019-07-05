@@ -15,7 +15,7 @@ Navigate to the path and store the result status code, body and headers in an in
 </td>
 <td>
 
-%FORK node_modules/.bin/zoroaster example/test/spec/get.js -a%
+%/FORK node_modules/.bin/zoroaster example/test/spec/get.js -a%
 </td></tr>
 </table>
 

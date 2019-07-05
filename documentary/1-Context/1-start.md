@@ -51,7 +51,7 @@ The new tests require implementing a method that will call the middleware constr
 <!-- block-start -->
 <tr><td>
 
-%FORK node_modules/.bin/zoroaster example/test/spec/constructor.js -a%
+%/FORK node_modules/.bin/zoroaster example/test/spec/constructor.js -a%
 </td></tr>
 <tr><td><md2html>
 
