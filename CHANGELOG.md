@@ -1,3 +1,9 @@
+## 17 July 2019
+
+### [1.5.1](https://github.com/idiocc/http/compare/v1.5.0...v1.5.1)
+
+- [fix] Send binary data using the form (avoid converting to strings).
+
 ## 5 July 2019
 
 ### [1.5.0](https://github.com/idiocc/http/compare/v1.4.0...v1.5.0)
