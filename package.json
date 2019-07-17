@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "@artdeco/clean-stack": "^1.1.1",
-    "@multipart/form": "^1.0.0",
+    "@multipart/form": "^1.1.0",
     "@rqt/aqt": "^1.2.6",
     "@zoroaster/deep-equal": "^1.0.1",
     "erotic": "^2.1.1",

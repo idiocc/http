@@ -10,7 +10,7 @@
 
 - [feature] Initial support for sessions (without `path`).
 - [fix] Correctly compare an empty body (`''`) in the assertion method which was skipped previously.
-- [doc] Doc cookiecs better, with `.name` and examples.
+- [doc] Doc cookies better, with `.name` and examples.
 
 ## 28 June 2019
 
