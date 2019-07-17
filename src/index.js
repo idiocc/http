@@ -304,12 +304,12 @@ export class Tester extends Promise {
       this.context._reset()
       const form = new Form()
       await cb(form)
-      const { data } = form
+      const { buffer } = form
       const res = await aqt(`${this.url}${path}`, {
         headers: { ...this.headers,
           'Content-Type': `multipart/form-data; boundary=${form.boundary}` },
         type: null,
-        data,
+        data: buffer,
         ...options,
       })
       this._assignRes(res, path)
