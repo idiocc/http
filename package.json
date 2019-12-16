@@ -10,7 +10,7 @@
     "mask": "yarn t test/mask",
     "test-build": "ALAMODE_ENV=test-build yarn test",
     "lint": "eslint .",
-    "doc": "NODE_DEBUG=doc doc -o README.md",
+    "doc": "doc -o README.md -d",
     "b": "yarn-s b1 b2",
     "b1": "ALAMODE_ENV=cookies alamode src/cookies.js -o . -s",
     "b2": "alamode src -o build -s -i cookies.js",
@@ -46,18 +46,18 @@
   "homepage": "https://github.com/idiocc/http#readme",
   "devDependencies": {
     "@goa/busboy": "^1.1.1",
-    "alamode": "^2.3.4",
+    "alamode": "^3.3.0",
     "aty": "^1.1.2",
     "connect": "^3.7.0",
-    "documentary": "^1.27.4",
+    "documentary": "^1.34.4",
     "eslint-config-artdeco": "1.0.1",
-    "yarn-s": "1.1.0",
-    "zoroaster": "^4.1.1-alpha"
+    "yarn-s": "1.2.1",
+    "zoroaster": "^4.1.2"
   },
   "dependencies": {
     "@artdeco/clean-stack": "^1.1.1",
     "@multipart/form": "^1.1.0",
-    "@rqt/aqt": "^1.2.6",
+    "@rqt/aqt": "^1.3.0",
     "@zoroaster/deep-equal": "^1.0.1",
     "erotic": "^2.1.1",
     "erte": "^1.2.0",
