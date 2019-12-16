@@ -10,7 +10,7 @@
     "mask": "yarn t test/mask",
     "test-build": "ALAMODE_ENV=test-build yarn test",
     "lint": "eslint .",
-    "doc": "doc -o README.md -d",
+    "doc": "doc -o README.md -d -n _httpContext",
     "b": "yarn-s b1 b2",
     "b1": "ALAMODE_ENV=cookies alamode src/cookies.js -o . -s",
     "b2": "alamode src -o build -s -i cookies.js",

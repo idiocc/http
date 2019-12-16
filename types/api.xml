@@ -1,0 +1,16 @@
+<types ns="_httpContext">
+  <interface name="Tester">
+    <fn name="put" return="_httpContext.Tester">
+      <arg string name="path" opt>
+        The path to send the request to, empty by default.
+      </arg>
+      <arg type="string|!Object" name="data" opt>
+        The data to send. If an object is passed, the default content-type is `application/json`, and if a string is passed, it's `text/plain`. This can be overridden with the `type` option.
+      </arg>
+      <arg type="!_rqt.AqtOptions" name="options" opt>
+        The options for the request library.
+      </arg>
+      Send a PUT request.
+    </fn>
+  </interface>
+</types>

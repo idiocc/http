@@ -1,6 +1,6 @@
 # @contexts/http
 
-[![npm version](https://badge.fury.io/js/%40contexts%2Fhttp.svg)](https://npmjs.org/package/@contexts/http)
+[![npm version](https://badge.fury.io/js/%40contexts%2Fhttp.svg)](https://www.npmjs.com/package/@contexts/http)
 
 `@contexts/http` is The Http(s) Testing Context For Super-Test Style Assertions.
 
@@ -27,16 +27,19 @@ yarn add @contexts/http
   * [`assert(code: number, body: (string|RegExp|Object)=): Tester`](#assertcode-numberbody-stringregexpobject-tester)
   * [`assert(header: string, value: ?(string|RegExp)): Tester`](#assertheader-stringvalue-stringregexp-tester)
   * [`assert(assertion: function(Aqt.Return)): Tester`](#assertassertion-functionaqtreturn-tester)
-    * [`AqtReturn`](#type-aqtreturn)
+    * [`_rqt.AqtReturn`](#type-_rqtaqtreturn)
   * [`set(header: string, value: string): Tester`](#setheader-stringvalue-string-tester)
   * [`post(path: string?, data: string|Object?, options: AqtOptions?): Tester`](#postpath-stringdata-stringobjectoptions-aqtoptions-tester)
   * [`postForm(path: string?, cb: async function(Form), options: AqtOptions?): Tester`](#postformpath-stringcb-async-functionformoptions-aqtoptions-tester)
   * [`session(): Tester`](#session-tester)
+    * [`Tester`](#type-tester)
 - [Extending](#extending)
 - [CookiesContext](#cookiescontext)
 - [Copyright](#copyright)
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/0.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/0.svg?sanitize=true">
+</a></p>
 
 ## API
 
@@ -47,7 +50,9 @@ import HttpContext, { Tester } from '@contexts/http'
 import CookiesContext, { CookiesTester } from '@contexts/http/cookie'
 ```
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/1.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/1.svg?sanitize=true">
+</a></p>
 
 ## class HttpContext
 
@@ -110,11 +115,13 @@ example/test/spec/default.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/2.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/2.svg?sanitize=true" width="25">
+</a></p>
 
 
 
-### `start(`<br/>&nbsp;&nbsp;`fn: (req: IncomingMessage, res: ServerResponse),`<br/>&nbsp;&nbsp;`secure: boolean=,`<br/>`): Tester`
+### <code><ins>start</ins>(</code><sub><br/>&nbsp;&nbsp;`fn: (req: IncomingMessage, res: ServerResponse),`<br/>&nbsp;&nbsp;`secure: boolean=,`<br/></sub><code>): <i>Tester</i></code>
 
 Starts the server with the given request listener function. It will setup an upper layer over the listener to try it and catch any errors in it. If there were errors, the status code will be set to `500` and the response will be ended with the error message. If there was no error, the status code will be set by _Node.JS_ to `200` automatically, if the request listener didn't set it. This is done so that assertion methods can be called inside of the supplied function. If the server needs to be started without the wrapper handler, the [`startPlain`](#startplainfn-req-incomingmessage-res-serverresponsesecure-boolean-tester) method can be used instead.
 
@@ -258,9 +265,11 @@ example/test/spec/constructor.js > sets the correct name
 <tr><td>We expected the last test to fail because in the assertion method we specified that the user name should be different from the one that was passed in the options to the middleware. Other tests pass because there were no errors in the assertion middleware. It is always required to call <code>assert</code> on the context instance, because simply requesting data with <code>get</code> will not throw anything even if the status code was not <em>200</em>.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/3.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/3.svg?sanitize=true" width="25">
+</a></p>
 
-### `startPlain(`<br/>&nbsp;&nbsp;`fn: (req: IncomingMessage, res: ServerResponse),`<br/>&nbsp;&nbsp;`secure: boolean=,`<br/>`): Tester`
+### <code><ins>startPlain</ins>(</code><sub><br/>&nbsp;&nbsp;`fn: (req: IncomingMessage, res: ServerResponse),`<br/>&nbsp;&nbsp;`secure: boolean=,`<br/></sub><code>): <i>Tester</i></code>
 
 Starts the server without wrapping the listener in the handler that would set status `200` on success and status `500` on error, and automatically finish the request. This means that the listener must manually do these things. Any uncaught error will result in run-time errors which will be caught by _Zoroaster_'s error handling mechanism outside of the test scope, but ideally they should be dealt with by the developer. If the middleware did not end the request, the test will timeout and the connection will be destroyed by the context to close the request.
 
@@ -372,9 +381,11 @@ example/test/spec/plain > plain > does not finish the request
 <tr><td colspan="2">The output shows how tests with listeners that did not handle errors fail, so did the tests with listeners that did not end the request. The <code>handled</code> test suite (on the right above), wraps the plain listener in a middleware that closed the connection and caught errors, setting the status code to <code>500</code>, therefore all tests passed there. The strategy is similar to the <code>start</code> method, but allows to implement a custom handler.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/4.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/4.svg?sanitize=true" width="25">
+</a></p>
 
-### `listen(`<br/>&nbsp;&nbsp;`server: http.Server|https.Server,`<br/>`): Tester`
+### <code><ins>listen</ins>(</code><sub><br/>&nbsp;&nbsp;`server: http.Server|https.Server,`<br/></sub><code>): <i>Tester</i></code>
 
 Starts the given server by calling the `listen` method. This method is used to test apps such as `Koa`, `Express`, `Connect` _etc_, or many middleware chained together, therefore it's a higher level of testing aka integration testing that does not allow to access the `response` object because no middleware is inserted into the server itself. It only allows to open URLs and assert on the results received by the request library, such as status codes, body and the headers. The server will be closed by the end of each test by the context.
 
@@ -439,9 +450,11 @@ example/test/spec/listen.js
 <tr><td colspan="2">The tests will be run as usual, but if there were any errors, they will be either handled by the server library, or caught by <em>Zoroaster</em> as global errors. Any unended requests will result in the test timing out.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/5.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/5.svg?sanitize=true" width="25">
+</a></p>
 
-### `debug(`<br/>&nbsp;&nbsp;`on: boolean=,`<br/>`): void`
+### <code><ins>debug</ins>(</code><sub><br/>&nbsp;&nbsp;`on: boolean=,`<br/></sub><code>): <i>void</i></code>
 
 Switches on the debugging for the `start` method, because it catches the error and sets the response to 500, without giving any info about the error. This will log the error that happened during assertions in the request listener. Useful to see at what point the request failed.
 
@@ -486,16 +499,20 @@ Error: The authentication is required.
 <tr><td>The <code>stderr</code> output, on the other hand, will now print the full error stack that lead to the error.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/6.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/6.svg?sanitize=true">
+</a></p>
 
 ## class Tester
 
 The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.
 
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/7.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/7.svg?sanitize=true" width="25">
+</a></p>
 
-### `get(`<br/>&nbsp;&nbsp;`path: string=,`<br/>`): Tester`
+### <code><ins>get</ins>(</code><sub><br/>&nbsp;&nbsp;`path: string=,`<br/></sub><code>): <i>Tester</i></code>
 
 Navigate to the path and store the result status code, body and headers in an internal state, used for assertions later using the `assert` method.
 
@@ -529,9 +546,11 @@ example/test/spec/get.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/8.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/8.svg?sanitize=true" width="25">
+</a></p>
 
-### `head(`<br/>&nbsp;&nbsp;`path: string=,`<br/>`): Tester`
+### <code><ins>head</ins>(</code><sub><br/>&nbsp;&nbsp;`path: string=,`<br/></sub><code>): <i>Tester</i></code>
 
 Send the `HEAD` request to the server.
 
@@ -566,9 +585,11 @@ example/test/spec/head.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/9.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/9.svg?sanitize=true" width="25">
+</a></p>
 
-### `assert(`<br/>&nbsp;&nbsp;`code: number,`<br/>&nbsp;&nbsp;`body: (string|RegExp|Object)=,`<br/>`): Tester`
+### <code><ins>assert</ins>(</code><sub><br/>&nbsp;&nbsp;`code: number,`<br/>&nbsp;&nbsp;`body: (string|RegExp|Object)=,`<br/></sub><code>): <i>Tester</i></code>
 
 Assert on the status code and body. The error message will contain the body if it was present. If the response was in JSON, it will be automatically parses by the request library, and the deep assertion will be performed.
 
@@ -626,9 +647,11 @@ example/test/spec/assert/code.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/10.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/10.svg?sanitize=true" width="25">
+</a></p>
 
-### `assert(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: ?(string|RegExp),`<br/>`): Tester`
+### <code><ins>assert</ins>(</code><sub><br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: ?(string|RegExp),`<br/></sub><code>): <i>Tester</i></code>
 
 Assert on the response header. The value must be either a string, regular expression to match the value of the header, or null to assert that the header was not set.
 
@@ -757,22 +780,24 @@ example/test/spec/assert/header-fail.js > absence of a header
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/11.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/11.svg?sanitize=true" width="25">
+</a></p>
 
-### `assert(`<br/>&nbsp;&nbsp;`assertion: function(Aqt.Return),`<br/>`): Tester`
+### <code><ins>assert</ins>(</code><sub><br/>&nbsp;&nbsp;`assertion: function(Aqt.Return),`<br/></sub><code>): <i>Tester</i></code>
 
 Perform an assertion using the function that will receive the response object which is the result of the request operation with `aqt`. If the tester was started with `start` or `startPlain` methods, it is possible to get the  response object from the request listener by calling the `getResponse` method on the context.
 
-`import('http').IncomingHttpHeaders` __<a name="type-httpincominghttpheaders">`http.IncomingHttpHeaders`</a>__
+[`import('http').IncomingHttpHeaders`](https://nodejs.org/api/http.html) __<a name="type-httpincominghttpheaders">`http.IncomingHttpHeaders`</a>__: The hash map of headers that are set by the server (e.g., when accessed via IncomingMessage.headers)
 
-__<a name="type-aqtreturn">`AqtReturn`</a>__
+<strong><a name="type-_rqtaqtreturn">`_rqt.AqtReturn`</a></strong>: The return type of the function.
 
-|        Name        |                                Type                                |                                                                                                                    Description                                                                                                                     |
-| ------------------ | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| __body*__          | <em>(string \| Object \| Buffer)</em>                              | The return from the server. In case the `json` content-type was set by the server, the response will be parsed into an object. If `binary` option was used for the request, a `Buffer` will be returned. Otherwise, a string response is returned. |
-| __headers*__       | <em>[http.IncomingHttpHeaders](#type-httpincominghttpheaders)</em> | Incoming headers returned by the server.                                                                                                                                                                                                           |
-| __statusCode*__    | <em>number</em>                                                    | The status code returned by the server.                                                                                                                                                                                                            |
-| __statusMessage*__ | <em>string</em>                                                    | The status message set by the server.                                                                                                                                                                                                              |
+|        Name        |                                                                                            Type                                                                                             |                                                                                                                    Description                                                                                                                     |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| __body*__          | <em>!(string \| Object \| Buffer)</em>                                                                                                                                                      | The return from the server. In case the `json` content-type was set by the server, the response will be parsed into an object. If `binary` option was used for the request, a `Buffer` will be returned. Otherwise, a string response is returned. |
+| __headers*__       | <em><a href="#type-httpincominghttpheaders" title="The hash map of headers that are set by the server (e.g., when accessed via IncomingMessage.headers)">!http.IncomingHttpHeaders</a></em> | Incoming headers returned by the server.                                                                                                                                                                                                           |
+| __statusCode*__    | <em>number</em>                                                                                                                                                                             | The status code returned by the server.                                                                                                                                                                                                            |
+| __statusMessage*__ | <em>string</em>                                                                                                                                                                             | The status message set by the server.                                                                                                                                                                                                              |
 
 <table>
 <tr><th colspan="2">assert(assertion)</th></tr>
@@ -817,9 +842,11 @@ example/test/spec/assert/function.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/12.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/12.svg?sanitize=true" width="25">
+</a></p>
 
-### `set(`<br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: string,`<br/>`): Tester`
+### <code><ins>set</ins>(</code><sub><br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: string,`<br/></sub><code>): <i>Tester</i></code>
 
 Sets the outgoing headers. Must be called before the `get` method. It is possible to remember the result of the first request using the `assert` method by storing it in a variable, and then use it for headers in the second request (see example).
 
@@ -883,9 +910,11 @@ example/test/spec/assert/set.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/13.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/13.svg?sanitize=true" width="25">
+</a></p>
 
-### `post(`<br/>&nbsp;&nbsp;`path: string?,`<br/>&nbsp;&nbsp;`data: string|Object?,`<br/>&nbsp;&nbsp;`options: AqtOptions?,`<br/>`): Tester`
+### <code><ins>post</ins>(</code><sub><br/>&nbsp;&nbsp;`path: string?,`<br/>&nbsp;&nbsp;`data: string|Object?,`<br/>&nbsp;&nbsp;`options: AqtOptions?,`<br/></sub><code>): <i>Tester</i></code>
 
 Posts data to the server. By default, a string will be sent with the `text/plain` _Content-Type_, whereas an object will be encoded as the `application/json` type, or it can be sent as `application/x-www-form-urlencoded` data by specifying `type: form` in options. To send `multipart/form-data` requests, use the `postForm` method.
 
@@ -939,9 +968,11 @@ example/test/spec/assert/post.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/14.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/14.svg?sanitize=true" width="25">
+</a></p>
 
-### `postForm(`<br/>&nbsp;&nbsp;`path: string?,`<br/>&nbsp;&nbsp;`cb: async function(Form),`<br/>&nbsp;&nbsp;`options: AqtOptions?,`<br/>`): Tester`
+### <code><ins>postForm</ins>(</code><sub><br/>&nbsp;&nbsp;`path: string?,`<br/>&nbsp;&nbsp;`cb: async function(Form),`<br/>&nbsp;&nbsp;`options: AqtOptions?,`<br/></sub><code>): <i>Tester</i></code>
 
 Creates a form instance, to which data and files can be appended via the supplied callback, and sends the request as `multipart/form-data` to the server. See the [Form interface](https://github.com/idiocc/form#class-form) full documentation.
 
@@ -984,9 +1015,11 @@ example/test/spec/assert/post-form.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/15.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/15.svg?sanitize=true" width="25">
+</a></p>
 
-### `session(): Tester`
+### <code><ins>session</ins>(): <i>Tester</i></code>
 
 Turns the session mode on. In the session mode, the cookies received from the server will be stored in the internal variable, and sent along with each following request. If the server removed the cookies by setting them to an empty string, or by setting the expiry date to be in the past, they will be removed from the tester and not sent to the server.
 
@@ -1091,7 +1124,27 @@ test/spec/session.js
 </td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/16.svg?sanitize=true"></a></p>
+__<a name="type-tester">`Tester`</a>__
+<table>
+ <thead><tr>
+  <th>Name</th>
+  <th>Type &amp; Description</th>
+ </tr></thead>
+ <tr>
+  <td rowSpan="3" align="center"><ins>put</ins></td>
+  <td><em>(path?: string, data?: (string | !Object), options?: !_rqt.AqtOptions) => <a href="#type-tester">Tester</a></em></td>
+ </tr>
+ <tr></tr>
+ <tr>
+  <td>
+   Send a PUT request.
+  </td>
+ </tr>
+</table>
+
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/16.svg?sanitize=true">
+</a></p>
 
 ## Extending
 
@@ -1273,7 +1326,9 @@ example/test/spec/cookie/ > sets cookie for a path
 <tr><td>Because we used <code>erotic</code>, the test will fail at the line of where the assertion method was called. It is useful to remove too much information in errors stacks, and especially for async assertions, which otherwise would have the stack beginning at <code>&lt;anonymous&gt;</code>, and only pointing to the internal lines in the <em>CookiesTester</em>, but not the test suite.</td></tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/17.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/17.svg?sanitize=true">
+</a></p>
 
 ## CookiesContext
 
@@ -1311,7 +1366,9 @@ The context was adapted from the work in https://github.com/pillarjs/cookies. Se
     },
     ```
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/18.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/18.svg?sanitize=true">
+</a></p>
 
 ## Copyright
 
@@ -1319,7 +1376,8 @@ The context was adapted from the work in https://github.com/pillarjs/cookies. Se
   <tr>
     <th>
       <a href="https://artd.eco">
-        <img src="https://raw.githubusercontent.com/wrote/wrote/master/images/artdeco.png" alt="Art Deco">
+        <img width="100" src="https://raw.githubusercontent.com/wrote/wrote/master/images/artdeco.png"
+          alt="Art Deco">
       </a>
     </th>
     <th>© <a href="https://artd.eco">Art Deco</a> for <a href="https://idio.cc">Idio</a> 2019</th>
@@ -1330,7 +1388,7 @@ The context was adapted from the work in https://github.com/pillarjs/cookies. Se
     </th>
     <th>
       <a href="https://www.technation.sucks" title="Tech Nation Visa">
-        <img src="https://raw.githubusercontent.com/artdecoweb/www.technation.sucks/master/anim.gif"
+        <img width="100" src="https://raw.githubusercontent.com/idiocc/cookies/master/wiki/arch4.jpg"
           alt="Tech Nation Visa">
       </a>
     </th>
@@ -1338,4 +1396,6 @@ The context was adapted from the work in https://github.com/pillarjs/cookies. Se
   </tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/-1.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/-1.svg?sanitize=true">
+</a></p>

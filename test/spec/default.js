@@ -138,6 +138,23 @@ export const head = {
   },
 }
 
+
+/** @type {TestSuite} */
+export const put = {
+  async 'sends put request'({ start }) {
+    let method
+    await start((req, res) => {
+      method = req.method
+      res.setHeader('x-test', 'test')
+      req.pipe(res)
+    })
+      .put('/', 'HELLO WORLD')
+      .assert(200, 'HELLO WORLD')
+      .assert('x-test', 'test')
+    equal(method, 'PUT')
+  },
+}
+
 /** @type {TestSuite} */
 export const assertFunction = {
   async 'passes assert function'({ start }) {

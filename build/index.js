@@ -275,6 +275,26 @@ class Tester extends Promise {
     return this
   }
   /**
+   * Send PUT request.
+   * @param {string} [path] The path to send request to, empty by default.
+   * @param {*} [data] The data to send. If an object is passed, the default content-type is `application/json`, and if a string is passed, it's `text/plain`. This can be overridden with the `type` option.
+   * @param {!AqtOptions} [options] The options for the request library.
+   */
+  put(path = '', data = undefined, options = {}) {
+    this._addLink(async () => {
+      this.context._reset()
+      const res = await aqt(`${this.url}${path}`, {
+        headers: this.headers,
+        method: 'PUT',
+        data,
+        type: typeof data == 'string' ? 'text/plain' : undefined,
+        ...options,
+      })
+      this._assignRes(res, path)
+    })
+    return this
+  }
+  /**
    * Post data to the path. By default, sends JSON-stringified body with `application/json` content type, unless specified otherwise in options (e.g., pass `{ type: form }` for `application/x-www-form-urlencoded` content-type).
    * @param {string} [path] The path to navigate, empty by default.
    * @param {*} [data] The data to send. If an object is passed, the default content-type is `application/json`, and if a string is passed, it's `text/plain`. This can be overridden with the `type` option.
