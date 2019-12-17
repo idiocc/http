@@ -275,6 +275,21 @@ class Tester extends Promise {
     return this
   }
   /**
+   * Send a request for the `Allow` and CORS pre-flight headers.
+   * @param {string} path The path to navigate, empty by default.
+   */
+  options(path = '') {
+    this._addLink(async () => {
+      this.context._reset()
+      const res = await aqt(`${this.url}${path}`, {
+        headers: this.headers,
+        method: 'OPTIONS',
+      })
+      this._assignRes(res, path)
+    })
+    return this
+  }
+  /**
    * Send PUT request.
    * @param {string} [path] The path to send request to, empty by default.
    * @param {*} [data] The data to send. If an object is passed, the default content-type is `application/json`, and if a string is passed, it's `text/plain`. This can be overridden with the `type` option.

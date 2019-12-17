@@ -140,7 +140,7 @@ export const head = {
 
 
 /** @type {TestSuite} */
-export const put = {
+export const HTTP = {
   async 'sends put request'({ start }) {
     let method
     await start((req, res) => {

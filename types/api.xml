@@ -6,6 +6,12 @@
       </arg>
       Send a GET request. View examples at [Wiki](https://github.com/idiocc/http/wiki/Get)
     </fn>
+    <fn name="options" return="_httpContext.Tester" example="test/spec/options.js">
+      <arg string name="path" opt>
+        The path to request options from.
+      </arg>
+      Send a request for the `Allow` and CORS pre-flight headers.
+    </fn>
     <fn name="head" return="_httpContext.Tester" example="example/test/spec/head.js">
       <arg string name="path" opt>
         The path to send the HEAD request to.

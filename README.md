@@ -531,6 +531,31 @@ async 'opens sitemap'({ start }) {
   </td>
  </tr>
  <tr>
+  <td rowSpan="3" align="center"><ins>options</ins></td>
+  <td><em>(path?: string) => <a href="#type-tester" title="The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.">Tester</a></em></td>
+ </tr>
+ <tr></tr>
+ <tr>
+  <td>
+
+Send a request for the `Allow` and CORS pre-flight headers.
+```js
+async 'sends options request'({ start }) {
+  let method
+  await start((req, res) => {
+    method = req.method
+    res.setHeader('allow', 'HEAD, GET')
+    res.statusCode = 204
+  })
+    .options('/')
+    .assert(204)
+    .assert('allow', 'HEAD, GET')
+  equal(method, 'OPTIONS')
+},
+```
+  </td>
+ </tr>
+ <tr>
   <td rowSpan="3" align="center"><ins>head</ins></td>
   <td><em>(path?: string, data?: (string | !Object), options?: !_rqt.AqtOptions) => <a href="#type-tester" title="The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.">Tester</a></em></td>
  </tr>
