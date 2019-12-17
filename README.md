@@ -22,8 +22,7 @@ yarn add @contexts/http
   * [`listen(server: http.Server|https.Server): Tester`](#listenserver-httpserverhttpsserver-tester)
   * [`debug(on: boolean=)`](#debugon-boolean-void)
 - [class Tester](#class-tester)
-  * [`get(path: string=): Tester`](#getpath-string-tester)
-  * [`head(path: string=): Tester`](#headpath-string-tester)
+  * [`Tester`](#type-tester)
   * [`assert(code: number, body: (string|RegExp|Object)=): Tester`](#assertcode-numberbody-stringregexpobject-tester)
   * [`assert(header: string, value: ?(string|RegExp)): Tester`](#assertheader-stringvalue-stringregexp-tester)
   * [`assert(assertion: function(Aqt.Return)): Tester`](#assertassertion-functionaqtreturn-tester)
@@ -32,8 +31,6 @@ yarn add @contexts/http
   * [`post(path: string?, data: string|Object?, options: AqtOptions?): Tester`](#postpath-stringdata-stringobjectoptions-aqtoptions-tester)
   * [`postForm(path: string?, cb: async function(Form), options: AqtOptions?): Tester`](#postformpath-stringcb-async-functionformoptions-aqtoptions-tester)
   * [`session(): Tester`](#session-tester)
-- [Other Methods](#other-methods)
-  * [`Tester`](#type-tester)
 - [Extending](#extending)
 - [CookiesContext](#cookiescontext)
 - [Copyright](#copyright)
@@ -508,19 +505,21 @@ Error: The authentication is required.
 
 The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.
 
-
-<p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/7.svg?sanitize=true" width="25">
-</a></p>
-
-### <code><ins>get</ins>(</code><sub><br/>&nbsp;&nbsp;`path: string=,`<br/></sub><code>): <i>Tester</i></code>
-
-Navigate to the path and store the result status code, body and headers in an internal state, used for assertions later using the `assert` method.
-
+__<a name="type-tester">`Tester`</a>__
 <table>
-<tr><th colspan="2">get(path?)</th></tr>
-<tr><td>
+ <thead><tr>
+  <th>Name</th>
+  <th>Type &amp; Description</th>
+ </tr></thead>
+ <tr>
+  <td rowSpan="3" align="center"><ins>get</ins></td>
+  <td><em>(path?: string) => <a href="#type-tester">Tester</a></em></td>
+ </tr>
+ <tr></tr>
+ <tr>
+  <td>
 
+Send a GET request. View examples at [Wiki](https://github.com/idiocc/http/wiki/Get)
 ```js
 async 'redirects to /'({ start }) {
   await start(middleware)
@@ -534,32 +533,17 @@ async 'opens sitemap'({ start }) {
     .assert(200)
 },
 ```
-</td>
-<td>
+  </td>
+ </tr>
+ <tr>
+  <td rowSpan="3" align="center"><ins>head</ins></td>
+  <td><em>(path?: string, data?: (string | !Object), options?: !_rqt.AqtOptions) => <a href="#type-tester">Tester</a></em></td>
+ </tr>
+ <tr></tr>
+ <tr>
+  <td>
 
-```
-example/test/spec/get.js
-  ✓  redirects to /
-  ✓  opens sitemap
-
-🦅  Executed 2 tests.
-```
-</td></tr>
-</table>
-
-<p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/8.svg?sanitize=true" width="25">
-</a></p>
-
-### <code><ins>head</ins>(</code><sub><br/>&nbsp;&nbsp;`path: string=,`<br/></sub><code>): <i>Tester</i></code>
-
-Send the `HEAD` request to the server.
-
-
-<table>
-<tr><th colspan="2">head(path?)</th></tr>
-<tr><td>
-
+Send a HEAD request. View examples at [Wiki](https://github.com/idiocc/http/wiki/Head)
 ```js
 async 'sends redirect for index'({ start }) {
   await start(middleware)
@@ -573,22 +557,25 @@ async 'sends 200 for sitemap'({ start }) {
     .assert(200)
 },
 ```
-</td>
-<td>
-
-```
-example/test/spec/head.js
-  ✓  sends redirect for index
-  ✓  sends 200 for sitemap
-
-🦅  Executed 2 tests.
-```
-</td></tr>
+  </td>
+ </tr>
+ <tr>
+  <td rowSpan="3" align="center"><ins>put</ins></td>
+  <td><em>(path?: string, data?: (string | !Object), options?: !_rqt.AqtOptions) => <a href="#type-tester">Tester</a></em></td>
+ </tr>
+ <tr></tr>
+ <tr>
+  <td>
+   Send a PUT request.
+  </td>
+ </tr>
 </table>
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/9.svg?sanitize=true" width="25">
+  <img src="/.documentary/section-breaks/7.svg?sanitize=true" width="25">
 </a></p>
+
+
 
 ### <code><ins>assert</ins>(</code><sub><br/>&nbsp;&nbsp;`code: number,`<br/>&nbsp;&nbsp;`body: (string|RegExp|Object)=,`<br/></sub><code>): <i>Tester</i></code>
 
@@ -649,7 +636,7 @@ example/test/spec/assert/code.js
 </table>
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/10.svg?sanitize=true" width="25">
+  <img src="/.documentary/section-breaks/8.svg?sanitize=true" width="25">
 </a></p>
 
 ### <code><ins>assert</ins>(</code><sub><br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: ?(string|RegExp),`<br/></sub><code>): <i>Tester</i></code>
@@ -782,7 +769,7 @@ example/test/spec/assert/header-fail.js > absence of a header
 </table>
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/11.svg?sanitize=true" width="25">
+  <img src="/.documentary/section-breaks/9.svg?sanitize=true" width="25">
 </a></p>
 
 ### <code><ins>assert</ins>(</code><sub><br/>&nbsp;&nbsp;`assertion: function(Aqt.Return),`<br/></sub><code>): <i>Tester</i></code>
@@ -844,7 +831,7 @@ example/test/spec/assert/function.js
 </table>
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/12.svg?sanitize=true" width="25">
+  <img src="/.documentary/section-breaks/10.svg?sanitize=true" width="25">
 </a></p>
 
 ### <code><ins>set</ins>(</code><sub><br/>&nbsp;&nbsp;`header: string,`<br/>&nbsp;&nbsp;`value: string,`<br/></sub><code>): <i>Tester</i></code>
@@ -912,7 +899,7 @@ example/test/spec/assert/set.js
 </table>
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/13.svg?sanitize=true" width="25">
+  <img src="/.documentary/section-breaks/11.svg?sanitize=true" width="25">
 </a></p>
 
 ### <code><ins>post</ins>(</code><sub><br/>&nbsp;&nbsp;`path: string?,`<br/>&nbsp;&nbsp;`data: string|Object?,`<br/>&nbsp;&nbsp;`options: AqtOptions?,`<br/></sub><code>): <i>Tester</i></code>
@@ -970,7 +957,7 @@ example/test/spec/assert/post.js
 </table>
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/14.svg?sanitize=true" width="25">
+  <img src="/.documentary/section-breaks/12.svg?sanitize=true" width="25">
 </a></p>
 
 ### <code><ins>postForm</ins>(</code><sub><br/>&nbsp;&nbsp;`path: string?,`<br/>&nbsp;&nbsp;`cb: async function(Form),`<br/>&nbsp;&nbsp;`options: AqtOptions?,`<br/></sub><code>): <i>Tester</i></code>
@@ -1017,7 +1004,7 @@ example/test/spec/assert/post-form.js
 </table>
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/15.svg?sanitize=true" width="25">
+  <img src="/.documentary/section-breaks/13.svg?sanitize=true" width="25">
 </a></p>
 
 ### <code><ins>session</ins>(): <i>Tester</i></code>
@@ -1125,28 +1112,9 @@ test/spec/session.js
 </td></tr>
 </table>
 
-## Other Methods
-
-__<a name="type-tester">`Tester`</a>__
-<table>
- <thead><tr>
-  <th>Name</th>
-  <th>Type &amp; Description</th>
- </tr></thead>
- <tr>
-  <td rowSpan="3" align="center"><ins>put</ins></td>
-  <td><em>(path?: string, data?: (string | !Object), options?: !_rqt.AqtOptions) => <a href="#type-tester">Tester</a></em></td>
- </tr>
- <tr></tr>
- <tr>
-  <td>
-   Send a PUT request.
-  </td>
- </tr>
-</table>
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/16.svg?sanitize=true">
+  <img src="/.documentary/section-breaks/14.svg?sanitize=true">
 </a></p>
 
 ## Extending
@@ -1330,7 +1298,7 @@ example/test/spec/cookie/ > sets cookie for a path
 </table>
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/17.svg?sanitize=true">
+  <img src="/.documentary/section-breaks/15.svg?sanitize=true">
 </a></p>
 
 ## CookiesContext
@@ -1370,7 +1338,7 @@ The context was adapted from the work in https://github.com/pillarjs/cookies. Se
     ```
 
 <p align="center"><a href="#table-of-contents">
-  <img src="/.documentary/section-breaks/18.svg?sanitize=true">
+  <img src="/.documentary/section-breaks/16.svg?sanitize=true">
 </a></p>
 
 ## Copyright

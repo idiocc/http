@@ -1,5 +1,23 @@
 <types ns="_httpContext">
   <interface name="Tester">
+    <fn name="get" return="_httpContext.Tester" example="example/test/spec/get.js">
+      <arg string name="path" opt>
+        The path to get data from.
+      </arg>
+      Send a GET request. View examples at [Wiki](https://github.com/idiocc/http/wiki/Get)
+    </fn>
+    <fn name="head" return="_httpContext.Tester" example="example/test/spec/head.js">
+      <arg string name="path" opt>
+        The path to send the HEAD request to.
+      </arg>
+      <arg type="string|!Object" name="data" opt>
+        The data to send. If an object is passed, the default content-type is `application/json`, and if a string is passed, it's `text/plain`. This can be overridden with the `type` option.
+      </arg>
+      <arg type="!_rqt.AqtOptions" name="options" opt>
+        The options for the request library.
+      </arg>
+      Send a HEAD request. View examples at [Wiki](https://github.com/idiocc/http/wiki/Head)
+    </fn>
     <fn name="put" return="_httpContext.Tester">
       <arg string name="path" opt>
         The path to send the request to, empty by default.
