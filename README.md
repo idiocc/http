@@ -32,7 +32,8 @@ yarn add @contexts/http
   * [`post(path: string?, data: string|Object?, options: AqtOptions?): Tester`](#postpath-stringdata-stringobjectoptions-aqtoptions-tester)
   * [`postForm(path: string?, cb: async function(Form), options: AqtOptions?): Tester`](#postformpath-stringcb-async-functionformoptions-aqtoptions-tester)
   * [`session(): Tester`](#session-tester)
-    * [`Tester`](#type-tester)
+- [Other Methods](#other-methods)
+  * [`Tester`](#type-tester)
 - [Extending](#extending)
 - [CookiesContext](#cookiescontext)
 - [Copyright](#copyright)
@@ -1123,6 +1124,8 @@ test/spec/session.js
 </details>
 </td></tr>
 </table>
+
+## Other Methods
 
 __<a name="type-tester">`Tester`</a>__
 <table>

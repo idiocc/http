@@ -1,4 +1,4 @@
-```### head => Tester
+```# head => Tester
 [
   ["path", "string="]
 ]
@@ -19,5 +19,3 @@ Send the `HEAD` request to the server.
 %/FORK node_modules/.bin/zoroaster example/test/spec/head.js -a%
 </td></tr>
 </table>
-
-%~ width="25"%
