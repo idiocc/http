@@ -50,7 +50,7 @@
     "alamode": "^3.3.0",
     "aty": "^1.1.2",
     "connect": "^3.7.0",
-    "documentary": "^1.34.5",
+    "documentary": "^1.34.6",
     "eslint-config-artdeco": "1.0.1",
     "typal": "^1.24.2",
     "yarn-s": "1.2.1",

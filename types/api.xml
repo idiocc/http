@@ -1,5 +1,5 @@
 <types ns="_httpContext">
-  <interface name="Tester">
+  <interface name="Tester" desc="The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.">
     <fn name="get" return="_httpContext.Tester" example="example/test/spec/get.js">
       <arg string name="path" opt>
         The path to get data from.

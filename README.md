@@ -21,8 +21,7 @@ yarn add @contexts/http
   * [`startPlain(fn: (req: IncomingMessage, res: ServerResponse), secure: boolean=): Tester`](#startplainfn-req-incomingmessage-res-serverresponsesecure-boolean-tester)
   * [`listen(server: http.Server|https.Server): Tester`](#listenserver-httpserverhttpsserver-tester)
   * [`debug(on: boolean=)`](#debugon-boolean-void)
-- [class Tester](#class-tester)
-  * [`Tester`](#type-tester)
+- [`Tester`](#type-tester)
   * [`assert(code: number, body: (string|RegExp|Object)=): Tester`](#assertcode-numberbody-stringregexpobject-tester)
   * [`assert(header: string, value: ?(string|RegExp)): Tester`](#assertheader-stringvalue-stringregexp-tester)
   * [`assert(assertion: function(Aqt.Return)): Tester`](#assertassertion-functionaqtreturn-tester)
@@ -501,11 +500,7 @@ Error: The authentication is required.
   <img src="/.documentary/section-breaks/6.svg?sanitize=true">
 </a></p>
 
-## class Tester
-
-The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.
-
-__<a name="type-tester">`Tester`</a>__
+__<a name="type-tester">`Tester`</a>__: The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.
 <table>
  <thead><tr>
   <th>Name</th>
@@ -513,7 +508,7 @@ __<a name="type-tester">`Tester`</a>__
  </tr></thead>
  <tr>
   <td rowSpan="3" align="center"><ins>get</ins></td>
-  <td><em>(path?: string) => <a href="#type-tester">Tester</a></em></td>
+  <td><em>(path?: string) => <a href="#type-tester" title="The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.">Tester</a></em></td>
  </tr>
  <tr></tr>
  <tr>
@@ -537,7 +532,7 @@ async 'opens sitemap'({ start }) {
  </tr>
  <tr>
   <td rowSpan="3" align="center"><ins>head</ins></td>
-  <td><em>(path?: string, data?: (string | !Object), options?: !_rqt.AqtOptions) => <a href="#type-tester">Tester</a></em></td>
+  <td><em>(path?: string, data?: (string | !Object), options?: !_rqt.AqtOptions) => <a href="#type-tester" title="The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.">Tester</a></em></td>
  </tr>
  <tr></tr>
  <tr>
@@ -561,7 +556,7 @@ async 'sends 200 for sitemap'({ start }) {
  </tr>
  <tr>
   <td rowSpan="3" align="center"><ins>put</ins></td>
-  <td><em>(path?: string, data?: (string | !Object), options?: !_rqt.AqtOptions) => <a href="#type-tester">Tester</a></em></td>
+  <td><em>(path?: string, data?: (string | !Object), options?: !_rqt.AqtOptions) => <a href="#type-tester" title="The instance of a _Tester_ class is returned by the `start`, `startPlain` and `listen` methods. It is used to chain the actions together and extends the promise that should be awaited for during the test. It provides a testing API similar to the _SuperTest_ package, but does not require calling `done` method, because the _Tester_ class is asynchronous.">Tester</a></em></td>
  </tr>
  <tr></tr>
  <tr>

@@ -84,14 +84,14 @@ differently@^1.0.0:
   dependencies:
     erte "^1.2.0"
 
-documentary@^1.34.5:
-  version "1.34.5"
-  resolved "https://registry.yarnpkg.com/documentary/-/documentary-1.34.5.tgz#8a4021e5179ebc2ddbdd23dfd648464eefea5c7c"
-  integrity sha512-d0OEGTR5BshYu+p0cIFbMZI26w4ogV5GYj9cRdXs7By22m0Wp2dzQ20oAktBALtfMh56BjSW3Zz1z45hg5G/2w==
+documentary@^1.34.6:
+  version "1.34.6"
+  resolved "https://registry.yarnpkg.com/documentary/-/documentary-1.34.6.tgz#b5d8873db25226472537ce9d98e33d4105ca1140"
+  integrity sha512-UL3k3xawspkWk39t4+ho4xWEuCEJloKeGzBAh4RZTcAAbL7ZwdkjeTyKtct4n2nPEzX0EA/XKXabnp4RA9Pymw==
   dependencies:
     alamode "^3.3.0"
     preact "8.5.3"
-    typal "^1.24.1"
+    typal "^1.24.2"
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -194,7 +194,7 @@ text-decoding@^1.0.0:
   resolved "https://registry.yarnpkg.com/text-decoding/-/text-decoding-1.0.0.tgz#38a5692d23b5c2b12942d6e245599cb58b1bc52f"
   integrity sha512-/0TJD42KDnVwKmDK6jj3xP7E2MG7SHAOG4tyTgyUCRPdHwvkquYNLEQltmdMa3owq3TkddCVcTsoctJI8VQNKA==
 
-typal@^1.24.1, typal@^1.24.2:
+typal@^1.24.2:
   version "1.24.2"
   resolved "https://registry.yarnpkg.com/typal/-/typal-1.24.2.tgz#542e184cd7ca256ad33e2c9db1b80ad8ef5dce80"
   integrity sha512-s0IVjeRpGjtbkxoom5DOKviUWiUBYe6TLAskRNEUINQQtAW99gYEOGRD2pLh06H9cOykI5KAGDSG0+4lCatQcQ==
