@@ -7,17 +7,17 @@
   resolved "https://registry.yarnpkg.com/@artdeco/clean-stack/-/clean-stack-1.1.1.tgz#0a68b9a061b5076ebaf948c150ea26d09c1e753f"
   integrity sha512-q5lO3vGUo0WgkSqzgzjL0HQdA9t2HzQqZISuVuQWMh9xqLuiLFP/ZTsxFc8vpMl7mNpGk7Mm0OeyFQ+Evrp0Cw==
 
-"@goa/busboy@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@goa/busboy/-/busboy-1.1.1.tgz#b51fdf295544ac3f4dc59178633036fed7f19d90"
-  integrity sha512-5xVzyQWAIZ9yLXEIds94rtTAkyoCo8vzy0rMto2lYijeR8mc84UKIzE9VseaUVAn0YXlJlDGMDNWiLTS/dQS7A==
+"@goa/busboy@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@goa/busboy/-/busboy-1.2.1.tgz#c89e229780a00d1b63d0017fb949334fc36c58e9"
+  integrity sha512-oKWdBlBB9mLXVb776JXjlsayNn9KPh21R+8t6U0owxze4EbAxCNZawJNr181hE9TxcdsiVnjfzkhn2mBhHMXZg==
   dependencies:
     text-decoding "^1.0.0"
 
-"@multipart/form@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@multipart/form/-/form-1.1.0.tgz#15d16e113565f9c157a636e0bf439dbae6b34a46"
-  integrity sha512-CiymdHyaOFbEBsB0+dNXK9vJxWuBXV6X9mXeAhtfjREDE8R3v/VwpdtTawWf9Vev6HCdKz1xDyw0gC7d9CAZlQ==
+"@multipart/form@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@multipart/form/-/form-2.0.0.tgz#ddade18f92ef75b56e29708536cbc59ce6961832"
+  integrity sha512-afvhQjJZ+hqCSuv0W4iP0L6heFND3Vaj2zRqjxRkCz2YNCIky33EPl6AU7JpOj5NFHKTk1smxumKeblP7TZBLQ==
 
 "@rqt/aqt@^1.3.0":
   version "1.3.0"
@@ -84,14 +84,14 @@ differently@^1.0.0:
   dependencies:
     erte "^1.2.0"
 
-documentary@^1.34.6:
-  version "1.34.6"
-  resolved "https://registry.yarnpkg.com/documentary/-/documentary-1.34.6.tgz#b5d8873db25226472537ce9d98e33d4105ca1140"
-  integrity sha512-UL3k3xawspkWk39t4+ho4xWEuCEJloKeGzBAh4RZTcAAbL7ZwdkjeTyKtct4n2nPEzX0EA/XKXabnp4RA9Pymw==
+documentary@^1.35.8:
+  version "1.35.8"
+  resolved "https://registry.yarnpkg.com/documentary/-/documentary-1.35.8.tgz#17e86eeecdca6daa0c8058484e6ced78ce5e3199"
+  integrity sha512-/V3Qs4oru12RFl0zif4TPmTcJ0whCnaWZxOsblpkzyFx7wZkWK9QTMGMz1C2Qv2aYVswMjV2BKQuE5UBHAsa6Q==
   dependencies:
     alamode "^3.3.0"
     preact "8.5.3"
-    typal "^1.24.2"
+    typal "^1.24.19"
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -194,10 +194,10 @@ text-decoding@^1.0.0:
   resolved "https://registry.yarnpkg.com/text-decoding/-/text-decoding-1.0.0.tgz#38a5692d23b5c2b12942d6e245599cb58b1bc52f"
   integrity sha512-/0TJD42KDnVwKmDK6jj3xP7E2MG7SHAOG4tyTgyUCRPdHwvkquYNLEQltmdMa3owq3TkddCVcTsoctJI8VQNKA==
 
-typal@^1.24.2:
-  version "1.24.2"
-  resolved "https://registry.yarnpkg.com/typal/-/typal-1.24.2.tgz#542e184cd7ca256ad33e2c9db1b80ad8ef5dce80"
-  integrity sha512-s0IVjeRpGjtbkxoom5DOKviUWiUBYe6TLAskRNEUINQQtAW99gYEOGRD2pLh06H9cOykI5KAGDSG0+4lCatQcQ==
+typal@^1.24.19:
+  version "1.24.19"
+  resolved "https://registry.yarnpkg.com/typal/-/typal-1.24.19.tgz#b77d62a25cf65bfbb13808d3939a571c8a65a8f4"
+  integrity sha512-LAdurZ+1RxVKXkxGR9qr+CM7b5DfQ+HB7zk1dBd2YVL3mcCS+s0K5k/5plxM3NMPcmjQi12nz2woWxoQp9nnbQ==
 
 unpipe@~1.0.0:
   version "1.0.0"
