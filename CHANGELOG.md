@@ -1,3 +1,9 @@
+## 24 December 2019
+
+### [1.6.2](https://github.com/idiocc/http/compare/v1.6.1...v1.6.2)
+
+- [deps] Update Form to 2.0 to write data as `utf8`.
+
 ## 17 December 2019
 
 ### [1.6.1](https://github.com/idiocc/http/compare/v1.6.0...v1.6.1)
